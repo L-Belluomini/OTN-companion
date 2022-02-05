@@ -1,10 +1,17 @@
+<p align="center">
+  <img src= https://github.com/MightyBakedPotato/Imagefiles/blob/main/OTN1-0%20crop%20resize.png>
+   
+<p/>
 
 # OTNcompanion
+
 ## Introduction
 This is the complementary tool for generating graphs for the OTN Atak plugin using Graphhopper.
 It is built based on Java, and easily runs on Windows and Linux devices.
 For technical informations on Graphhopper visit [this link](https://github.com/graphhopper/graphhopper/tree/master/docs).
 To download the OSM data you are interested in, go to [geofabrik](https://download.geofabrik.de/) select you region and download the .pbf file
+
+![image](https://github.com/MightyBakedPotato/Imagefiles/blob/main/51oEcOu.jpg)
 ## For users
 1. On the GitHub project page, go to [releases](https://github.com/L-Belluomini/OTN-companion/releases) and download the .jar file
 2. Open the comand prompt
