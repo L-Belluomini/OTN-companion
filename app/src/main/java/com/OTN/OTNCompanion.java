@@ -27,7 +27,6 @@ public class OTNCompanion
 
 
     public OTNCompanion() {
-        System.out.println( "Hello World! \nI am OTN-companion, here to help" );
     }
 
     public void setFileDir(String fileDir){
@@ -74,8 +73,6 @@ public class OTNCompanion
     public void storeProfiles(){
         System.out.println("storign profiles to json file");
 
-        storageDir = "target/routing-graph-cache"; // tmp
-
         Gson gson = new Gson();
         String jsonConfing = gson.toJson(this.ghConfig);
         File myObj=null;
@@ -100,8 +97,6 @@ public class OTNCompanion
     public void createGraph(){
         System.out.println("creating graph in" + storageDir );
         System.out.println("based on file " + fileDir);
-
-        storageDir = "target/routing-graph-cache"; // tmp
 
         this.fileDir = "file.pbf";
         GraphHopper hopper = new GraphHopper();
