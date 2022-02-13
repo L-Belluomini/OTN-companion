@@ -31,7 +31,8 @@ Simple Java project menaged by Maven
 * Graphhopper
 * Picocli
 ## Future features
-TBD
+* TBD
+* Support for Free Tak Hub for routing and graph generationg
 ## Contact
 For any issue, suggestion or question, feel free to leave an issue on the [GitHub issues page](https://github.com/L-Belluomini/OTN-companion/issues).
 ## License
