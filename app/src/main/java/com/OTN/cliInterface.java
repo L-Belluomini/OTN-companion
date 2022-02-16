@@ -10,6 +10,16 @@ import picocli.CommandLine.ParameterException;
 import picocli.CommandLine.Spec;
 import picocli.CommandLine.HelpCommand;
 
+import com.google.gson.Gson;
+import com.google.gson.stream.*;
+
+import com.graphhopper.GraphHopperConfig;
+import com.graphhopper.GraphHopper;
+
+
+import java.util.*;
+import java.io.*;
+
 @Command ( 
 	name = "otn-companion" , 
 	subcommands = {  CommandLine.HelpCommand.class} , 
@@ -25,12 +35,13 @@ public class cliInterface{
   	@Command (
   		name = "generate",
   		description = "generate graph from OSM file",
-  		mixinStandardHelpOptions = true
+  		mixinStandardHelpOptions = true,
+  		sortOptions = false
   	)
-  	void generateGraph ( 
+  	int generateGraph ( 
   		@Parameters( arity = "1" , paramLabel ="storageDir" , description = "directory to contain the graph " )
   		String storageDir ,
-  		@Option ( names ={ "-i" , "--inputfile"} , description = " OSM file" )
+  		@Option ( names ={ "-i" , "--inputfile"} , required = true , paramLabel ="OsmFile" , description = " OSM file" )
   		String fileDir ,
   		@Option ( names ={ "-d" , "--default"} , description = "load default profiles( ch car + foot)" , defaultValue = "false" )
   		boolean defaultProfile ,
@@ -50,23 +61,51 @@ public class cliInterface{
   		companion.createAddProfiles( defaultProfile );
   		companion.createGraph();
   		companion.storeProfiles();
-
-
-  	}
-  	/*
+  		return 0;
+  	  	}
+  	
   	@Command (
   		name = "check",
   		description = "check grapf constintency againt the profiles in the json",
   		mixinStandardHelpOptions = true
   	)
-  	void checkGraph (
+  	int checkGraph (
   		@Parameters( paramLabel ="storageDir" , description = "directory contaning the graph AND the json" )
-  		String storageDir
-  		) {
-  		OTNCompanion companion  = new OTNCompanion();
-  		companion.setStorageDir(storageDir);
+		String storageDir
+		) {
+  		
+  		GraphHopper hopper = new GraphHopper(); 
+  		hopper.setGraphHopperLocation(storageDir);
+  		Gson ason;
+  		FileReader fReader;
+  		JsonReader reader;
+  		GraphHopperConfig jConfig;
+  		System.out.println( "reading......");
+  		try {
+            ason = new Gson();
+            fReader =  new FileReader(storageDir + "/config.json");
+            reader = new JsonReader(fReader);
+            jConfig = ason.fromJson (reader , GraphHopperConfig.class );
+            if (jConfig == null){
+                System.out.println( "reading j config failed");
+                return 1;
+            }
+        } catch (Exception e) {
+        	System.out.println( "reading j config failed with ERRROR:");
+            System.out.println ( e.toString());
+            return 1;
+        }
+        System.out.println( "reading j config CORRECT");
+        	hopper.init(jConfig);
+        	try {
+        		hopper.load(storageDir);	
+        	} catch (Exception e) {
+        		System.out.println ( e.toString());
+            	return 1;
+        	}
+            System.out.println( "loaded graph CORRECT");
 
-  	}
-  	*/
+        return 0;
+		}
 
 }

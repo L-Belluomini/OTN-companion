@@ -95,30 +95,34 @@ public class OTNCompanion
     }
 
     public void createGraph(){
-        System.out.println("creating graph in" + storageDir );
+        System.out.println("creating graph in " + storageDir );
         System.out.println("based on file " + fileDir);
 
-        this.fileDir = "file.pbf";
         GraphHopper hopper = new GraphHopper();
-        hopper.setOSMFile(fileDir); // move to ghConfig ?
+        hopper.setOSMFile(this.fileDir); // move to ghConfig ?
         hopper.init(this.ghConfig);
-        hopper.setGraphHopperLocation(storageDir); // move to ghConfig ?
+        hopper.setGraphHopperLocation(this.storageDir); // move to ghConfig ?
         System.out.println("creating graph, this may take a while....");
         hopper.importAndClose();
         System.out.println("graph finished");
     }
 
-    public void loadJson(){
+    /*public void loadJson(){
 
         GraphHopperConfig jConfig=null;
-         try {
+       try {
             Gson ason = new Gson();
-            JsonReader reader = new JsonReader(new FileReader(storageDir + "/config.json"));
+            FileReader fReader =  new FileReader(storageDir + "/config.json");
+            JsonReader reader = new JsonReader(fReader);
             jConfig = ason.fromJson (reader , GraphHopperConfig.class );
+            if (jConfig == null){
+                System.out.println( "reading j config failed");
+                return;
+            }
         } catch (IOException e) {
-          System.out.println("An error occurred, reading " );
+            System.out.println ( e.toString());
         }
 
-    }
+    }*/
 }
 
