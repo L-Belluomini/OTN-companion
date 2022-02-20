@@ -109,7 +109,7 @@ public class OTNCompanion
 
         if ( diskStorage ) {
             DAType type = DAType.MMAP;
-            ghConfig.putObject ("graph.dataaccess.default_type" , type.toString() );
+            tmp.putObject ("graph.dataaccess.default_type" , type.toString() );
             System.out.println(" set memory to disk");
         }
         hopper.init(tmp);
