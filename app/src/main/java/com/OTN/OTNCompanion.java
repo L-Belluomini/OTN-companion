@@ -37,16 +37,17 @@ public class OTNCompanion
         this.storageDir = storageDir;
     }
 
-    public void createAddProfiles(boolean defaultProfile){
+    public void createAddProfiles(boolean defaultProfile ){
 
         System.out.println("creating profiles");
         
         if (defaultProfile){
-            System.out.println("default profiles ( ch car + foot)");
+            System.out.println("default profiles ( ch car + alt foot)");
   
             this.profiles.add(new Profile("car").setVehicle("car").setWeighting("fastest").setTurnCosts(false));
             this.profiles.add(new Profile("foot").setVehicle("foot").setWeighting("shortest").setTurnCosts(false));
             this.chProfiles.add( new CHProfile("car"));
+            this.lmProfiles.add( new LMProfile("foot"));
 
         } else {
 
@@ -67,6 +68,7 @@ public class OTNCompanion
         if ( this.lmProfiles.size() != 0 ){
             ghConfig.setLMProfiles(lmProfiles);
         }
+        
         System.out.println("profile creation ended");
     }
 
@@ -94,17 +96,30 @@ public class OTNCompanion
         }
     }
 
-    public void createGraph(){
+    public void createGraph( boolean diskStorage){
         System.out.println("creating graph in " + storageDir );
         System.out.println("based on file " + fileDir);
+        
+        
 
+        
         GraphHopper hopper = new GraphHopper();
         hopper.setOSMFile(this.fileDir); // move to ghConfig ?
-        hopper.init(this.ghConfig);
+        GraphHopperConfig tmp = this.ghConfig;
+
+        if ( diskStorage ) {
+            DAType type = DAType.MMAP;
+            ghConfig.putObject ("graph.dataaccess.default_type" , type.toString() );
+            System.out.println(" set memory to disk");
+        }
+        hopper.init(tmp);
         hopper.setGraphHopperLocation(this.storageDir); // move to ghConfig ?
         System.out.println("creating graph, this may take a while....");
+        long start = System.currentTimeMillis();
         hopper.importAndClose();
-        System.out.println("graph finished");
+        long finish = System.currentTimeMillis();
+        long timeElapsed = finish - start;
+        System.out.println("graph finished, took:"+ Long.toString(timeElapsed/1000)+ " s");
     }
 
     /*public void loadJson(){

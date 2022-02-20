@@ -46,7 +46,9 @@ public class cliInterface{
   		@Option ( names ={ "-d" , "--default"} , description = "load default profiles( ch car + foot)" , defaultValue = "false" )
   		boolean defaultProfile ,
   		@Option ( names = {"--car"} , description = "load just car profile (ch)" , defaultValue = "false")
-  		boolean altProfile
+  		boolean altProfile ,
+        @Option ( names = {"--slow_mode"}, description = "use disk insted of ram for generating graph", defaultValue = "false")
+        boolean diskStorage
   		) {
 
   		OTNCompanion companion  = new OTNCompanion();
@@ -58,8 +60,8 @@ public class cliInterface{
   		} else if ( altProfile & defaultProfile ) { // if both set WORONG
   			System.out.println("DO NOT set deafult and other options, falling back to default");
   		}
-  		companion.createAddProfiles( defaultProfile );
-  		companion.createGraph();
+  		companion.createAddProfiles( defaultProfile  );
+  		companion.createGraph( diskStorage );
   		companion.storeProfiles();
   		return 0;
   	  	}
