@@ -31,10 +31,12 @@ public class OTNCompanion
 
     public void setFileDir(String fileDir){
         this.fileDir = fileDir;
+        System.out.println("set OSM file:" + fileDir);
     }
 
     public void setStorageDir ( String storageDir ) {
         this.storageDir = storageDir;
+        System.out.println("set stroge Dir:" + storageDir);
     }
 
     public void createAddProfiles(boolean defaultProfile ){
@@ -96,13 +98,24 @@ public class OTNCompanion
         }
     }
 
-    public void createGraph( boolean diskStorage){
+    public void createGraph( boolean diskStorage) {
+        if ( this.fileDir == "" ) { 
+            System.out.println("osm file not set");
+            return;
+        }
+        if ( this.storageDir == "" ) {
+            System.out.println("storage dir not set");
+            return;
+        }
+        if ( this.profiles.size() == 0 ) { 
+            System.out.println("no profile configured");
+            return;
+        }
+
         System.out.println("creating graph in " + storageDir );
         System.out.println("based on file " + fileDir);
         
-        
 
-        
         GraphHopper hopper = new GraphHopper();
         hopper.setOSMFile(this.fileDir); // move to ghConfig ?
         GraphHopperConfig tmp = this.ghConfig;
