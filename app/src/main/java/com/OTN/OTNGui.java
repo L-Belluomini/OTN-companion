@@ -122,7 +122,7 @@ public class OTNGui {
 				try {
 					tempFile = File.createTempFile("otnc", ".osm");
 				} catch (IOException ex) {
-					System.out.println(e.toString());
+					System.out.println(ex.toString());
 				}
 				tempFile.deleteOnExit();
 				OTNGuiFilter filter = new OTNGuiFilter( openOSM,tempFile );
