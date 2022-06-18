@@ -56,7 +56,7 @@ public class OTNGuiFilter {
 	    	c.gridx = 0;
 	    	c.gridy = 0;
 	    	c.gridwidth = 4;
-	    	c.insets = new Insets(5,0,5,0);
+	    	c.insets = new Insets(5,5,5,5);
 	    	bbFilterPannel.add ( topleftcorner , c);
 
 	    	JLabel topLabel = new JLabel("Lat:");
@@ -64,6 +64,7 @@ public class OTNGuiFilter {
 	    	c.anchor = GridBagConstraints.FIRST_LINE_START;
 			c.gridx = 0;
 	    	c.gridy = 1;
+	    	c.insets = new Insets(0,5,0,5);
 	    	bbFilterPannel.add ( topLabel , c);
 
 	    	this.topTF = new JTextField(15);
@@ -71,14 +72,16 @@ public class OTNGuiFilter {
 	    	c.anchor = GridBagConstraints.FIRST_LINE_START;
 			c.gridx = 1;
 	    	c.gridy = 1;
+	    	c.insets = new Insets(0,0,0,5);
 	    	c.fill = GridBagConstraints.BOTH;
 	    	bbFilterPannel.add ( topTF , c);
 
-	    	JLabel leftLabel = new JLabel("long:");
+	    	JLabel leftLabel = new JLabel("Long:");
 	    	c = new GridBagConstraints();
 	    	c.anchor = GridBagConstraints.FIRST_LINE_START;
 			c.gridx = 2;
 	    	c.gridy = 1;
+	    	c.insets = new Insets(0,0,0,5);
 	    	bbFilterPannel.add ( leftLabel , c);
 
 	    	this.leftTF = new JTextField(15);
@@ -87,6 +90,7 @@ public class OTNGuiFilter {
 			c.gridx = 3;
 	    	c.gridy = 1;
 	    	c.fill = GridBagConstraints.BOTH;
+	    	c.insets = new Insets(0,0,0,5);
 	    	bbFilterPannel.add ( leftTF , c);
 
 	    	c = new GridBagConstraints();
@@ -104,7 +108,7 @@ public class OTNGuiFilter {
 	    	c.gridx = 0;
 	    	c.gridy = 3;
 	    	c.gridwidth = 4;
-	    	c.insets = new Insets(0,0,5,0);
+	    	c.insets = new Insets(0,5,5,5);
 	    	bbFilterPannel.add ( bottomrightcorner , c);
 
 	    	JLabel bottomLabel = new JLabel("Lat:");
@@ -112,6 +116,7 @@ public class OTNGuiFilter {
 	    	c.anchor = GridBagConstraints.FIRST_LINE_START;
 			c.gridx = 0;
 	    	c.gridy = 4;
+	    	c.insets = new Insets(0,5,0,5);
 	    	bbFilterPannel.add ( bottomLabel , c);
 
 	    	this.bottomTF = new JTextField(15);
@@ -120,13 +125,15 @@ public class OTNGuiFilter {
 			c.gridx = 1;
 	    	c.gridy = 4;
 	    	c.fill = GridBagConstraints.BOTH;
+	    	c.insets = new Insets(0,0,0,5);
 	    	bbFilterPannel.add ( bottomTF , c);
 
-	    	JLabel rightLabel = new JLabel("long:");
+	    	JLabel rightLabel = new JLabel("Long:");
 	    	c = new GridBagConstraints();
 	    	c.anchor = GridBagConstraints.FIRST_LINE_START;
 			c.gridx = 2;
 	    	c.gridy = 4;
+	    	c.insets = new Insets(0,0,0,5);
 	       	bbFilterPannel.add ( rightLabel , c);
 
 	    	this. rightTF = new JTextField(15);
@@ -135,6 +142,7 @@ public class OTNGuiFilter {
 			c.gridx = 3;
 	    	c.gridy = 4;
 	    	c.fill = GridBagConstraints.BOTH;
+	    	c.insets = new Insets(0,0,0,5);
 	    	bbFilterPannel.add ( rightTF , c);
 
 
@@ -252,6 +260,7 @@ public class OTNGuiFilter {
 					Float right =Float.parseFloat ( rightTF.getText() );
 
 					if ( top != null && bottom != null && left != null && right != null ){
+						System.out.println("filter data valid");
 						editor.loadFile( _openOSM );
 						editor.setFilter(left , right , top , bottom );
 						

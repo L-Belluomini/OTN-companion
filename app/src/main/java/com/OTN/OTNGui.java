@@ -159,6 +159,15 @@ public class OTNGui {
     	});  
 
     	paneOSM.add ( selectButton , c);
+
+
+    	JButton analyzebutton = new JButton("analyze");
+    	c = new GridBagConstraints();
+    	c.anchor = GridBagConstraints.FIRST_LINE_START;
+    	c.gridx = 1;
+    	c.gridy = 4;
+    	paneOSM.add (analyzebutton, c);
+
     	/*
     	this.topTF = new JTextField(15);
     	c = new GridBagConstraints();
