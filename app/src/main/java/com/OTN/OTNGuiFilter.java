@@ -13,6 +13,9 @@ public class OTNGuiFilter {
 	private JTextField bottomTF;
 	private JTextField leftTF;
 	private JTextField rightTF;
+	private JTextField centerlatTF;
+	private JTextField centerlongTF;
+	private JTextField radiusTF;
 	private File _tempFile;
 	private File _openOSM;
 
@@ -43,30 +46,72 @@ public class OTNGuiFilter {
 	    	
 	    	//////////////// SET PANES ////////////////////////////////////////
 	    	
-	    	JPanel bbFilterPannel  =new JPanel( new GridBagLayout() );  
-	    	filterPane.add( "Boundiing Box",bbFilterPannel );
+	    	JPanel bbFilterPannel  =new JPanel( new GridBagLayout() );
+	    	filterPane.add( "Bounding box",bbFilterPannel );
 	    	bbFilterPannel.setSize(300,300);
 
-	    	JLabel topLabel = new JLabel("top boundires");
+	    	JLabel topleftcorner = new JLabel("Top left corner:");
+	    	c= new GridBagConstraints();
+	    	c.anchor = GridBagConstraints.FIRST_LINE_START;
+	    	c.gridx = 0;
+	    	c.gridy = 0;
+	    	c.gridwidth = 4;
+	    	c.insets = new Insets(5,0,5,0);
+	    	bbFilterPannel.add ( topleftcorner , c);
+
+	    	JLabel topLabel = new JLabel("Lat:");
 	    	c = new GridBagConstraints();
 	    	c.anchor = GridBagConstraints.FIRST_LINE_START;
-			c.gridx = 1;
-	    	c.gridy = 2;
+			c.gridx = 0;
+	    	c.gridy = 1;
 	    	bbFilterPannel.add ( topLabel , c);
 
 	    	this.topTF = new JTextField(15);
 	    	c = new GridBagConstraints();
 	    	c.anchor = GridBagConstraints.FIRST_LINE_START;
 			c.gridx = 1;
-	    	c.gridy = 2;
+	    	c.gridy = 1;
 	    	c.fill = GridBagConstraints.BOTH;
 	    	bbFilterPannel.add ( topTF , c);
 
-	    	JLabel bottomLabel = new JLabel("bottom boundires");
+	    	JLabel leftLabel = new JLabel("long:");
 	    	c = new GridBagConstraints();
 	    	c.anchor = GridBagConstraints.FIRST_LINE_START;
-			c.gridx = 1;
+			c.gridx = 2;
+	    	c.gridy = 1;
+	    	bbFilterPannel.add ( leftLabel , c);
+
+	    	this.leftTF = new JTextField(15);
+	    	c = new GridBagConstraints();
+	    	c.anchor = GridBagConstraints.FIRST_LINE_START;
+			c.gridx = 3;
+	    	c.gridy = 1;
+	    	c.fill = GridBagConstraints.BOTH;
+	    	bbFilterPannel.add ( leftTF , c);
+
+	    	c = new GridBagConstraints();
+			c.gridx = 0;
 	    	c.gridy = 2;
+	    	c.fill = GridBagConstraints.BOTH;
+	    	c.gridwidth = 4;
+	    	c.insets = new Insets(5,5,5,5);
+
+	    	bbFilterPannel.add ( new JSeparator (SwingConstants.HORIZONTAL) , c );
+
+	    	JLabel bottomrightcorner = new JLabel("Bottom right corner:");
+	    	c= new GridBagConstraints();
+	    	c.anchor = GridBagConstraints.FIRST_LINE_START;
+	    	c.gridx = 0;
+	    	c.gridy = 3;
+	    	c.gridwidth = 4;
+	    	c.insets = new Insets(0,0,5,0);
+	    	bbFilterPannel.add ( bottomrightcorner , c);
+
+	    	JLabel bottomLabel = new JLabel("Lat:");
+	    	c = new GridBagConstraints();
+	    	c.anchor = GridBagConstraints.FIRST_LINE_START;
+			c.gridx = 0;
+	    	c.gridy = 4;
 	    	bbFilterPannel.add ( bottomLabel , c);
 
 	    	this.bottomTF = new JTextField(15);
@@ -77,26 +122,42 @@ public class OTNGuiFilter {
 	    	c.fill = GridBagConstraints.BOTH;
 	    	bbFilterPannel.add ( bottomTF , c);
 
-	    	JLabel leftLabel = new JLabel("left boundires");
+	    	JLabel rightLabel = new JLabel("long:");
+	    	c = new GridBagConstraints();
+	    	c.anchor = GridBagConstraints.FIRST_LINE_START;
+			c.gridx = 2;
+	    	c.gridy = 4;
+	       	bbFilterPannel.add ( rightLabel , c);
+
+	    	this. rightTF = new JTextField(15);
+	    	c = new GridBagConstraints();
+	    	c.anchor = GridBagConstraints.FIRST_LINE_START;
+			c.gridx = 3;
+	    	c.gridy = 4;
+	    	c.fill = GridBagConstraints.BOTH;
+	    	bbFilterPannel.add ( rightTF , c);
+
+
+	    	/*JLabel bottomLabel = new JLabel("bottom boundires");
 	    	c = new GridBagConstraints();
 	    	c.anchor = GridBagConstraints.FIRST_LINE_START;
 			c.gridx = 1;
-	    	c.gridy = 2;
-	    	bbFilterPannel.add ( leftLabel , c);
+	    	c.gridy = 4;
+	    	bbFilterPannel.add ( bottomLabel , c);
 
-	    	this.leftTF = new JTextField(15);
+	    	this.bottomTF = new JTextField(15);
 	    	c = new GridBagConstraints();
 	    	c.anchor = GridBagConstraints.FIRST_LINE_START;
-			c.gridx = 0;
-	    	c.gridy = 3;
+			c.gridx = 1;
+	    	c.gridy = 4;
 	    	c.fill = GridBagConstraints.BOTH;
-	    	bbFilterPannel.add ( leftTF , c);
+	    	bbFilterPannel.add ( bottomTF , c);
 
 	    	JLabel rightLabel = new JLabel("right boundires");
 	    	c = new GridBagConstraints();
 	    	c.anchor = GridBagConstraints.FIRST_LINE_START;
 			c.gridx = 1;
-	    	c.gridy = 2;
+	    	c.gridy = 3;
 	    	bbFilterPannel.add ( rightLabel , c);
 
 	    	this.rightTF = new JTextField(15);    
@@ -105,13 +166,81 @@ public class OTNGuiFilter {
 			c.gridx = 1;
 	    	c.gridy = 3;
 	    	c.fill = GridBagConstraints.BOTH;
-	    	bbFilterPannel.add ( rightTF , c);
+	    	bbFilterPannel.add ( rightTF , c);*/
+
+
+	    	JPanel radiusFilterPannel  = new JPanel( new GridBagLayout() );
+	    	filterPane.add( "Bounding circle", radiusFilterPannel );
+	    	radiusFilterPannel.setSize(300,300);
+		
+
+	    	JLabel centerlat = new JLabel("Circle center lat:");
+	    	c = new GridBagConstraints();
+	    	c.anchor = GridBagConstraints.FIRST_LINE_END;
+	    	c.weightx = 0.5;
+			c.gridx = 0;
+	    	c.gridy = 0;
+	    	c.insets = new Insets(5,5,5,5);
+	    	radiusFilterPannel.add ( centerlat  , c);
+
+	    	this.centerlatTF = new JTextField(15);    
+	    	c = new GridBagConstraints();
+	    	c.weightx = 0.5;
+			c.gridx = 1;
+	    	c.gridy = 0;
+	    	c.insets = new Insets(5,5,5,5);
+	    	radiusFilterPannel.add ( centerlatTF , c);
+
+	    	JLabel centerlong = new JLabel("Circle center long:");
+	    	c = new GridBagConstraints();
+	    	c.anchor = GridBagConstraints.FIRST_LINE_END;
+	    	c.weightx = 0.5;
+			c.gridx = 0;
+	    	c.gridy = 1;
+	    	c.insets = new Insets(5,5,5,5);
+	    	radiusFilterPannel.add ( centerlong  , c);
+
+	    	this.centerlongTF = new JTextField(15);    
+	    	c = new GridBagConstraints();
+	    	c.weightx = 0.5;
+			c.gridx = 1;
+	    	c.gridy = 1;
+	    	c.insets = new Insets(5,5,5,5);
+	    	radiusFilterPannel.add ( centerlongTF , c);
+
+	    	c = new GridBagConstraints();
+			c.gridx = 0;
+	    	c.gridy = 2;
+	    	c.fill = GridBagConstraints.BOTH;
+	    	c.gridwidth = 3;
+	    	c.ipady= 3;
+
+	    	radiusFilterPannel.add ( new JSeparator (SwingConstants.HORIZONTAL) , c );
+
+	    	JLabel radiustxt = new JLabel ("Circle radius:");
+	    	c = new	GridBagConstraints();
+	    	c.anchor = GridBagConstraints.FIRST_LINE_END;
+	    	c.weightx = 0.5;
+	    	c.gridx = 0;
+	    	c.gridy = 3;
+	    	c.insets = new Insets(5,5,5,5);
+	    	radiusFilterPannel.add (radiustxt, c);
+
+	    	this.radiusTF = new JTextField(15);    
+	    	c = new GridBagConstraints();
+	    	c.weightx = 0.5;
+			c.gridx = 1;
+	    	c.gridy = 3;
+	    	c.insets = new Insets(5,5,5,5);
+	    	radiusFilterPannel.add ( radiusTF , c);
+
+
 
 	    	c = new GridBagConstraints();
 	    	c.fill = GridBagConstraints.VERTICAL;
 	    	c.anchor = GridBagConstraints.LAST_LINE_END;
 	  	  	c.gridx = 0;
-	    	c.gridy = 1;
+	    	c.gridy = 1; 
 
 	    	JButton filterButton = new JButton("select");
 	    	filterFrame.add(filterButton, c);
