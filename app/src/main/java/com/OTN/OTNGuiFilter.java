@@ -254,9 +254,41 @@ public class OTNGuiFilter {
 					if ( top != null && bottom != null && left != null && right != null ){
 						editor.loadFile( _openOSM );
 						editor.setFilter(left , right , top , bottom );
+
+						System.out.println("set coords");
 						
 						editor.setOutput( _tempFile );
+
+						/*final JOptionPane optionPane = new JOptionPane
+						("This may take a while...", JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+
+						final JDialog dialog = new JDialog();
+						dialog.setTitle("Bounding box generation");
+						dialog.setModal(true);
+						dialog.setContentPane(optionPane);
+						dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+						dialog.pack();
+						dialog.setVisible(true);*/
+
+						long start = System.currentTimeMillis();
+
+						System.out.println("started time");
+
+
 						editor.runFilter();
+
+						System.out.println("filter running");
+
+						
+						
+						    
+
+						long finish = System.currentTimeMillis();
+        				long timeElapsed = finish - start;
+
+        				/*dialog.dispose();*/
+
+
 					} else {
 						_tempFile = _openOSM;
 					}
