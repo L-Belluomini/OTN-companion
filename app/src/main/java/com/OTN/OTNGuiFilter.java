@@ -259,34 +259,29 @@ public class OTNGuiFilter {
 						
 						editor.setOutput( _tempFile );
 
-						/*final JOptionPane optionPane = new JOptionPane
-						("This may take a while...", JOptionPane.PLAIN_MESSAGE, JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
 
-						final JDialog dialog = new JDialog();
+						JDialog dialog = new JDialog();
 						dialog.setTitle("Bounding box generation");
-						dialog.setModal(true);
-						dialog.setContentPane(optionPane);
+						dialog.setModal(false);
+						dialog.setSize(300,300);
 						dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+						JLabel text = new JLabel ("This may take a while...");
+						dialog.add(text);
 						dialog.pack();
-						dialog.setVisible(true);*/
+						dialog.setVisible(true);
 
 						long start = System.currentTimeMillis();
 
 						System.out.println("started time");
 
-
 						editor.runFilter();
 
-						System.out.println("filter running");
-
-						
-						
-						    
+						System.out.println("filter applied");
 
 						long finish = System.currentTimeMillis();
         				long timeElapsed = finish - start;
 
-        				/*dialog.dispose();*/
+        				dialog.dispose();
 
 
 					} else {
