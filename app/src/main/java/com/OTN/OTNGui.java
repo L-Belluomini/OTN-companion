@@ -162,6 +162,15 @@ public class OTNGui {
 
 
     	JButton analyzebutton = new JButton("analyze");
+    	analyzebutton.addActionListener(new ActionListener(){  
+			public void actionPerformed(ActionEvent e){ 
+				if (openOSM == null ){
+					System.out.println("no osm file set");
+					return;
+				}
+				OSMAnalyzer analizer = new OSMAnalyzer ( openOSM );
+        	}  
+    	});  
     	c = new GridBagConstraints();
     	c.anchor = GridBagConstraints.FIRST_LINE_START;
     	c.gridx = 1;

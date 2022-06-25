@@ -23,8 +23,15 @@ public class OSMAnalyzer {
 	private Sink osmXmlwriter;
 	private File tempFile;
 
+public OSMAnalyzer () {
+}
+public OSMAnalyzer (File file) {
+	loadFile(file);
+}
 
-	void loadFile(File file) {
+
+	void loadFile( File file) {
+		System.out.println("started analizing config");
 				boolean pbf = false;
 		CompressionMethod compression = CompressionMethod.None;
 
@@ -64,6 +71,9 @@ public class OSMAnalyzer {
 		}
 		osmXmlwriter = new XmlWriter( tempFile , CompressionMethod.None );
 		filter.setSink(osmXmlwriter);
+		System.out.println("analizer filter running");
+		osmReader.run();
+		System.out.println("analizer filter finished");
 		InputStream filterdStream;
 		try {
 		filterdStream = new FileInputStream( tempFile.getPath());
