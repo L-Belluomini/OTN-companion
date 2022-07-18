@@ -169,6 +169,7 @@ public class OTNGui {
 					return;
 				}
 				OSMAnalyzer analizer = new OSMAnalyzer ( openOSM );
+				analizer.execute();
         	}  
     	});  
     	c = new GridBagConstraints();

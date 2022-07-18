@@ -7,8 +7,9 @@ import org.openstreetmap.osmosis.xml.common.CompressionMethod;
 import org.openstreetmap.osmosis.xml.v0_6.*;
 import org.openstreetmap.osmosis.areafilter.v0_6.*;
 import java.io.*;
+import javax.swing.SwingWorker;
 
-public class OSMEditor {
+public class OSMEditor extends SwingWorker <Void, Void>{
 
 	private RunnableSource osmReader;
 	private AreaFilter filter;
@@ -186,22 +187,28 @@ public class OSMEditor {
 	}
 	
 
-	void runFilter (){
+	@Override
+	public Void doInBackground(){
 		if ( osmReader == null ){
 			 System.out.println("reader not set");
-			 return;
+			 return null;
 		} 
 		if ( filter == null ){
 			 System.out.println("filter not set");
-			 return;
+			 return null;
 		}
 		if ( osmXmlwriter == null ){
 			 System.out.println("osmXmlwriter not set");
-			 return;
+			 return null;
 		}
 
 		osmReader.run();
-
-
+		
+		return null;
 	}
+
+	@Override
+    public void done() {
+    	return;
+    }
 }

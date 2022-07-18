@@ -3,6 +3,8 @@ package com.OTN;
 import java.io.*;
 import java.util.*;
 
+import javax.swing.SwingWorker;
+
 import org.openstreetmap.osmosis.core.domain.v0_6.*;
 import org.openstreetmap.osmosis.core.task.v0_6.*;
 import org.openstreetmap.osmosis.core.filter.common.*;
@@ -18,13 +20,12 @@ import de.topobyte.osm4j.core.model.iface.OsmNode;
 import de.topobyte.osm4j.core.model.util.OsmModelUtil;
 import de.topobyte.osm4j.xml.dynsax.OsmXmlIterator;
 
-public class OSMAnalyzer {
+
+public class OSMAnalyzer extends SwingWorker <Void, Void> {
 	private RunnableSource osmReader;
 	private Sink osmXmlwriter;
 	private File tempFile;
 
-public OSMAnalyzer () {
-}
 public OSMAnalyzer (File file) {
 	loadFile(file);
 }
@@ -54,6 +55,12 @@ public OSMAnalyzer (File file) {
 			return;
 
 		}
+		
+
+
+	}
+	@Override
+	public Void doInBackground() {
 		Map<String,Set<String>>map = new HashMap <String,Set<String>> ( );
 
 		Set<String> set = new HashSet<String>( );
@@ -64,10 +71,10 @@ public OSMAnalyzer (File file) {
 		osmReader.setSink(filter);
 		try {
 			tempFile = File.createTempFile("osmAnalisys", ".osm");
-			tempFile.deleteOnExit();
+			//tempFile.deleteOnExit();
 		} catch (IOException ex) {
 			System.out.println(ex.toString());
-			return;
+			return null;
 		}
 		osmXmlwriter = new XmlWriter( tempFile , CompressionMethod.None );
 		filter.setSink(osmXmlwriter);
@@ -79,15 +86,21 @@ public OSMAnalyzer (File file) {
 		filterdStream = new FileInputStream( tempFile.getPath());
 		} catch (IOException ex) {
 			System.out.println(ex.toString());
-			return;
+			return null;
 		}
 		OsmIterator iterator = new OsmXmlIterator(filterdStream, false);
 		for (EntityContainer container : iterator) {
 			System.out.println( Long.toString( container.getEntity().getId() ) );
 		}
-
+		return null;
 
 	}
+
+	@Override
+    public void done() {
+    	return ;
+    }
+
 	
 
 }

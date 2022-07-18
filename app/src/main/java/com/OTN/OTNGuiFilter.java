@@ -5,6 +5,9 @@ import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;  
 
 public class OTNGuiFilter {
 
@@ -252,7 +255,7 @@ public class OTNGuiFilter {
 
 	    	JButton filterButton = new JButton("select");
 	    	filterFrame.add(filterButton, c);
-	    	filterButton.addActionListener(new ActionListener(){  
+	    	filterButton.addActionListener( new ActionListener(){  
 				public void actionPerformed(ActionEvent e){
 					Float top = Float.parseFloat ( topTF.getText() );
 					Float bottom = Float.parseFloat ( bottomTF.getText() );
@@ -261,17 +264,34 @@ public class OTNGuiFilter {
 
 					if ( top != null && bottom != null && left != null && right != null ){
 						System.out.println("filter data valid");
-						editor.loadFile( _openOSM );
 						editor.setFilter(left , right , top , bottom );
 
 						System.out.println("set coords");
 						
 						editor.setOutput( _tempFile );
+						System.out.println("started time");
+						long start = System.currentTimeMillis();
+						final JDialog dialog = new JDialog();
+
+						editor.addPropertyChangeListener(new PropertyChangeListener() {
+
+					        @Override
+					        public void propertyChange(PropertyChangeEvent evt) {
+					           if (evt.getPropertyName().equals("state")) {
+					               if (evt.getNewValue() == SwingWorker.StateValue.DONE) {
+					                  dialog.dispose();
+					               }
+					            }
+					         }
+					      });
+
+						editor.execute();
+
+						
 
 
-						JDialog dialog = new JDialog();
 						dialog.setTitle("Bounding box generation");
-						dialog.setModal(false);
+						dialog.setModal(true);
 						dialog.setSize(300,300);
 						dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 						JLabel text = new JLabel ("This may take a while...");
@@ -279,15 +299,10 @@ public class OTNGuiFilter {
 						dialog.pack();
 						dialog.setVisible(true);
 
-						long start = System.currentTimeMillis();
-
-						System.out.println("started time");
-
-						editor.runFilter();
-
+						
+						long finish = System.currentTimeMillis();
 						System.out.println("filter applied");
 
-						long finish = System.currentTimeMillis();
         				long timeElapsed = finish - start;
 
         				dialog.dispose();
