@@ -5,6 +5,7 @@ import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;  
@@ -21,6 +22,7 @@ public class OTNGuiFilter {
 	private JTextField radiusTF;
 	private File _tempFile;
 	private File _openOSM;
+	JFrame frame;
 
 
 		OTNGuiFilter( File openOSM , File tempFile ) {
@@ -35,6 +37,7 @@ public class OTNGuiFilter {
 	        //JPanel filterPanel=new JPanel();  
 	        filterFrame.setLayout( new GridBagLayout() ); 
 			filterFrame.setVisible(true);//making the frame visible
+			filterFrame.setPreferredSize(new Dimension(500,300));
 
 			GridBagConstraints c = new GridBagConstraints();
 			c.gridx = 0;
@@ -43,15 +46,11 @@ public class OTNGuiFilter {
 
 			JTabbedPane filterPane = new JTabbedPane();
 			filterFrame.add(filterPane , c);
-
-
-	    	filterFrame.pack();
 	    	
 	    	//////////////// SET PANES ////////////////////////////////////////
 	    	
 	    	JPanel bbFilterPannel  =new JPanel( new GridBagLayout() );
 	    	filterPane.add( "Bounding box",bbFilterPannel );
-	    	bbFilterPannel.setSize(300,300);
 
 	    	JLabel topleftcorner = new JLabel("Top left corner:");
 	    	c= new GridBagConstraints();
@@ -271,15 +270,15 @@ public class OTNGuiFilter {
 						editor.setOutput( _tempFile );
 						System.out.println("started time");
 						long start = System.currentTimeMillis();
-						final JDialog dialog = new JDialog();
-
+						final JDialog bbdialogwait = new JDialog();
+			
 						editor.addPropertyChangeListener(new PropertyChangeListener() {
 
 					        @Override
 					        public void propertyChange(PropertyChangeEvent evt) {
 					           if (evt.getPropertyName().equals("state")) {
 					               if (evt.getNewValue() == SwingWorker.StateValue.DONE) {
-					                  dialog.dispose();
+					                  bbdialogwait.dispose();
 					               }
 					            }
 					         }
@@ -287,25 +286,27 @@ public class OTNGuiFilter {
 
 						editor.execute();
 
-						
-
-
-						dialog.setTitle("Bounding box generation");
-						dialog.setModal(true);
-						dialog.setSize(300,300);
-						dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+						bbdialogwait.setTitle("Bounding box generation");
+						bbdialogwait.setModal(true);
+						bbdialogwait.setSize(300,300);
+						bbdialogwait.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 						JLabel text = new JLabel ("This may take a while...");
-						dialog.add(text);
-						dialog.pack();
-						dialog.setVisible(true);
+						bbdialogwait.add(text);
+						bbdialogwait.pack();
+						bbdialogwait.setVisible(true);
 
-						
 						long finish = System.currentTimeMillis();
+						
 						System.out.println("filter applied");
 
         				long timeElapsed = finish - start;
 
-        				dialog.dispose();
+        				bbdialogwait.dispose();
+
+        				frame = new JFrame();
+
+        				JOptionPane.showMessageDialog(frame,"Bounding box succesfully applied","Bounding box generation",
+    					JOptionPane.PLAIN_MESSAGE);
 
 
 					} else {
