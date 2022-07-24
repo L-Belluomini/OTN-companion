@@ -33,10 +33,9 @@ public class OTNGuiFilter {
 			this._tempFile = tempFile;
 			this._openOSM = openOSM;
 
-			JFrame filterFrame= new JFrame("filter");    
+			JFrame filterFrame= new JFrame("Filter");    
 	        filterFrame.setLayout( new GridBagLayout() ); 
 			filterFrame.setVisible(true);
-			filterFrame.setPreferredSize(new Dimension(500, 300));
 
 			GridBagConstraints c = new GridBagConstraints();
 			c.gridx = 0;
@@ -44,6 +43,7 @@ public class OTNGuiFilter {
 	    	c.fill = GridBagConstraints.BOTH;
 
 	    	this.tabs = new JTabbedPane();
+
     		filterFrame.add(tabs , c);
     		fillBBPane();
     		fillRadiusPane();
@@ -72,7 +72,9 @@ public class OTNGuiFilter {
 						
 						editor.setOutput( _tempFile );
 						System.out.println("started time");
+
 						long start = System.currentTimeMillis();
+
 						final JDialog bbdialogwait = new JDialog();
 			
 						editor.addPropertyChangeListener(new PropertyChangeListener() {
@@ -89,6 +91,8 @@ public class OTNGuiFilter {
 
 						editor.execute();
 
+						///////// WAIT DIALOG /////////
+
 	    				bbdialogwait.setLayout( new GridBagLayout() );
 
 						GridBagConstraints c = new GridBagConstraints();
@@ -98,7 +102,7 @@ public class OTNGuiFilter {
 
 						bbdialogwait.setTitle("Bounding box generation");
 						bbdialogwait.setModal(true);
-						bbdialogwait.setPreferredSize(new Dimension(200,100));
+						bbdialogwait.setSize(new Dimension(250,120));
 						bbdialogwait.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 						JLabel text = new JLabel ("This may take a while...");
 						bbdialogwait.add(text, c);
@@ -114,7 +118,7 @@ public class OTNGuiFilter {
 
         				frame = new JFrame();
 
-        				JOptionPane.showMessageDialog(frame,"Bounding box succesfully applied","Bounding box generation",
+        				JOptionPane.showMessageDialog(frame,"Bounding box succesfully applied in " + timeElapsed +" ms.","Bounding box generation",
     					JOptionPane.PLAIN_MESSAGE);
 
 
@@ -125,11 +129,11 @@ public class OTNGuiFilter {
 	    	});
 
 	    	filterFrame.add(filterButton, c);
-    		filterFrame.pack();
-
+	    	filterFrame.pack();
+    	
     	}		
 
-	    	//////////////////// BB FILTER PANNEL ////////////////////
+	    //////////////////// BB FILTER PANNEL ////////////////////
 	    	
 		private void fillBBPane() {
 		JPanel bbFilterPanel =new JPanel( new GridBagLayout() );  
@@ -232,7 +236,7 @@ public class OTNGuiFilter {
 
 	    }
 
-	    	//////////////////// RADIUS FILTER PANNEL ////////////////////
+	   	//////////////////// RADIUS FILTER PANNEL ////////////////////
 
 		private void fillRadiusPane() {
 		JPanel radiusFilterPanel =new JPanel( new GridBagLayout() );  
