@@ -5,6 +5,8 @@ import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.awt.Container;
+import java.awt.Dimension;
 
 //import OTNcompanion;
 
@@ -23,39 +25,49 @@ public class OTNGui {
 	
 	OTNGui () {
 		this.otnc = new OTNCompanion();
-		this.frame = new JFrame();
+		this.frame = new JFrame("OTN-Companion");
 		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE); 
-		frame.setLayout( new GridBagLayout() ); 
 		frame.setVisible(true);//making the frame visible
+		frame.setSize(new Dimension(500,300));
+
+		Container content = frame.getContentPane();
+
+		content.setLayout( new GridBagLayout() );
 
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
     	c.gridy = 0;
+    	c.weightx = 1;
+    	c.weighty = 1; 
     	c.fill = GridBagConstraints.BOTH;
 
 		this.tabs = new JTabbedPane();
-    	frame.add(tabs , c);
+    	content.add(tabs , c);
     	fillOSMPane();
     	fillProfilesPane();
     	fillGraphPane();
     	// for testing purposes
     	otnc.createAddProfiles(true);
 
+		c = new GridBagConstraints();
+    	c.fill = GridBagConstraints.VERTICAL;
+    	c.anchor = GridBagConstraints.LAST_LINE_END;
+  	  	c.gridx = 0;
+    	c.gridy = 1;
 
-    	c = new GridBagConstraints();
+    	JPanel buttonPanel = new JPanel();
+
     	JButton button = new JButton("generate");
     	button.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){ 
 				otnc.createGraph(false);
 				otnc.storeProfiles();
         	}  
-    	});  
+    	});
 
-    	c.fill = GridBagConstraints.VERTICAL;
-    	c.anchor = GridBagConstraints.LAST_LINE_END;
-  	  	c.gridx = 0;
-    	c.gridy = 1;
-    	frame.add(button, c);
+    	buttonPanel.add(button);
+
+    	content.add(buttonPanel, c);
     	frame.pack();
 	}	
 
@@ -178,79 +190,6 @@ public class OTNGui {
     	c.gridy = 4;
     	paneOSM.add (analyzebutton, c);
 
-    	/*
-    	this.topTF = new JTextField(15);
-    	c = new GridBagConstraints();
-    	c.anchor = GridBagConstraints.FIRST_LINE_START;
-		c.gridx = 1;
-    	c.gridy = 2;
-    	c.fill = GridBagConstraints.BOTH;
-    	paneOSM.add ( topTF , c);
-
-    	this.bottomTF = new JTextField(15);
-    	c = new GridBagConstraints();
-    	c.anchor = GridBagConstraints.FIRST_LINE_START;
-		c.gridx = 1;
-    	c.gridy = 4;
-    	c.fill = GridBagConstraints.BOTH;
-    	paneOSM.add ( bottomTF , c);
-
-    	this.leftTF = new JTextField(15);
-    	c = new GridBagConstraints();
-    	c.anchor = GridBagConstraints.FIRST_LINE_START;
-		c.gridx = 0;
-    	c.gridy = 3;
-    	c.fill = GridBagConstraints.BOTH;
-    	paneOSM.add ( leftTF , c);
-
-    	this.rightTF = new JTextField(15);    
-    	c = new GridBagConstraints();
-    	c.anchor = GridBagConstraints.FIRST_LINE_START;
-		c.gridx = 1;
-    	c.gridy = 3;
-    	c.fill = GridBagConstraints.BOTH;
-    	paneOSM.add ( rightTF , c);
-
-    	 JButton filterButton = new JButton("select");
-    	filterButton.addActionListener(new ActionListener(){  
-			public void actionPerformed(ActionEvent e){
-				Float top = Float.parseFloat ( topTF.getText() );
-				Float bottom = Float.parseFloat ( bottomTF.getText() );
-				Float left = Float.parseFloat ( leftTF.getText() );
-				Float right =Float.parseFloat ( rightTF.getText() );
-
-				if ( top != null && bottom != null && left != null && right != null ){
-					OSMEditor osmeditor = new OSMEditor();
-					osmeditor.loadFile(openOSM);
-					osmeditor.setFilter(left , right , top , bottom );
-					try {
-					tempFile = File.createTempFile("otnc", ".osm");
-					} catch (IOException ex) {
-						System.out.println(e.toString());
-					}
-					tempFile.deleteOnExit();
-					osmeditor.setOutput(tempFile);
-					osmeditor.runFilter();
-					otnc.setFileDir( tempFile.getAbsolutePath() );
-				} else {
-					otnc.setFileDir( openOSM.getPath());
-				}
-
-
-
-        	}  
-    	});  
-
-    	c = new GridBagConstraints();
-    	c.anchor = GridBagConstraints.FIRST_LINE_START;
-		c.gridx = 2;
-    	c.gridy = 5;
-    	c.fill = GridBagConstraints.BOTH;
-    	paneOSM.add ( filterButton , c);
-    	*/
-
-    	
-
 	}
 
 	
@@ -261,17 +200,19 @@ public class OTNGui {
 
     	ProfilesTableDataModel tableData = new ProfilesTableDataModel() ;
 
+    	GridBagConstraints c = new GridBagConstraints();
+
+    	c.gridx = 0;
+    	c.gridy = 0;
+    	c.weightx = 1;
+    	c.weighty = 1;
+    	c.fill = GridBagConstraints.BOTH; 
+
       	JTable table = new JTable(tableData);
       	table.setFillsViewportHeight(true);
       	JScrollPane scrollpane = new JScrollPane(table);
 
-      	/*GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0;
-    	c.gridy = 0;
-    	c.fill = GridBagConstraints.BOTH;
-      	paneProfiles.add(scrollpane , c );
-      	*/
-      	paneProfiles.add(scrollpane);
+      	paneProfiles.add(scrollpane, c);
 	}
 
 	private void fillGraphPane() {

@@ -8,7 +8,8 @@ import java.io.*;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;  
+import java.beans.PropertyChangeListener;
+import java.awt.Container;
 
 public class OTNGuiFilter {
 
@@ -37,25 +38,34 @@ public class OTNGuiFilter {
 	        filterFrame.setLayout( new GridBagLayout() ); 
 			filterFrame.setVisible(true);
 
+			Container content = filterFrame.getContentPane();
+
+			content.setLayout( new GridBagLayout() );
+
 			GridBagConstraints c = new GridBagConstraints();
 			c.gridx = 0;
 	    	c.gridy = 0;
+	    	c.weightx = 1;
+	    	c.weighty = 1; 
 	    	c.fill = GridBagConstraints.BOTH;
 
-	    	this.tabs = new JTabbedPane();
-
-    		filterFrame.add(tabs , c);
+			this.tabs = new JTabbedPane();
+	    	content.add(tabs , c);
     		fillBBPane();
     		fillRadiusPane();
 
-    		//////////////////// SELECT BUTTON ////////////////////
+    		//////////////////// SELECT PANEL ////////////////////
 
     		c = new GridBagConstraints();
     		c.fill = GridBagConstraints.VERTICAL;
     		c.anchor = GridBagConstraints.LAST_LINE_END;
   	  		c.gridx = 0;
     		c.gridy = 1;
-	    
+
+    		JPanel buttonPanel = new JPanel();
+
+    		////////////////// SELECT BUTTON ////////////////////
+
 	    	JButton filterButton = new JButton("select");
 	    	filterButton.addActionListener( new ActionListener(){  
 				public void actionPerformed(ActionEvent e){
@@ -128,7 +138,10 @@ public class OTNGuiFilter {
 	        	}  
 	    	});
 
-	    	filterFrame.add(filterButton, c);
+	    	buttonPanel.add(filterButton);
+
+	    	content.add(buttonPanel, c);
+
 	    	filterFrame.pack();
     	
     	}		
@@ -137,7 +150,7 @@ public class OTNGuiFilter {
 	    	
 		private void fillBBPane() {
 		JPanel bbFilterPanel =new JPanel( new GridBagLayout() );  
-    	this.tabs.add( "BoundingBox",bbFilterPanel );
+    	this.tabs.add( "Bounding box",bbFilterPanel );
 
 	    	JLabel topleftcorner = new JLabel("Top left corner:");
 	    	GridBagConstraints c = new GridBagConstraints();
@@ -240,7 +253,7 @@ public class OTNGuiFilter {
 
 		private void fillRadiusPane() {
 		JPanel radiusFilterPanel =new JPanel( new GridBagLayout() );  
-    	this.tabs.add( "Bounding Circle",radiusFilterPanel );		
+    	this.tabs.add( "Bounding circle",radiusFilterPanel );		
 
 	    	JLabel centerlat = new JLabel("Circle center lat:");
 	    	GridBagConstraints c = new GridBagConstraints();
