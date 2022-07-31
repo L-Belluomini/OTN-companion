@@ -23,15 +23,18 @@ import de.topobyte.osm4j.xml.dynsax.OsmXmlIterator;
 
 public class OSMAnalyzer extends SwingWorker <Void, Void> {
 	private RunnableSource osmReader;
+	private String filePath;
 	private Sink osmXmlwriter;
 	private File tempFile;
 
 public OSMAnalyzer (File file) {
+	filePath = file.getPath();
+	System.out.println(filePath);
 	loadFile(file);
 }
 
 
-	void loadFile( File file) {
+	private void loadFile( File file) {
 		System.out.println("started analizing config");
 				boolean pbf = false;
 		CompressionMethod compression = CompressionMethod.None;
@@ -62,16 +65,18 @@ public OSMAnalyzer (File file) {
 	@Override
 	public Void doInBackground() {
 		Map<String,Set<String>>map = new HashMap <String,Set<String>> ( );
+		Set<String> keys = new HashSet<String>( );
+		Set<String> boundaryValues = new HashSet<String>( );
+		keys.add("boundary");
+		boundaryValues.add("administrative");
+		map.put ("boundary", boundaryValues );
 
-		Set<String> set = new HashSet<String>( );
-		set.add("boundary");
-
-		TagFilter filter = new TagFilter ( "accept-relation" , set , map  );
+		TagFilter filter = new TagFilter ( "accept-relation" , keys , map  ); 
 
 		osmReader.setSink(filter);
 		try {
 			tempFile = File.createTempFile("osmAnalisys", ".osm");
-			//tempFile.deleteOnExit();
+			tempFile.deleteOnExit();
 		} catch (IOException ex) {
 			System.out.println(ex.toString());
 			return null;
@@ -88,9 +93,25 @@ public OSMAnalyzer (File file) {
 			System.out.println(ex.toString());
 			return null;
 		}
+		geoPoliticalBoundires result = new geoPoliticalBoundires(filePath);
 		OsmIterator iterator = new OsmXmlIterator(filterdStream, false);
 		for (EntityContainer container : iterator) {
-			System.out.println( Long.toString( container.getEntity().getId() ) );
+			if (container.getType() == de.topobyte.osm4j.core.model.iface.EntityType.Relation){
+				for ( int keyIndex =0; keyIndex < container.getEntity().getNumberOfTags(); keyIndex ++ ){
+					if ( container.getEntity().getTag(keyIndex).getKey() ) {
+						switch( container.getEntity().getTag(keyIndex).getNewValue() ) {
+							case ("2")
+								break
+							case ("3")
+								break
+								
+						}
+					}
+				}
+				
+				System.out.println(  container.getEntity().toString() );
+			}
+			
 		}
 		return null;
 
