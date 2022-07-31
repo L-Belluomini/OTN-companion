@@ -245,15 +245,6 @@ public class OTNGuiFilter {
 	    	c.gridy = 4;
 	    	c.fill = GridBagConstraints.BOTH;
 	    	c.insets = new Insets(0,0,0,5);
-	    	bbFilterPanel.add ( rightTF , c);
-
-	    }
-
-	   	//////////////////// RADIUS FILTER PANNEL ////////////////////
-
-		private void fillRadiusPane() {
-		JPanel radiusFilterPanel =new JPanel( new GridBagLayout() );  
-    	this.tabs.add( "Bounding circle",radiusFilterPanel );		
 
 	    	JLabel centerlat = new JLabel("Circle center lat:");
 	    	GridBagConstraints c = new GridBagConstraints();
@@ -313,8 +304,99 @@ public class OTNGuiFilter {
 			c.gridx = 1;
 	    	c.gridy = 3;
 	    	c.insets = new Insets(5,5,5,5);
-	    	radiusFilterPanel.add ( radiusTF , c);
+	    	radiusFilterPannel.add ( radiusTF , c);
 
-	    }
+
+
+	    	c = new GridBagConstraints();
+	    	c.fill = GridBagConstraints.VERTICAL;
+	    	c.anchor = GridBagConstraints.LAST_LINE_END;
+	  	  	c.gridx = 0;
+	    	c.gridy = 1; 
+
+	    	JButton filterButton = new JButton("select");
+	    	filterFrame.add(filterButton, c);
+	    	filterButton.addActionListener( new ActionListener(){  
+				public void actionPerformed(ActionEvent e){
+					
+						
+						editor.setOutput( _tempFile );
+						System.out.println("started time");
+						long start = System.currentTimeMillis();
+						final JDialog bbdialogwait = new JDialog();
+			
+						editor.addPropertyChangeListener(new PropertyChangeListener() {
+
+					        @Override
+					        public void propertyChange(PropertyChangeEvent evt) {
+					           if (evt.getPropertyName().equals("state")) {
+					               if (evt.getNewValue() == SwingWorker.StateValue.DONE) {
+					                  bbdialogwait.dispose();
+					               }
+					            }
+					         }
+					      });
+
+						editor.execute();
+
+						bbdialogwait.setTitle("Bounding box generation");
+						bbdialogwait.setModal(true);
+						bbdialogwait.setSize(300,300);
+						bbdialogwait.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+						JLabel text = new JLabel ("This may take a while...");
+						bbdialogwait.add(text);
+						bbdialogwait.pack();
+						bbdialogwait.setVisible(true);
+
+						long finish = System.currentTimeMillis();
+						
+						System.out.println("filter applied");
+
+        				long timeElapsed = finish - start;
+
+        				bbdialogwait.dispose();
+
+        				frame = new JFrame();
+
+        				JOptionPane.showMessageDialog(frame,"Bounding box succesfully applied","Bounding box generation",
+    					JOptionPane.PLAIN_MESSAGE);
+
+
+					} else {
+						_tempFile = _openOSM;
+					}
+	        	  
+	    	});
+
 
 	}
+	private SetBBFilter(){
+	    		Float top = Float.parseFloat ( topTF.getText() );
+					Float bottom = Float.parseFloat ( bottomTF.getText() );
+					Float left = Float.parseFloat ( leftTF.getText() );
+					Float right =Float.parseFloat ( rightTF.getText() );
+
+					if ( top != null && bottom != null && left != null && right != null ){
+						System.out.println("filter data valid");
+						editor.setFilter(left , right , top , bottom );
+
+						System.out.println("set coords");
+
+    }
+	private SetPolyFilter(){
+		
+	}
+
+	private SetCircleFilter(){
+		Float radius = Float.parseFloat ( radiusTF.getText() );
+		Float centerlat = Float.parseFloat ( centerlatTF.getText() );
+		Float centerlong = Float.parseFloat ( centerlongTF.getText() );
+
+		if (radius != null && centerlong != null && centerlat != null){
+			System.out.println("filter data valid");
+			editor.setFilter( centerlat , centerlong , radius );
+			System.out.println("set coords");
+
+		}
+   	}
+}

@@ -103,6 +103,7 @@ public class OSMEditor extends SwingWorker <Void, Void>{
 			,1
 		}
 	};
+	
 	private final double earthRadiusM = 6371000;
 
 	OSMEditor(){
@@ -132,6 +133,10 @@ public class OSMEditor extends SwingWorker <Void, Void>{
 		}
 
 	}
+	void setOutput (File file) {
+		osmXmlwriter = new XmlWriter( file , CompressionMethod.None );
+		filter.setSink(osmXmlwriter);
+	}
 
 	void setFilter( double left,
 	        double right,
@@ -142,10 +147,6 @@ public class OSMEditor extends SwingWorker <Void, Void>{
 		osmReader.setSink(filter);
 	}
 
-	void setOutput (File file) {
-		osmXmlwriter = new XmlWriter( file , CompressionMethod.None );
-		filter.setSink(osmXmlwriter);
-	}
 	void setFilter( double centerLat,
         double centerLong,
         double rMteters) {
@@ -183,8 +184,13 @@ public class OSMEditor extends SwingWorker <Void, Void>{
 
 		filter = new  PolygonFilter( IdTrackerType.Dynamic, tempFile, true ,true , false , true );
 		osmReader.setSink(filter);
-
 	}
+	void setFilter(File plyFile ) {
+		filter = new  PolygonFilter( IdTrackerType.Dynamic, plyFile, true ,true , false , true );
+		osmReader.setSink(filter);
+	}
+
+
 	
 
 	@Override
