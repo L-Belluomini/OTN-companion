@@ -370,24 +370,25 @@ public class OTNGuiFilter {
 
 
 	}
-	private SetBBFilter(){
-	    		Float top = Float.parseFloat ( topTF.getText() );
-					Float bottom = Float.parseFloat ( bottomTF.getText() );
-					Float left = Float.parseFloat ( leftTF.getText() );
-					Float right =Float.parseFloat ( rightTF.getText() );
+	private void SetBBFilter(){
+		Float top = Float.parseFloat ( topTF.getText() );
+		Float bottom = Float.parseFloat ( bottomTF.getText() );
+		Float left = Float.parseFloat ( leftTF.getText() );
+		Float right =Float.parseFloat ( rightTF.getText() );
 
-					if ( top != null && bottom != null && left != null && right != null ){
-						System.out.println("filter data valid");
-						editor.setFilter(left , right , top , bottom );
+		if ( top != null && bottom != null && left != null && right != null ){
+			System.out.println("filter data valid");
+			editor.setFilter(left , right , top , bottom );
+			System.out.println("set coords");
 
-						System.out.println("set coords");
-
+		}
     }
-	private SetPolyFilter(){
+    
+	//private void SetPolyFilter(){
 		
-	}
+	//}
 
-	private SetCircleFilter(){
+	private void SetCircleFilter(){
 		Float radius = Float.parseFloat ( radiusTF.getText() );
 		Float centerlat = Float.parseFloat ( centerlatTF.getText() );
 		Float centerlong = Float.parseFloat ( centerlongTF.getText() );

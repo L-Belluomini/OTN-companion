@@ -98,12 +98,12 @@ public OSMAnalyzer (File file) {
 		for (EntityContainer container : iterator) {
 			if (container.getType() == de.topobyte.osm4j.core.model.iface.EntityType.Relation){
 				for ( int keyIndex =0; keyIndex < container.getEntity().getNumberOfTags(); keyIndex ++ ){
-					if ( container.getEntity().getTag(keyIndex).getKey() ) {
-						switch( container.getEntity().getTag(keyIndex).getNewValue() ) {
-							case ("2")
-								break
-							case ("3")
-								break
+					if ( container.getEntity().getTag(keyIndex).getKey() == "admin_level") {
+						switch( container.getEntity().getTag(keyIndex).getValue() ) {
+							case ("2"):
+								break;
+							case ("3"):
+								break;
 								
 						}
 					}
