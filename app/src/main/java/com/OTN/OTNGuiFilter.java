@@ -23,7 +23,7 @@ public class OTNGuiFilter {
 	private JTextField radiusTF;
 	private File _tempFile;
 	private File _openOSM;
-	private JTabbedPane tabs;
+	static private JTabbedPane tabs;
 	JFrame frame;
 
 		OTNGuiFilter( File openOSM , File tempFile ) {
@@ -53,7 +53,6 @@ public class OTNGuiFilter {
 	    	content.add(tabs , c);
     		fillBBPane();
     		fillRadiusPane();
-
     		//////////////////// SELECT PANEL ////////////////////
 
     		c = new GridBagConstraints();
@@ -69,72 +68,68 @@ public class OTNGuiFilter {
 	    	JButton filterButton = new JButton("select");
 	    	filterButton.addActionListener( new ActionListener(){  
 				public void actionPerformed(ActionEvent e){
-					Float top = Float.parseFloat ( topTF.getText() );
-					Float bottom = Float.parseFloat ( bottomTF.getText() );
-					Float left = Float.parseFloat ( leftTF.getText() );
-					Float right =Float.parseFloat ( rightTF.getText() );
-
-					if ( top != null && bottom != null && left != null && right != null ){
-						System.out.println("filter data valid");
-						editor.setFilter(left , right , top , bottom );
-
-						System.out.println("set coords");
-						
-						editor.setOutput( _tempFile );
-						System.out.println("started time");
-
-						long start = System.currentTimeMillis();
-
-						final JDialog bbdialogwait = new JDialog();
-			
-						editor.addPropertyChangeListener(new PropertyChangeListener() {
-
-					        @Override
-					        public void propertyChange(PropertyChangeEvent evt) {
-					           if (evt.getPropertyName().equals("state")) {
-					               if (evt.getNewValue() == SwingWorker.StateValue.DONE) {
-					                  bbdialogwait.dispose();
-					               }
-					            }
-					         }
-					      });
-
-						editor.execute();
-
-						///////// WAIT DIALOG /////////
-
-	    				bbdialogwait.setLayout( new GridBagLayout() );
-
-						GridBagConstraints c = new GridBagConstraints();
-	    				c.anchor = GridBagConstraints.CENTER;
-	  	  				c.gridx = 0;
-	    				c.gridy = 0;
-
-						bbdialogwait.setTitle("Bounding box generation");
-						bbdialogwait.setModal(true);
-						bbdialogwait.setSize(new Dimension(250,120));
-						bbdialogwait.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-						JLabel text = new JLabel ("This may take a while...");
-						bbdialogwait.add(text, c);
-						bbdialogwait.setVisible(true);
-
-						long finish = System.currentTimeMillis();
-						
-						System.out.println("filter applied");
-
-        				long timeElapsed = finish - start;
-
-        				bbdialogwait.dispose();
-
-        				frame = new JFrame();
-
-        				JOptionPane.showMessageDialog(frame,"Bounding box succesfully applied in " + timeElapsed +" ms.","Bounding box generation",
-    					JOptionPane.PLAIN_MESSAGE);
-
-
-					} else {
-						_tempFile = _openOSM;
+					
+					// switch for different type
+					System.out.println( tabs.getSelectedComponent().toString() );
+					switch( tabs.getSelectedComponent( ) ){
+						case bbFilterPanel:
+							System.out.println( "selected bb panel" );
+							break;
+						case radiusFilterPanel:
+							System.out.println( "selected radius panel" );
+							break;
 					}
+						
+					editor.setOutput( _tempFile );
+					System.out.println("started time");
+
+					long start = System.currentTimeMillis();
+
+					final JDialog bbdialogwait = new JDialog();
+		
+					editor.addPropertyChangeListener(new PropertyChangeListener() {
+
+				        @Override
+				        public void propertyChange(PropertyChangeEvent evt) {
+				           if (evt.getPropertyName().equals("state")) {
+				               if (evt.getNewValue() == SwingWorker.StateValue.DONE) {
+				                  bbdialogwait.dispose();
+				               }
+				            }
+				        }
+				    });
+
+					editor.execute();
+
+					///////// WAIT DIALOG /////////
+
+    				bbdialogwait.setLayout( new GridBagLayout() );
+
+					GridBagConstraints c = new GridBagConstraints();
+    				c.anchor = GridBagConstraints.CENTER;
+  	  				c.gridx = 0;
+    				c.gridy = 0;
+
+					bbdialogwait.setTitle("Bounding box generation");
+					bbdialogwait.setModal(true);
+					bbdialogwait.setSize(new Dimension(250,120));
+					bbdialogwait.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+					JLabel text = new JLabel ("This may take a while...");
+					bbdialogwait.add(text, c);
+					bbdialogwait.setVisible(true);
+
+					long finish = System.currentTimeMillis();
+					
+					System.out.println("filter applied");
+
+    				long timeElapsed = finish - start;
+
+    				bbdialogwait.dispose();
+
+    				frame = new JFrame();
+
+    				JOptionPane.showMessageDialog(frame,"Bounding box succesfully applied in " + timeElapsed +" ms.","Bounding box generation",
+					JOptionPane.PLAIN_MESSAGE);
 	        	}  
 	    	});
 
@@ -149,8 +144,8 @@ public class OTNGuiFilter {
 	    //////////////////// BB FILTER PANNEL ////////////////////
 	    	
 		private void fillBBPane() {
-		JPanel bbFilterPanel =new JPanel( new GridBagLayout() );  
-    	this.tabs.add( "Bounding box",bbFilterPanel );
+			JPanel bbFilterPanel =new JPanel( new GridBagLayout() );  
+    		this.tabs.add( "Bounding box",bbFilterPanel );
 
 	    	JLabel topleftcorner = new JLabel("Top left corner:");
 	    	GridBagConstraints c = new GridBagConstraints();
@@ -245,7 +240,13 @@ public class OTNGuiFilter {
 	    	c.gridy = 4;
 	    	c.fill = GridBagConstraints.BOTH;
 	    	c.insets = new Insets(0,0,0,5);
+	    	bbFilterPanel.add ( rightTF , c);
+	    }
+	    	    //////////////////// RADIUS FILTER PANNEL ////////////////////
 
+	    private void fillRadiusPane() {
+	    	JPanel radiusFilterPanel =new JPanel( new GridBagLayout() );  
+    		this.tabs.add( "radius area",radiusFilterPanel );
 	    	JLabel centerlat = new JLabel("Circle center lat:");
 	    	GridBagConstraints c = new GridBagConstraints();
 	    	c.anchor = GridBagConstraints.FIRST_LINE_END;
@@ -304,72 +305,10 @@ public class OTNGuiFilter {
 			c.gridx = 1;
 	    	c.gridy = 3;
 	    	c.insets = new Insets(5,5,5,5);
-	    	radiusFilterPannel.add ( radiusTF , c);
+	    	radiusFilterPanel.add ( radiusTF , c);
 
+	    }
 
-
-	    	c = new GridBagConstraints();
-	    	c.fill = GridBagConstraints.VERTICAL;
-	    	c.anchor = GridBagConstraints.LAST_LINE_END;
-	  	  	c.gridx = 0;
-	    	c.gridy = 1; 
-
-	    	JButton filterButton = new JButton("select");
-	    	filterFrame.add(filterButton, c);
-	    	filterButton.addActionListener( new ActionListener(){  
-				public void actionPerformed(ActionEvent e){
-					
-						
-						editor.setOutput( _tempFile );
-						System.out.println("started time");
-						long start = System.currentTimeMillis();
-						final JDialog bbdialogwait = new JDialog();
-			
-						editor.addPropertyChangeListener(new PropertyChangeListener() {
-
-					        @Override
-					        public void propertyChange(PropertyChangeEvent evt) {
-					           if (evt.getPropertyName().equals("state")) {
-					               if (evt.getNewValue() == SwingWorker.StateValue.DONE) {
-					                  bbdialogwait.dispose();
-					               }
-					            }
-					         }
-					      });
-
-						editor.execute();
-
-						bbdialogwait.setTitle("Bounding box generation");
-						bbdialogwait.setModal(true);
-						bbdialogwait.setSize(300,300);
-						bbdialogwait.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-						JLabel text = new JLabel ("This may take a while...");
-						bbdialogwait.add(text);
-						bbdialogwait.pack();
-						bbdialogwait.setVisible(true);
-
-						long finish = System.currentTimeMillis();
-						
-						System.out.println("filter applied");
-
-        				long timeElapsed = finish - start;
-
-        				bbdialogwait.dispose();
-
-        				frame = new JFrame();
-
-        				JOptionPane.showMessageDialog(frame,"Bounding box succesfully applied","Bounding box generation",
-    					JOptionPane.PLAIN_MESSAGE);
-
-
-					} else {
-						_tempFile = _openOSM;
-					}
-	        	  
-	    	});
-
-
-	}
 	private void SetBBFilter(){
 		Float top = Float.parseFloat ( topTF.getText() );
 		Float bottom = Float.parseFloat ( bottomTF.getText() );
