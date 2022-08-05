@@ -134,6 +134,10 @@ public class OSMEditor extends SwingWorker <Void, Void>{
 
 	}
 	void setOutput (File file) {
+		if (filter == null ) {
+			System.out.println("filter type and cords not set");
+			return;
+		}
 		osmXmlwriter = new XmlWriter( file , CompressionMethod.None );
 		filter.setSink(osmXmlwriter);
 	}
@@ -155,6 +159,7 @@ public class OSMEditor extends SwingWorker <Void, Void>{
 		double tmpLat;
 		double tmpLong;
 		File tempFile = null;
+		System.out.println("started creating poly file for filter");
 
 		try {
 			tempFile = File.createTempFile("radiusArea", ".poly");
@@ -173,6 +178,7 @@ public class OSMEditor extends SwingWorker <Void, Void>{
 				tmpStgring = Double.toString(tmpLong) + " " + Double.toString(tmpLat) + System.lineSeparator(); 
 				buffer.write(tmpStgring);  
 			}
+			System.out.println("finished loop for poly file");
 			tmpStgring = "END";
 			buffer.write(tmpStgring);
 			tmpStgring = "END";
@@ -207,7 +213,7 @@ public class OSMEditor extends SwingWorker <Void, Void>{
 			 System.out.println("osmXmlwriter not set");
 			 return null;
 		}
-
+		System.out.println("running actual filter");
 		osmReader.run();
 		
 		return null;

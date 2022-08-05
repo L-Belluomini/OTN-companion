@@ -24,6 +24,7 @@ public class OTNGuiFilter {
 	private File _tempFile;
 	private File _openOSM;
 	static private JTabbedPane tabs;
+	private File polyFilterFile;
 	JFrame frame;
 
 		OTNGuiFilter( File openOSM , File tempFile ) {
@@ -51,8 +52,9 @@ public class OTNGuiFilter {
 
 			this.tabs = new JTabbedPane();
 	    	content.add(tabs , c);
-    		fillBBPane();
+    		fillBBPane(); // order is critical
     		fillRadiusPane();
+    		fillPolyPane();
     		//////////////////// SELECT PANEL ////////////////////
 
     		c = new GridBagConstraints();
@@ -69,14 +71,18 @@ public class OTNGuiFilter {
 	    	filterButton.addActionListener( new ActionListener(){  
 				public void actionPerformed(ActionEvent e){
 					
-					// switch for different type
-					System.out.println( tabs.getSelectedComponent().toString() );
-					switch( tabs.getSelectedComponent( ) ){
-						case bbFilterPanel:
+					switch( tabs.getSelectedIndex( ) ){
+						case 0:
 							System.out.println( "selected bb panel" );
+							SetBBFilter();
 							break;
-						case radiusFilterPanel:
+						case 1:
 							System.out.println( "selected radius panel" );
+							SetCircleFilter();
+							break;
+						case 2:
+							System.out.println( "selected poly panel" );
+							setPolyFilter();
 							break;
 					}
 						
@@ -130,6 +136,7 @@ public class OTNGuiFilter {
 
     				JOptionPane.showMessageDialog(frame,"Bounding box succesfully applied in " + timeElapsed +" ms.","Bounding box generation",
 					JOptionPane.PLAIN_MESSAGE);
+					frame.dispose();
 	        	}  
 	    	});
 
@@ -290,7 +297,7 @@ public class OTNGuiFilter {
 
 	    	radiusFilterPanel.add ( new JSeparator (SwingConstants.HORIZONTAL) , c );
 
-	    	JLabel radiustxt = new JLabel ("Circle radius:");
+	    	JLabel radiustxt = new JLabel ("Circle radius (m):");
 	    	c = new	GridBagConstraints();
 	    	c.anchor = GridBagConstraints.FIRST_LINE_END;
 	    	c.weightx = 0.5;
@@ -306,7 +313,32 @@ public class OTNGuiFilter {
 	    	c.gridy = 3;
 	    	c.insets = new Insets(5,5,5,5);
 	    	radiusFilterPanel.add ( radiusTF , c);
+	    }
+	    private void fillPolyPane () {
+	    	final JPanel polyFilterPanel =new JPanel( new GridBagLayout() );  
+    		this.tabs.add( "polyfile",polyFilterPanel );
+    		final JFileChooser polyFilterFileChoser = new JFileChooser();
 
+
+    		//JLabel hint = new JLabel("Circle center lat:");
+	    	GridBagConstraints c = new GridBagConstraints();
+	    	c.anchor = GridBagConstraints.FIRST_LINE_END;
+	    	c.weightx = 0.5;
+			c.gridx = 0;
+	    	c.gridy = 0;
+	    	c.insets = new Insets(5,5,5,5);
+	    	JButton polyFileselctf = new JButton("select poly file");
+	    	polyFileselctf.addActionListener( new ActionListener(){  
+				public void actionPerformed(ActionEvent e){
+					int returnVal = polyFilterFileChoser.showOpenDialog(polyFilterPanel);
+       				if (returnVal == JFileChooser.APPROVE_OPTION) {
+            			polyFilterFile = polyFilterFileChoser.getSelectedFile();
+            		}
+
+				}
+			});
+
+	    	polyFilterPanel.add ( polyFileselctf  , c);
 	    }
 
 	private void SetBBFilter(){
@@ -323,10 +355,6 @@ public class OTNGuiFilter {
 		}
     }
     
-	//private void SetPolyFilter(){
-		
-	//}
-
 	private void SetCircleFilter(){
 		Float radius = Float.parseFloat ( radiusTF.getText() );
 		Float centerlat = Float.parseFloat ( centerlatTF.getText() );
@@ -336,6 +364,15 @@ public class OTNGuiFilter {
 			System.out.println("filter data valid");
 			editor.setFilter( centerlat , centerlong , radius );
 			System.out.println("set coords");
+
+		}
+	}
+
+	private void setPolyFilter(){
+		if ( polyFilterFile.getName().endsWith(".poly") ){
+			System.out.println("filter file valid");
+			editor.setFilter( polyFilterFile);
+			System.out.println("set poly file for direct filter");
 
 		}
    	}
