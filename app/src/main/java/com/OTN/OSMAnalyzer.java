@@ -68,6 +68,7 @@ public OSMAnalyzer (File file) {
 		Set<String> keys = new HashSet<String>( );
 		Set<String> boundaryValues = new HashSet<String>( );
 		keys.add("boundary");
+		keys.add("admin_level");
 		boundaryValues.add("administrative");
 		map.put ("boundary", boundaryValues );
 
@@ -96,21 +97,17 @@ public OSMAnalyzer (File file) {
 		geoPoliticalBoundires result = new geoPoliticalBoundires(filePath);
 		OsmIterator iterator = new OsmXmlIterator(filterdStream, false);
 		for (EntityContainer container : iterator) {
-			if (container.getType() == de.topobyte.osm4j.core.model.iface.EntityType.Relation){
-				for ( int keyIndex =0; keyIndex < container.getEntity().getNumberOfTags(); keyIndex ++ ){
-					if ( container.getEntity().getTag(keyIndex).getKey() == "admin_level") {
-						switch( container.getEntity().getTag(keyIndex).getValue() ) {
-							case ("2"):
-								break;
-							case ("3"):
-								break;
-								
-						}
+			if (container.getType() == de.topobyte.osm4j.core.model.iface.EntityType.Relation) {
+				/*for ( int keyIndex =0; keyIndex < container.getEntity().getNumberOfTags(); keyIndex ++ ){
+					if ( container.getEntity().getTag(keyIndex).getKey() == "admin_level" && container.getEntity().getTag(keyIndex).getValue == 2 ) {
+						System.out.println( container.toString() );
+						
+
 					}
 				}
 				
 				System.out.println(  container.getEntity().toString() );
-			}
+			*/}
 			
 		}
 		return null;

@@ -5,10 +5,12 @@ import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.util.List;
+import java.util.LinkedList;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Color;
 
-//import OTNcompanion;
 
 public class OTNGui {
 
@@ -16,18 +18,24 @@ public class OTNGui {
 	private JTabbedPane tabs;
 	private OTNCompanion otnc;
 	final JFileChooser fc = new JFileChooser();
-	private File openOSM = null;
-	private File tempFile;
-	
+	final private LinkedList<AreaElement> areaElements;
+	private areaElements selectedElement;
+	private File vnsKmlFile;
+	private JRadioButton otnRadioButton;
+	private JRadioButton vnsRadioButton;
+	private JTextField areaNameTF;
+
 	public static void main(String[] args) {
 	new OTNGui();
     }
 	
 	OTNGui () {
 		this.otnc = new OTNCompanion();
+		this.areaElements = new LinkedList();
+
 		this.frame = new JFrame("OTN-Companion");
 		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE); 
-		frame.setVisible(true);//making the frame visible
+		frame.setVisible(true);
 		frame.setSize(new Dimension(500,300));
 
 		Container content = frame.getContentPane();
@@ -46,8 +54,8 @@ public class OTNGui {
     	fillOSMPane();
     	fillProfilesPane();
     	fillGraphPane();
-    	// for testing purposes
-    	otnc.createAddProfiles(true);
+
+    	otnc.createAddProfiles(true); // for testing purposes//////////////////////////////////////////
 
 		c = new GridBagConstraints();
     	c.fill = GridBagConstraints.VERTICAL;
@@ -60,8 +68,12 @@ public class OTNGui {
     	JButton button = new JButton("generate");
     	button.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){ 
-				otnc.createGraph(false);
-				otnc.storeProfiles();
+				if ( otnRadioButton.isSelected() ){
+					otnc.createGraph();
+				} else if ( vnsRadioButton.isSelected() && vnsKmlFile.exists() ) {
+				otnc.createVNSGraph(vnsKmlFile);
+				}
+
         	}  
     	});
 
@@ -75,8 +87,17 @@ public class OTNGui {
 		JPanel paneOSM =new JPanel( new GridBagLayout() );  
     	this.tabs.add( "Area",paneOSM );
     	
+		areaNameTF = new JTextField(15);
+		GridBagConstraints c = new GridBagConstraints();
+    	c.anchor = GridBagConstraints.FIRST_LINE_START;
+		c.gridx = 1;
+    	c.gridy = 1;
+    	c.insets = new Insets(0,0,0,5);
+    	c.fill = GridBagConstraints.BOTH;
+    	paneOSM.add ( areaNameTF , c);
 
-    	GridBagConstraints c = new GridBagConstraints();
+
+    	c = new GridBagConstraints();
     	c.anchor = GridBagConstraints.FIRST_LINE_START;
 		c.gridx = 0;
     	c.gridy = 0;
@@ -90,7 +111,9 @@ public class OTNGui {
 	            if (returnVal == JFileChooser.APPROVE_OPTION) {
 	            	File file = fc.getSelectedFile();
 	            	if ( file.exists() ){
-	            		openOSM = file;
+	            		areaElements.add ( new AreaElement ( file  ) );
+	            		areaElements.getLast().setName( areaNameTF.getText() );
+	            		selectedElement = areaElements.getLast();
 	            	}
 
 	            }
@@ -111,7 +134,7 @@ public class OTNGui {
 	            if (returnVal == JFileChooser.APPROVE_OPTION) {
 	            	File file = fc.getSelectedFile();
 	            	if ( file.exists() ){
-	            		// to do
+	            		selectedElement.setpolyBoundary(file);
 	            	}
 
 	            }
@@ -126,18 +149,17 @@ public class OTNGui {
     	c.gridy = 2;
 
     	JButton filterButton = new JButton("add BB Filter");
+    	filterButton.setBackground( Color.CYAN );
     	filterButton.addActionListener( new ActionListener() {  
 			public void actionPerformed(ActionEvent e){ 
-				if ( openOSM == null ) {
+				if ( ! selectedElement.isValid() ) {
 					return;
 				}
-				try {
-					tempFile = File.createTempFile("otnc", ".osm");
-				} catch (IOException ex) {
-					System.out.println(ex.toString());
-				}
-				tempFile.deleteOnExit();
-				OTNGuiFilter filter = new OTNGuiFilter( openOSM,tempFile );
+				AreaElement inpunt = areaElements.getLast();
+				AreaElement output = new AreaElement();
+				areaElements.add (output);
+
+				OTNGuiFilter filter = new OTNGuiFilter( inpunt , output );
 	        }  
     	}); 
 
@@ -159,28 +181,31 @@ public class OTNGui {
     	c.gridy = 3;
     	c.fill = GridBagConstraints.BOTH;
 
+    	/*
     	JButton selectButton = new JButton("selct raw area");
     	selectButton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){ 
-				if (openOSM == null ){
+				if (areaElements.getLast() == null ){
 					System.out.println("no osm file set");
 					return;
 				}
-				otnc.setFileDir( openOSM.getPath());
+				otnc.setOsmArea( areaElements.getFirst() );
         	}  
     	});  
 
-    	paneOSM.add ( selectButton , c);
+    	paneOSM.add ( selectButton , c); 
+    	*/
 
 
     	JButton analyzebutton = new JButton("analyze");
+    	analyzebutton.setBackground( Color.CYAN );
     	analyzebutton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){ 
-				if (openOSM == null ){
+				if (areaElements.getLast() == null ){
 					System.out.println("no osm file set");
 					return;
 				}
-				OSMAnalyzer analizer = new OSMAnalyzer ( openOSM );
+				OSMAnalyzer analizer = new OSMAnalyzer ( areaElements.getLast().getOsmFile() );
 				analizer.execute();
         	}  
     	});  
@@ -218,11 +243,69 @@ public class OTNGui {
 	private void fillGraphPane() {
 		JPanel graphPane =new JPanel( new GridBagLayout() );  
     	this.tabs.add( "Graph",graphPane );
-    	
+
     	GridBagConstraints c = new GridBagConstraints();
     	c.anchor = GridBagConstraints.FIRST_LINE_START;
 		c.gridx = 0;
     	c.gridy = 0;
+    	c.fill = GridBagConstraints.BOTH;
+
+    	ButtonGroup graphCompatGroup = new ButtonGroup();
+    	this.otnRadioButton = new JRadioButton("OTN", true );
+    	this.vnsRadioButton = new JRadioButton("VNS");
+    	graphCompatGroup.add( otnRadioButton );
+    	graphCompatGroup.add( vnsRadioButton );
+
+    	graphPane.add ( otnRadioButton , c);
+    	c.gridx = 1;
+    	graphPane.add ( vnsRadioButton , c);
+
+    	final JButton vnskmlButton = new JButton("load kml (VNS only)");
+    	vnskmlButton.setEnabled(false);
+    	vnskmlButton.addActionListener(new ActionListener(){  
+			public void actionPerformed(ActionEvent e){ 
+				fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+	            int returnVal = fc.showOpenDialog(frame);
+	            if (returnVal == JFileChooser.APPROVE_OPTION) {
+	            	File file = fc.getSelectedFile();
+	            	if ( file.exists() ){
+	            		vnsKmlFile = file;
+	            	}
+	            }
+        	}  
+    	});
+
+    	otnRadioButton.addActionListener(new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	        	if ( otnRadioButton.isSelected() ){
+	        		vnskmlButton.setEnabled(false);
+	        	}
+	            
+	        }
+    	});
+
+    	vnsRadioButton.addActionListener(new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	        	if ( vnsRadioButton.isSelected() ){
+	        		vnskmlButton.setEnabled(true);
+	        	}
+	            
+	        }
+    	});
+
+    	c = new GridBagConstraints();
+    	c.anchor = GridBagConstraints.FIRST_LINE_START;
+		c.gridx = 0;
+    	c.gridy = 1;
+    	c.fill = GridBagConstraints.BOTH;
+    	graphPane.add ( vnskmlButton , c);
+
+    	c = new GridBagConstraints();
+    	c.anchor = GridBagConstraints.FIRST_LINE_START;
+		c.gridx = 0;
+    	c.gridy = 2;
     	c.fill = GridBagConstraints.BOTH;
 
     	JButton setStorageDirButton = new JButton("select storage Dir");
@@ -242,14 +325,6 @@ public class OTNGui {
     	});  
     	setStorageDirButton.setActionCommand("load");
     	graphPane.add ( setStorageDirButton , c);
-    }
-
-    public void setFilterOutput ( File tempFile ){
-    	if ( tempFile == null ){
-    		return;
-    	}
-    	this.tempFile = tempFile;
-
     }
 
 }

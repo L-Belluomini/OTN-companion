@@ -13,25 +13,25 @@ import com.google.gson.stream.*;
 
 import java.util.*;
 import java.io.*;
+import java.time.Instant;
 
 
-
+// TODO ? extends SwingWorker <Void, Void>
 public class OTNCompanion 
 {
     private List<Profile> profiles = new LinkedList<Profile>();
     private List<CHProfile> chProfiles = new LinkedList<CHProfile>();
     private List<LMProfile> lmProfiles = new LinkedList<LMProfile>();
     private GraphHopperConfig ghConfig = null;
-    private String fileDir="";
     private String storageDir ="";
+    private AreaElement area;
 
 
     public OTNCompanion() {
     }
+    public void setOsmArea ( AreaElement earea ){
+        this.area = earea;
 
-    public void setFileDir(String fileDir){
-        this.fileDir = fileDir;
-        System.out.println("set OSM file:" + fileDir);
     }
 
     public void setStorageDir ( String storageDir ) {
@@ -74,7 +74,16 @@ public class OTNCompanion
         System.out.println("profile creation ended");
     }
 
-    public void storeProfiles(){
+    private void storeProfiles(){
+        if ( this.storageDir == "" ) {
+            System.out.println("storage dir not set");
+            return;
+        }
+        if ( this.area.getOsmFile().getPath() == "" ) { 
+            System.out.println("osm file not set");
+            return;
+        }
+
         System.out.println("storign profiles to json file");
 
         Gson gson = new Gson();
@@ -82,7 +91,7 @@ public class OTNCompanion
         File myObj=null;
 
         try {
-        myObj = new File(storageDir + "/config.json");
+        myObj = new File(storageDir +  File.pathSeparator + "config.json");
         if (myObj.createNewFile()) {
         System.out.println("File created: " + myObj.getName());
         } else {
@@ -96,10 +105,12 @@ public class OTNCompanion
         } catch (IOException e) {
             System.out.println("An error occurred, creating or writing " + myObj.getName());
         }
+        
     }
 
-    public void createGraph( boolean diskStorage) {
-        if ( this.fileDir == "" ) { 
+
+    public void createGraph( ) {
+        if ( this.area.getOsmFile().getPath() == "" ) { 
             System.out.println("osm file not set");
             return;
         }
@@ -112,19 +123,25 @@ public class OTNCompanion
             return;
         }
 
+
+        File dir = new File (storageDir +  File.pathSeparator + area.getName().replaceAll("\\s+","") );
+        dir.mkdir();
+        storageDir = dir.getPath();
+
         System.out.println("creating graph in " + storageDir );
-        System.out.println("based on file " + fileDir);
+        System.out.println("based on file " + area.getOsmFile().getPath() );
         
 
         GraphHopper hopper = new GraphHopper();
-        hopper.setOSMFile(this.fileDir); // move to ghConfig ?
+        hopper.setOSMFile( this.area.getOsmFile().getPath() ); // move to ghConfig ?
         GraphHopperConfig tmp = this.ghConfig;
 
-        if ( diskStorage ) {
+        /*if ( diskStorage ) {
             DAType type = DAType.MMAP;
             tmp.putObject ("graph.dataaccess.default_type" , type.toString() );
             System.out.println(" set memory to disk");
-        }
+        }*/
+
         hopper.init(tmp);
         hopper.setGraphHopperLocation(this.storageDir); // move to ghConfig ?
         System.out.println("creating graph, this may take a while....");
@@ -133,24 +150,110 @@ public class OTNCompanion
         long finish = System.currentTimeMillis();
         long timeElapsed = finish - start;
         System.out.println("graph finished, took:"+ Long.toString(timeElapsed/1000)+ " s");
+        storeProfiles();
     }
 
-    /*public void loadJson(){
+    public boolean isAnyProfileSet(){
+        return ! profiles.isEmpty( );  
+    }
 
-        GraphHopperConfig jConfig=null;
-       try {
-            Gson ason = new Gson();
-            FileReader fReader =  new FileReader(storageDir + "/config.json");
-            JsonReader reader = new JsonReader(fReader);
-            jConfig = ason.fromJson (reader , GraphHopperConfig.class );
-            if (jConfig == null){
-                System.out.println( "reading j config failed");
-                return;
+    public void createVNSGraph(File kmlFile ){
+        profiles.clear();
+        chProfiles.clear();
+        lmProfiles.clear();
+        
+        this.profiles.add(new Profile("car").setVehicle("car").setWeighting("fastest").setTurnCosts(false));
+        this.chProfiles.add( new CHProfile("car"));
+
+        createGraph( );
+
+        // copy kml
+        FileInputStream fis = null;
+        FileOutputStream fos = null;
+
+        try {
+            fis = new FileInputStream(kmlFile);
+            fos = new FileOutputStream(storageDir +  File.pathSeparator + "area.kml");
+            int c;
+
+            while ((c = fis.read()) != -1) {
+                fos.write(c);
             }
-        } catch (IOException e) {
-            System.out.println ( e.toString());
+            System.out.println( "copied kml file successfully" );
+            
+            if (fis != null) {
+                fis.close();
+            }
+            if (fos != null) {
+                fos.close();
+            }
+
+        }catch (IOException ex) {
+            System.out.println(ex.toString());
         }
 
-    }*/
+    
+
+        // copy poly
+        fis = null;
+        fos = null;
+        try {
+            fis = new FileInputStream( this.area.getPolyFile() );
+            fos = new FileOutputStream(storageDir +  File.pathSeparator + "area.poly");
+            int c;
+
+            while ((c = fis.read()) != -1) {
+                fos.write(c);
+            }
+            System.out.println( "copied poly file successfully" );
+            if (fis != null) {
+                fis.close();
+            }
+            if (fos != null) {
+                fos.close();
+            }
+
+        } catch (IOException ex) {
+            System.out.println(ex.toString());
+        }
+        try{
+            // create timestamp & .timestamp
+        File areatimestamtp = new File (storageDir +  File.pathSeparator + "area.timestamp" );
+        FileWriter timewriter = new FileWriter( areatimestamtp );
+        BufferedWriter timebuffer = new BufferedWriter(timewriter);
+        timebuffer.write( Instant.now().toString()  );
+        timebuffer.flush();
+
+        File timestamp =new File (storageDir +  File.pathSeparator + "timestamp" );
+        timewriter = new FileWriter( timestamp );
+        timebuffer = new BufferedWriter(timewriter);
+        timebuffer.write( Instant.now().toString()  );
+        timebuffer.flush();
+        System.out.println( "created timestamps file successfully" );
+
+        } catch (Exception ex) {
+            System.out.println(ex.toString());
+        }
+        
+    }
+/*
+    @Override
+    public Void doInBackground(){
+        if ( false ){
+             System.out.println("reader not set");
+             return null;
+        } 
+        
+        System.out.println("running actual filter");
+        osmReader.run();
+        
+        return null;
+    }
+
+    @Override
+    public void done() {
+        return;
+    }
+    */
 }
 
