@@ -19,7 +19,7 @@ public class OTNGui {
 	private OTNCompanion otnc;
 	final JFileChooser fc = new JFileChooser();
 	final private LinkedList<AreaElement> areaElements;
-	private areaElements selectedElement;
+	private AreaElement selectedElement;
 	private File vnsKmlFile;
 	private JRadioButton otnRadioButton;
 	private JRadioButton vnsRadioButton;
