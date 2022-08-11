@@ -70,7 +70,7 @@ public class ProfilesTableDataModel extends AbstractTableModel {
 
     // data
 
-	void addProfile (String name , String vehicle , String weighting , boolean tc , boolean ch , boolean lm ) {
+	public void addProfile (String name , String vehicle , String weighting , boolean tc , boolean ch , boolean lm ) {
 		Profile profile = new Profile( name ).setVehicle( vehicle ).setWeighting( weighting ).setTurnCosts( tc );
 		this.profiles.add( profile);
 
@@ -84,6 +84,15 @@ public class ProfilesTableDataModel extends AbstractTableModel {
 		}
 	}
 
+	public List<Profile> getProfiles(){
+		return profiles;
+	}
+	public List<CHProfile>  getCHprofiles(){
+		return chProfiles;
+	}
+	public List<LMProfile>  getlmProfiles(){
+		return lmProfiles;
+	}
 
 
 }

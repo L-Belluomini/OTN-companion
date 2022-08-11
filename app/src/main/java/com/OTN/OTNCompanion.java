@@ -74,6 +74,18 @@ public class OTNCompanion
         System.out.println("profile creation ended");
     }
 
+    public void setProfiles ( ProfilesTableDataModel  tableprofiles ){
+        if (tableprofiles.getProfiles().size =0 ) {
+            return;
+        }
+        profiles.clear();
+        profiles.addAll( tableprofiles.getProfiles() );
+        chProfiles.clear();
+        chProfiles.addAll( tableprofiles.getCHprofieles( ) );
+        lmProfiles.clear();
+        lmProfiles.adAll(  tableprofiles.getLMprofieles( ) );
+    }
+
     private void storeProfiles(){
         if ( this.storageDir == "" ) {
             System.out.println("storage dir not set");
