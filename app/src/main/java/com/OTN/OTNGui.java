@@ -55,7 +55,7 @@ public class OTNGui {
     	fillProfilesPane();
     	fillGraphPane();
 
-    	otnc.createAddProfiles(true); // for testing purposes//////////////////////////////////////////
+    	//otnc.createAddProfiles(true); // for testing purposes//////////////////////////////////////////
 
 		c = new GridBagConstraints();
     	c.fill = GridBagConstraints.VERTICAL;
@@ -224,6 +224,9 @@ public class OTNGui {
     	this.tabs.add( "Profiles",paneProfiles );
 
     	ProfilesTableDataModel tableData = new ProfilesTableDataModel() ;
+    	
+		tableData.addProfile("car", "car", "fastest", false, false, true);
+		tableData.addProfile("foot", "foot", "fastest", false, false, true);
 
     	GridBagConstraints c = new GridBagConstraints();
 
@@ -235,6 +238,7 @@ public class OTNGui {
 
       	JTable table = new JTable(tableData);
       	table.setFillsViewportHeight(true);
+
       	JScrollPane scrollpane = new JScrollPane(table);
 
       	paneProfiles.add(scrollpane, c);
