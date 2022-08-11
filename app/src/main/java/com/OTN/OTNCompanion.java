@@ -75,15 +75,15 @@ public class OTNCompanion
     }
 
     public void setProfiles ( ProfilesTableDataModel  tableprofiles ){
-        if (tableprofiles.getProfiles().size =0 ) {
+        if (tableprofiles.getProfiles().size() ==0 ) {
             return;
         }
         profiles.clear();
         profiles.addAll( tableprofiles.getProfiles() );
         chProfiles.clear();
-        chProfiles.addAll( tableprofiles.getCHprofieles( ) );
+        chProfiles.addAll( tableprofiles.getCHprofiles( ) );
         lmProfiles.clear();
-        lmProfiles.adAll(  tableprofiles.getLMprofieles( ) );
+        lmProfiles.addAll(  tableprofiles.getlmProfiles( ) );
     }
 
     private void storeProfiles(){

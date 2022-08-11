@@ -19,7 +19,7 @@ public class OTNGuiProfileEditor {
 		
 	}
 
-	public editProfile ( int erow ) {
+	public void editProfile ( int erow ) {
 		
 		this.row = erow;
 	}
