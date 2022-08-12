@@ -10,6 +10,9 @@ import java.util.LinkedList;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Color;
+import javax.swing.ImageIcon;
+import java.awt.Image;
+import javax.swing.JFrame;
 
 
 public class OTNGui {
@@ -30,6 +33,7 @@ public class OTNGui {
     }
 	
 	OTNGui () {
+		
 		this.otnc = new OTNCompanion();
 		this.areaElements = new LinkedList();
 
@@ -37,10 +41,12 @@ public class OTNGui {
 		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE); 
 		frame.setVisible(true);
 		frame.setSize(new Dimension(500,300));
+		frame.setLayout(null);
+		frame.setIconImage(new ImageIcon(getClass().getResource("/otnLogo.png")).getImage());
 
 		Container content = frame.getContentPane();
 
-		content.setLayout( new GridBagLayout() );
+		content.setLayout( new GridBagLayout());
 
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
@@ -224,24 +230,58 @@ public class OTNGui {
     	this.tabs.add( "Profiles",paneProfiles );
 
     	ProfilesTableDataModel tableData = new ProfilesTableDataModel() ;
-    	
-		tableData.addProfile("car", "car", "fastest", false, false, true);
+    	tableData.addProfile("car", "car", "fastest", false, false, true);
 		tableData.addProfile("foot", "foot", "fastest", false, false, true);
 
-    	GridBagConstraints c = new GridBagConstraints();
+		/////////////////////////// TABLE & SCROLLPANE /////////////////////////////
 
-    	c.gridx = 0;
-    	c.gridy = 0;
-    	c.weightx = 1;
-    	c.weighty = 1;
-    	c.fill = GridBagConstraints.BOTH; 
-
-      	JTable table = new JTable(tableData);
+		JTable table = new JTable(tableData);
       	table.setFillsViewportHeight(true);
 
       	JScrollPane scrollpane = new JScrollPane(table);
 
+    	GridBagConstraints c = new GridBagConstraints();
+    	c.gridx = 0;
+    	c.gridy = 0;
+    	c.weightx = 1;
+    	c.weighty = 1;
+    	c.fill = GridBagConstraints.BOTH;
+
       	paneProfiles.add(scrollpane, c);
+
+      	/////////////////////////// BUTTONS ////////////////////////////////
+
+		c = new GridBagConstraints();
+		c.fill = GridBagConstraints.VERTICAL;
+		c.anchor = GridBagConstraints.LAST_LINE_END;
+	  	c.gridx = 0;
+		c.gridy = 1;
+		c.insets = new Insets(5,5,5,5); //profilesButtonsPanel costraints
+
+      	JPanel profilesButtonsPanel = new JPanel(new GridBagLayout());
+
+      		JButton deleteProfileButton = new JButton("delete Profile");
+			GridBagConstraints cb = new GridBagConstraints();
+			cb.fill = GridBagConstraints.VERTICAL;
+			cb.anchor = GridBagConstraints.LAST_LINE_END;
+		  	cb.gridx = 0;
+			cb.gridy = 0;
+
+			profilesButtonsPanel.add(deleteProfileButton, cb);
+
+
+      		JButton newProfileButton = new JButton("new Profile");
+      		cb = new GridBagConstraints();
+			cb.fill = GridBagConstraints.VERTICAL;
+			cb.anchor = GridBagConstraints.LAST_LINE_END;
+		  	cb.gridx = 1;
+			cb.gridy = 0;
+			cb.insets = new Insets(0,5,0,0);
+
+			profilesButtonsPanel.add(newProfileButton, cb);
+
+
+      	paneProfiles.add(profilesButtonsPanel,c);
 	}
 
 	private void fillGraphPane() {
