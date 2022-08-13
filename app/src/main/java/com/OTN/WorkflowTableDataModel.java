@@ -2,8 +2,7 @@ package com.OTN;
 
 import javax.swing.*;
 import javax.swing.table.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;  
 
 import java.util.*;
@@ -56,7 +55,7 @@ public class WorkflowTableDataModel extends AbstractTableModel {
 
 	public void addAreaElement (File osmfile ) {
 	AreaElement AreaElement = new AreaElement(osmfile);
-	AreaElement.setCreationTime (LocalDateTime.now().toString());
+	AreaElement.setCreationTime ( LocalDateTime.now().toString());
 	workflowelements.add(AreaElement);
 	}
 
