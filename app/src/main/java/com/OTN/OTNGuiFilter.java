@@ -62,7 +62,7 @@ public class OTNGuiFilter {
 		c = new GridBagConstraints();
 		c.fill = GridBagConstraints.VERTICAL;
 		c.anchor = GridBagConstraints.LAST_LINE_END;
-	  		c.gridx = 0;
+	  	c.gridx = 0;
 		c.gridy = 1;
 
 		JPanel buttonPanel = new JPanel();
@@ -115,7 +115,7 @@ public class OTNGuiFilter {
 
 				GridBagConstraints c = new GridBagConstraints();
 				c.anchor = GridBagConstraints.CENTER;
-	  				c.gridx = 0;
+	  			c.gridx = 0;
 				c.gridy = 0;
 
 				bbdialogwait.setTitle("Bounding box generation");

@@ -1,12 +1,13 @@
 package com.OTN;
 
-import java.io.*;
+import java.io.*; 
 
 public class AreaElement  {
 	private File osmfile;
 	private File polyFileBoundary;
 	private boolean complete = false;
 	private String areaName;
+	private String creationTime;
 
 	AreaElement (File osmfile ) {
 		if ( osmfile.exists() ){
@@ -40,12 +41,23 @@ public class AreaElement  {
 			// to do add real check ?
 		}
 	}
+
 	public void setName(String name){
 		this.areaName = name;
 	}
+
 	public String getName() {
 		return areaName;
 	}
+
+	public void setCreationTime (String time){
+		this.creationTime = time;
+	} 
+	
+	public String getCreationTime () {
+		return this.creationTime;
+	}
+
 	public boolean isValid() {
 		if ( ! this.complete ){
 			return this.osmfile.exists();
@@ -55,6 +67,5 @@ public class AreaElement  {
 	}
 	public boolean isComplete() {
 		return complete;
-
 	}
 }

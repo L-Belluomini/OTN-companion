@@ -13,6 +13,7 @@ import java.awt.Color;
 import javax.swing.ImageIcon;
 import java.awt.Image;
 import javax.swing.JFrame;
+import java.time.*;
 
 
 public class OTNGui {
@@ -53,41 +54,101 @@ public class OTNGui {
     	c.gridy = 0;
     	c.weightx = 1;
     	c.weighty = 1; 
-    	c.fill = GridBagConstraints.BOTH;
+    	c.fill = GridBagConstraints.BOTH; //tabs costraints
 
 		this.tabs = new JTabbedPane();
     	content.add(tabs , c);
+    	fillAreaPane();
     	fillOSMPane();
     	fillProfilesPane();
     	fillGraphPane();
 
-    	//otnc.createAddProfiles(true); // for testing purposes//////////////////////////////////////////
+    	//otnc.createAddProfiles(true); // for testing purposes
+
+
+    	/////////////////////////////// GENERATE BUTTON ///////////////////////////////////
 
 		c = new GridBagConstraints();
     	c.fill = GridBagConstraints.VERTICAL;
     	c.anchor = GridBagConstraints.LAST_LINE_END;
   	  	c.gridx = 0;
-    	c.gridy = 1;
+    	c.gridy = 1; //generatePanel costraints
 
-    	JPanel buttonPanel = new JPanel();
+    	JPanel generatePanel = new JPanel();
 
-    	JButton button = new JButton("generate");
-    	button.addActionListener(new ActionListener(){  
-			public void actionPerformed(ActionEvent e){ 
-				if ( otnRadioButton.isSelected() ){
-					otnc.createGraph();
-				} else if ( vnsRadioButton.isSelected() && vnsKmlFile.exists() ) {
-				otnc.createVNSGraph(vnsKmlFile);
-				}
+	    	JButton button = new JButton("generate");
+	    	button.addActionListener(new ActionListener(){  
+				public void actionPerformed(ActionEvent e){ 
+					if ( otnRadioButton.isSelected() ){
+						otnc.createGraph();
+					} else if ( vnsRadioButton.isSelected() && vnsKmlFile.exists() ) {
+					otnc.createVNSGraph(vnsKmlFile);
+					}
 
-        	}  
-    	});
+	        	}  
+	    	});
 
-    	buttonPanel.add(button);
+    	generatePanel.add(button);
 
-    	content.add(buttonPanel, c);
+    	content.add(generatePanel, c);
     	frame.pack();
 	}	
+
+
+	//////////////////////////////// WORKFLOW AREA ////////////////////////////////////////////////
+
+	private void fillAreaPane() {
+		JPanel paneArea =new JPanel( new GridBagLayout() );  
+    	this.tabs.add( "AreaExp",paneArea );
+
+    	WorkflowTableDataModel workflowTableData = new WorkflowTableDataModel() ;
+
+		/////////////////////////// TABLE & SCROLLPANE /////////////////////////////
+
+		JTable wftable = new JTable(workflowTableData);
+      	wftable.setFillsViewportHeight(true);
+
+      	JScrollPane wfscrollpane = new JScrollPane(wftable);
+
+    	GridBagConstraints c = new GridBagConstraints();
+    	c.gridx = 0;
+    	c.gridy = 0;
+    	c.weightx = 1;
+    	c.weighty = 1;
+    	c.fill = GridBagConstraints.BOTH;
+
+      	paneArea.add(wfscrollpane, c);
+
+      	/////////////////////////// BUTTONS ////////////////////////////////
+
+		c = new GridBagConstraints();
+		c.fill = GridBagConstraints.VERTICAL;
+		c.anchor = GridBagConstraints.LAST_LINE_END;
+	  	c.gridx = 0;
+		c.gridy = 1;
+		c.insets = new Insets(5,5,5,5); //wfButtonsPanel costraints
+
+      	JPanel areaButtonsPanel = new JPanel(new GridBagLayout());
+
+      		JButton saveTMPbutton = new JButton("save TMP");
+      			
+      			/*deleteProfileButton.addActionListener(new ActionListener(){  
+				public void actionPerformed(ActionEvent e){
+				}*/
+
+			GridBagConstraints cwf = new GridBagConstraints();
+			cwf.fill = GridBagConstraints.VERTICAL;
+			cwf.anchor = GridBagConstraints.LAST_LINE_END;
+		  	cwf.gridx = 0;
+			cwf.gridy = 0;
+
+			areaButtonsPanel.add(saveTMPbutton, cwf);
+
+
+      	paneArea.add(areaButtonsPanel,c);
+	}
+
+    /////////////////////////////// OSMPANE ///////////////////////////////////////////////////
 
 	private void fillOSMPane() {
 		JPanel paneOSM =new JPanel( new GridBagLayout() );  
@@ -154,7 +215,7 @@ public class OTNGui {
 		c.gridx = 1;
     	c.gridy = 2;
 
-    	JButton filterButton = new JButton("add BB Filter");
+    	JButton filterButton = new JButton("filter area");
     	filterButton.setBackground( Color.CYAN );
     	filterButton.addActionListener( new ActionListener() {  
 			public void actionPerformed(ActionEvent e){ 
@@ -223,22 +284,22 @@ public class OTNGui {
 
 	}
 
-	
+	///////////////////////////////////// PROFILES PANE ///////////////////////////////////
 
 	private void fillProfilesPane() {
 		JPanel paneProfiles =new JPanel(  new GridBagLayout() );  
     	this.tabs.add( "Profiles",paneProfiles );
 
-    	ProfilesTableDataModel tableData = new ProfilesTableDataModel() ;
-    	tableData.addProfile("car", "car", "fastest", false, false, true);
-		tableData.addProfile("foot", "foot", "fastest", false, false, true);
+    	ProfilesTableDataModel profilesTableData = new ProfilesTableDataModel() ;
+    	profilesTableData.addProfile("car", "car", "fastest", false, false, true);
+		profilesTableData.addProfile("foot", "foot", "fastest", false, false, true);
 
 		/////////////////////////// TABLE & SCROLLPANE /////////////////////////////
 
-		JTable table = new JTable(tableData);
-      	table.setFillsViewportHeight(true);
+		JTable profilesTable = new JTable(profilesTableData);
+      	profilesTable.setFillsViewportHeight(true);
 
-      	JScrollPane scrollpane = new JScrollPane(table);
+      	JScrollPane profilesScrollpane = new JScrollPane(profilesTable);
 
     	GridBagConstraints c = new GridBagConstraints();
     	c.gridx = 0;
@@ -247,7 +308,7 @@ public class OTNGui {
     	c.weighty = 1;
     	c.fill = GridBagConstraints.BOTH;
 
-      	paneProfiles.add(scrollpane, c);
+      	paneProfiles.add(profilesScrollpane, c);
 
       	/////////////////////////// BUTTONS ////////////////////////////////
 
@@ -261,6 +322,11 @@ public class OTNGui {
       	JPanel profilesButtonsPanel = new JPanel(new GridBagLayout());
 
       		JButton deleteProfileButton = new JButton("delete Profile");
+      			
+      			/*deleteProfileButton.addActionListener(new ActionListener(){  
+				public void actionPerformed(ActionEvent e){
+				}*/
+
 			GridBagConstraints cb = new GridBagConstraints();
 			cb.fill = GridBagConstraints.VERTICAL;
 			cb.anchor = GridBagConstraints.LAST_LINE_END;
@@ -271,6 +337,10 @@ public class OTNGui {
 
 
       		JButton newProfileButton = new JButton("new Profile");
+      			/*newProfileButton.addActionListener(new ActionListener(){  
+				public void actionPerformed(ActionEvent e){
+				}*/
+
       		cb = new GridBagConstraints();
 			cb.fill = GridBagConstraints.VERTICAL;
 			cb.anchor = GridBagConstraints.LAST_LINE_END;
@@ -283,6 +353,8 @@ public class OTNGui {
 
       	paneProfiles.add(profilesButtonsPanel,c);
 	}
+
+	//////////////////////////////////// GRAPH PANE ////////////////////////////////////
 
 	private void fillGraphPane() {
 		JPanel graphPane =new JPanel( new GridBagLayout() );  
@@ -367,6 +439,7 @@ public class OTNGui {
 	            }
         	}  
     	});  
+
     	setStorageDirButton.setActionCommand("load");
     	graphPane.add ( setStorageDirButton , c);
     }
