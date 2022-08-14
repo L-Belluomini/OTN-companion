@@ -58,8 +58,8 @@ public class OTNGui {
 
 		this.tabs = new JTabbedPane();
     	content.add(tabs , c);
-    	fillAreaPane();
     	fillOSMPane();
+    	fillAreaPane();
     	fillProfilesPane();
     	fillGraphPane();
 
@@ -72,7 +72,8 @@ public class OTNGui {
     	c.fill = GridBagConstraints.VERTICAL;
     	c.anchor = GridBagConstraints.LAST_LINE_END;
   	  	c.gridx = 0;
-    	c.gridy = 1; //generatePanel costraints
+    	c.gridy = 1;
+    	c.insets = new Insets(0,0,0,5);//generatePanel costraints
 
     	JPanel generatePanel = new JPanel();
 
@@ -94,65 +95,11 @@ public class OTNGui {
     	frame.pack();
 	}	
 
-
-	//////////////////////////////// WORKFLOW AREA ////////////////////////////////////////////////
-
-	private void fillAreaPane() {
-		JPanel paneArea =new JPanel( new GridBagLayout() );  
-    	this.tabs.add( "AreaExp",paneArea );
-
-    	WorkflowTableDataModel workflowTableData = new WorkflowTableDataModel() ;
-
-		/////////////////////////// TABLE & SCROLLPANE /////////////////////////////
-
-		JTable wftable = new JTable(workflowTableData);
-      	wftable.setFillsViewportHeight(true);
-
-      	JScrollPane wfscrollpane = new JScrollPane(wftable);
-
-    	GridBagConstraints c = new GridBagConstraints();
-    	c.gridx = 0;
-    	c.gridy = 0;
-    	c.weightx = 1;
-    	c.weighty = 1;
-    	c.fill = GridBagConstraints.BOTH;
-
-      	paneArea.add(wfscrollpane, c);
-
-      	/////////////////////////// BUTTONS ////////////////////////////////
-
-		c = new GridBagConstraints();
-		c.fill = GridBagConstraints.VERTICAL;
-		c.anchor = GridBagConstraints.LAST_LINE_END;
-	  	c.gridx = 0;
-		c.gridy = 1;
-		c.insets = new Insets(5,5,5,5); //wfButtonsPanel costraints
-
-      	JPanel areaButtonsPanel = new JPanel(new GridBagLayout());
-
-      		JButton saveTMPbutton = new JButton("save TMP");
-      			
-      			/*deleteProfileButton.addActionListener(new ActionListener(){  
-				public void actionPerformed(ActionEvent e){
-				}*/
-
-			GridBagConstraints cwf = new GridBagConstraints();
-			cwf.fill = GridBagConstraints.VERTICAL;
-			cwf.anchor = GridBagConstraints.LAST_LINE_END;
-		  	cwf.gridx = 0;
-			cwf.gridy = 0;
-
-			areaButtonsPanel.add(saveTMPbutton, cwf);
-
-
-      	paneArea.add(areaButtonsPanel,c);
-	}
-
-    /////////////////////////////// OSMPANE ///////////////////////////////////////////////////
+	/////////////////////////////// OSMPANE ///////////////////////////////////////////////////
 
 	private void fillOSMPane() {
 		JPanel paneOSM =new JPanel( new GridBagLayout() );  
-    	this.tabs.add( "Area",paneOSM );
+    	this.tabs.add( "OSM file",paneOSM );
     	
 		areaNameTF = new JTextField(15);
 		GridBagConstraints c = new GridBagConstraints();
@@ -212,29 +159,6 @@ public class OTNGui {
 
     	c = new GridBagConstraints();
     	c.anchor = GridBagConstraints.FIRST_LINE_START;
-		c.gridx = 1;
-    	c.gridy = 2;
-
-    	JButton filterButton = new JButton("filter area");
-    	filterButton.setBackground( Color.CYAN );
-    	filterButton.addActionListener( new ActionListener() {  
-			public void actionPerformed(ActionEvent e){ 
-				if ( ! selectedElement.isValid() ) {
-					return;
-				}
-				AreaElement inpunt = areaElements.getLast();
-				AreaElement output = new AreaElement();
-				areaElements.add (output);
-
-				OTNGuiFilter filter = new OTNGuiFilter( inpunt , output );
-	        }  
-    	}); 
-
-    	paneOSM.add ( filterButton , c);
-
-
-    	c = new GridBagConstraints();
-    	c.anchor = GridBagConstraints.FIRST_LINE_START;
 		c.gridx = 0;
     	c.gridy = 1;
     	c.fill = GridBagConstraints.BOTH;
@@ -263,25 +187,133 @@ public class OTNGui {
     	paneOSM.add ( selectButton , c); 
     	*/
 
+	}
 
-    	JButton analyzebutton = new JButton("analyze");
-    	analyzebutton.setBackground( Color.CYAN );
-    	analyzebutton.addActionListener(new ActionListener(){  
-			public void actionPerformed(ActionEvent e){ 
-				if (areaElements.getLast() == null ){
-					System.out.println("no osm file set");
-					return;
-				}
-				OSMAnalyzer analizer = new OSMAnalyzer ( areaElements.getLast().getOsmFile() );
-				analizer.execute();
-        	}  
-    	});  
+	//////////////////////////////// WORKFLOW AREA ////////////////////////////////////////////////
+
+	private void fillAreaPane() {
+		JPanel paneArea =new JPanel( new GridBagLayout() );  
+    	this.tabs.add( "Area",paneArea );
+
+    	JLabel workflowtitle = new JLabel("area workflow");
+
+    	GridBagConstraints c = new GridBagConstraints();
+    	c.gridx = 0;
+    	c.gridy = 0;
+    	c.weightx = 1;
+    	c.weighty = 1;
+    	c.anchor = GridBagConstraints.CENTER;
+    	c.insets = new Insets (5,5,5,5);
+
+    	paneArea.add(workflowtitle, c);
+
+		/////////////////////////// TABLE & SCROLLPANE /////////////////////////////
+
+		WorkflowTableDataModel workflowTableData = new WorkflowTableDataModel() ;
+
+		JTable wftable = new JTable(workflowTableData);
+      	wftable.setFillsViewportHeight(true);
+
+      	JScrollPane wfscrollpane = new JScrollPane(wftable);
+
     	c = new GridBagConstraints();
-    	c.anchor = GridBagConstraints.FIRST_LINE_START;
-    	c.gridx = 1;
-    	c.gridy = 4;
-    	paneOSM.add (analyzebutton, c);
+    	c.gridx = 0;
+    	c.gridy = 1;
+    	c.weightx = 1;
+    	c.weighty = 1;
+    	c.fill = GridBagConstraints.BOTH;
 
+      	paneArea.add(wfscrollpane, c);
+
+      	/////////////////////////// BUTTONS ////////////////////////////////
+
+		c = new GridBagConstraints();
+		c.fill = GridBagConstraints.BOTH;
+	  	c.gridx = 0;
+		c.gridy = 2;
+		c.insets = new Insets(5,5,5,5); //areaButtonsPanel costraints
+
+      	JPanel areaButtonsPanel = new JPanel(new GridBagLayout());
+
+      		JButton deleteWFelementbutton = new JButton("delete");
+      			
+      			/*deleteProfileButton.addActionListener(new ActionListener(){  
+				public void actionPerformed(ActionEvent e){
+				}*/
+
+			GridBagConstraints cab = new GridBagConstraints();
+			cab.fill = GridBagConstraints.VERTICAL;
+			cab.anchor = GridBagConstraints.FIRST_LINE_START;
+		  	cab.gridx = 0;
+			cab.gridy = 0;
+			cab.weightx = 1;
+
+			areaButtonsPanel.add(deleteWFelementbutton, cab);
+
+			cab = new GridBagConstraints();
+			cab.anchor = GridBagConstraints.LAST_LINE_END;
+			cab.gridx = 1;
+	    	cab.gridy = 0;
+	    	cab.weightx = 1;
+
+			JPanel rightareaButtons = new JPanel(new GridBagLayout());
+
+				JButton savePolyButton = new JButton("save poly file");
+				savePolyButton.setEnabled(false);
+
+				GridBagConstraints crab = new GridBagConstraints();
+				crab.gridx = 0;
+				crab.gridy = 0;
+
+				rightareaButtons.add(savePolyButton, crab);
+
+				JButton analyzebutton = new JButton("analyze");
+		    	analyzebutton.setBackground( Color.CYAN );
+		    	analyzebutton.setEnabled(false);
+
+		    	analyzebutton.addActionListener(new ActionListener(){  
+					public void actionPerformed(ActionEvent e){ 
+						if (areaElements.getLast() == null ){
+							System.out.println("no osm file set");
+							return;
+						}
+						OSMAnalyzer analizer = new OSMAnalyzer ( areaElements.getLast().getOsmFile() );
+						analizer.execute();
+		        	}  
+		    	});
+
+		    	crab = new GridBagConstraints();
+		    	crab.gridx = 1;
+		    	crab.gridy = 0;
+		    	crab.insets = new Insets(0,5,0,0);
+
+		    	rightareaButtons.add(analyzebutton, crab);
+
+		    	JButton filterButton = new JButton("filter area");
+		    	filterButton.setBackground( Color.CYAN );
+		    	filterButton.addActionListener( new ActionListener() {  
+					public void actionPerformed(ActionEvent e){ 
+						if ( ! selectedElement.isValid() ) {
+							return;
+						}
+						AreaElement inpunt = areaElements.getLast();
+						AreaElement output = new AreaElement();
+						areaElements.add (output);
+
+						OTNGuiFilter filter = new OTNGuiFilter( inpunt , output );
+			       		}  
+		    		});
+
+		    	crab = new GridBagConstraints();
+		    	crab.gridx = 2;
+				crab.gridy = 0;
+				crab.insets = new Insets(0,5,0,0);
+
+				rightareaButtons.add(filterButton, crab);
+
+	    	areaButtonsPanel.add (rightareaButtons , cab);
+
+      	paneArea.add(areaButtonsPanel,c);
 	}
 
 	///////////////////////////////////// PROFILES PANE ///////////////////////////////////

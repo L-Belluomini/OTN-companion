@@ -57,7 +57,7 @@ public class OTNGuiFilter {
 		fillRadiusPane();
 		fillPolyPane();
 		
-		//////////////////// SELECT PANEL ////////////////////
+		/////////////////////////////////// SELECT PANEL //////////////////////////////////////////////////
 
 		c = new GridBagConstraints();
 		c.fill = GridBagConstraints.VERTICAL;
@@ -67,7 +67,7 @@ public class OTNGuiFilter {
 
 		JPanel buttonPanel = new JPanel();
 
-		////////////////// SELECT BUTTON ////////////////////
+		///////////////////////////// SELECT BUTTON ///////////////////7//////////////
 
     	JButton filterButton = new JButton("select");
     	filterButton.addActionListener( new ActionListener(){  
@@ -109,7 +109,7 @@ public class OTNGuiFilter {
 
 				editor.execute();
 
-				///////// WAIT DIALOG /////////
+				//////////////////////////////// WAIT DIALOG /////////////////////////////
 
 				bbdialogwait.setLayout( new GridBagLayout() );
 
@@ -150,7 +150,7 @@ public class OTNGuiFilter {
 	
 	}
 
-    //////////////////// BB FILTER PANNEL ////////////////////
+    ////////////////////////////////////// BB FILTER PANNEL ///////////////////////////////////////////////
     	
 	private void fillBBPane() {
 		JPanel bbFilterPanel =new JPanel( new GridBagLayout() );  
@@ -251,8 +251,9 @@ public class OTNGuiFilter {
     	c.insets = new Insets(0,0,0,5);
     	bbFilterPanel.add ( rightTF , c);
     }
-    	    //////////////////// RADIUS FILTER PANNEL ////////////////////
-
+    	   
+   	///////////////////////////////////// RADIUS FILTER PANNEL /////////////////////////////////////////
+   
     private void fillRadiusPane() {
     	JPanel radiusFilterPanel =new JPanel( new GridBagLayout() );  
 		this.tabs.add( "radius area",radiusFilterPanel );
@@ -317,20 +318,19 @@ public class OTNGuiFilter {
     	radiusFilterPanel.add ( radiusTF , c);
     }
 
+    //////////////////////////////////// POLY PANE ///////////////////////////////////////////////////
+
     private void fillPolyPane () {
     	final JPanel polyFilterPanel =new JPanel( new GridBagLayout() );  
-		this.tabs.add( "polyfile",polyFilterPanel );
+		this.tabs.add( "poly file",polyFilterPanel );
 		final JFileChooser polyFilterFileChoser = new JFileChooser();
 
-
-		//JLabel hint = new JLabel("Circle center lat:");
     	GridBagConstraints c = new GridBagConstraints();
-    	c.anchor = GridBagConstraints.FIRST_LINE_END;
-    	c.weightx = 0.5;
 		c.gridx = 0;
     	c.gridy = 0;
     	c.insets = new Insets(5,5,5,5);
-    	JButton polyFileselctf = new JButton("select poly file");
+
+    	JButton polyFileselctf = new JButton("browse poly file");
     	polyFileselctf.addActionListener( new ActionListener(){  
 			public void actionPerformed(ActionEvent e){
 				int returnVal = polyFilterFileChoser.showOpenDialog(polyFilterPanel);
@@ -343,6 +343,8 @@ public class OTNGuiFilter {
 
     	polyFilterPanel.add ( polyFileselctf  , c);
     }
+
+    /////////////////////////////////////// FILTER METHODS //////////////////////////////////////////////
 
 	private void SetBBFilter(){
 		Float top = Float.parseFloat ( topTF.getText() );
