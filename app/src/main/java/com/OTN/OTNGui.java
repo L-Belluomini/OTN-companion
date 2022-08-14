@@ -41,8 +41,6 @@ public class OTNGui {
 		this.frame = new JFrame("OTN-Companion");
 		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE); 
 		frame.setVisible(true);
-		frame.setSize(new Dimension(500,300));
-		frame.setLayout(null);
 		frame.setIconImage(new ImageIcon(getClass().getResource("/otnLogo.png")).getImage());
 
 		Container content = frame.getContentPane();
@@ -92,6 +90,7 @@ public class OTNGui {
     	generatePanel.add(button);
 
     	content.add(generatePanel, c);
+
     	frame.pack();
 	}	
 
@@ -101,6 +100,7 @@ public class OTNGui {
 		JPanel paneOSM =new JPanel( new GridBagLayout() );  
     	this.tabs.add( "OSM file",paneOSM );
     	
+    	/*
 		areaNameTF = new JTextField(15);
 		GridBagConstraints c = new GridBagConstraints();
     	c.anchor = GridBagConstraints.FIRST_LINE_START;
@@ -109,13 +109,14 @@ public class OTNGui {
     	c.insets = new Insets(0,0,0,5);
     	c.fill = GridBagConstraints.BOTH;
     	paneOSM.add ( areaNameTF , c);
+    	*/
 
-
-    	c = new GridBagConstraints();
-    	c.anchor = GridBagConstraints.FIRST_LINE_START;
+    	GridBagConstraints c = new GridBagConstraints();
+    	c.anchor = GridBagConstraints.CENTER;
 		c.gridx = 0;
     	c.gridy = 0;
-    	c.fill = GridBagConstraints.BOTH;
+    	c.fill = GridBagConstraints.HORIZONTAL;
+    	c.insets = new Insets(5,5,5,5);
 
     	JButton loadButton = new JButton("load OSM file");
     	loadButton.addActionListener(new ActionListener(){  
@@ -136,9 +137,11 @@ public class OTNGui {
     	paneOSM.add ( loadButton , c);
 
     	c = new GridBagConstraints();
-    	c.anchor = GridBagConstraints.FIRST_LINE_START;
-		c.gridx = 1;
-    	c.gridy = 0;
+    	c.anchor = GridBagConstraints.CENTER;
+		c.gridx = 0;
+    	c.gridy = 1;
+    	c.fill = GridBagConstraints.HORIZONTAL;
+    	c.insets = new Insets(5,5,5,5);
 
     	JButton polyButton = new JButton("load poly file");
     	polyButton.addActionListener(new ActionListener(){  
@@ -158,21 +161,20 @@ public class OTNGui {
     	paneOSM.add ( polyButton , c);
 
     	c = new GridBagConstraints();
-    	c.anchor = GridBagConstraints.FIRST_LINE_START;
 		c.gridx = 0;
-    	c.gridy = 1;
-    	c.fill = GridBagConstraints.BOTH;
-    	c.ipady= 3;
+    	c.gridy = 2;
+    	c.insets = new Insets (3,0,3,0);
+    	c.fill = GridBagConstraints.HORIZONTAL;
 
     	paneOSM.add ( new JSeparator (SwingConstants.HORIZONTAL) , c );
 
+    	/*
     	c = new GridBagConstraints();
     	c.anchor = GridBagConstraints.FIRST_LINE_START;
 		c.gridx = 1;
     	c.gridy = 3;
     	c.fill = GridBagConstraints.BOTH;
 
-    	/*
     	JButton selectButton = new JButton("selct raw area");
     	selectButton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){ 
@@ -186,6 +188,34 @@ public class OTNGui {
 
     	paneOSM.add ( selectButton , c); 
     	*/
+
+    	c = new GridBagConstraints();
+    	c.anchor = GridBagConstraints.CENTER;
+		c.gridx = 0;
+    	c.gridy = 3;
+    	c.fill = GridBagConstraints.HORIZONTAL;
+    	c.insets = new Insets(5,5,5,5);
+
+    	JButton clearButton = new JButton("restore to original file");
+      			/*clearButton.addActionListener(new ActionListener(){  
+				public void actionPerformed(ActionEvent e){
+				}*/
+
+		paneOSM.add(clearButton, c);
+
+		c = new GridBagConstraints();
+    	c.anchor = GridBagConstraints.CENTER;
+		c.gridx = 0;
+    	c.gridy = 4;
+    	c.fill = GridBagConstraints.HORIZONTAL;
+    	c.insets = new Insets(5,5,5,5);
+
+    	JButton discardButton = new JButton("discard file");
+      			/*discardButton.addActionListener(new ActionListener(){  
+				public void actionPerformed(ActionEvent e){
+				}*/
+
+		paneOSM.add(discardButton, c);
 
 	}
 
@@ -201,7 +231,6 @@ public class OTNGui {
     	c.gridx = 0;
     	c.gridy = 0;
     	c.weightx = 1;
-    	c.weighty = 1;
     	c.anchor = GridBagConstraints.CENTER;
     	c.insets = new Insets (5,5,5,5);
 
@@ -236,7 +265,6 @@ public class OTNGui {
       	JPanel areaButtonsPanel = new JPanel(new GridBagLayout());
 
       		JButton deleteWFelementbutton = new JButton("delete");
-      			
       			/*deleteProfileButton.addActionListener(new ActionListener(){  
 				public void actionPerformed(ActionEvent e){
 				}*/
@@ -289,6 +317,11 @@ public class OTNGui {
 
 		    	rightareaButtons.add(analyzebutton, crab);
 
+		    	crab = new GridBagConstraints();
+		    	crab.gridx = 2;
+				crab.gridy = 0;
+				crab.insets = new Insets(0,5,0,1);
+
 		    	JButton filterButton = new JButton("filter area");
 		    	filterButton.setBackground( Color.CYAN );
 		    	filterButton.addActionListener( new ActionListener() {  
@@ -303,11 +336,6 @@ public class OTNGui {
 						OTNGuiFilter filter = new OTNGuiFilter( inpunt , output );
 			       		}  
 		    		});
-
-		    	crab = new GridBagConstraints();
-		    	crab.gridx = 2;
-				crab.gridy = 0;
-				crab.insets = new Insets(0,5,0,0);
 
 				rightareaButtons.add(filterButton, crab);
 
@@ -353,7 +381,7 @@ public class OTNGui {
 
       	JPanel profilesButtonsPanel = new JPanel(new GridBagLayout());
 
-      		JButton deleteProfileButton = new JButton("delete Profile");
+      		JButton deleteProfileButton = new JButton("delete profile");
       			
       			/*deleteProfileButton.addActionListener(new ActionListener(){  
 				public void actionPerformed(ActionEvent e){
@@ -368,7 +396,7 @@ public class OTNGui {
 			profilesButtonsPanel.add(deleteProfileButton, cb);
 
 
-      		JButton newProfileButton = new JButton("new Profile");
+      		JButton newProfileButton = new JButton("new profile");
       			/*newProfileButton.addActionListener(new ActionListener(){  
 				public void actionPerformed(ActionEvent e){
 				}*/
@@ -378,7 +406,7 @@ public class OTNGui {
 			cb.anchor = GridBagConstraints.LAST_LINE_END;
 		  	cb.gridx = 1;
 			cb.gridy = 0;
-			cb.insets = new Insets(0,5,0,0);
+			cb.insets = new Insets(0,5,0,3);
 
 			profilesButtonsPanel.add(newProfileButton, cb);
 
@@ -392,21 +420,31 @@ public class OTNGui {
 		JPanel graphPane =new JPanel( new GridBagLayout() );  
     	this.tabs.add( "Graph",graphPane );
 
-    	GridBagConstraints c = new GridBagConstraints();
-    	c.anchor = GridBagConstraints.FIRST_LINE_START;
-		c.gridx = 0;
-    	c.gridy = 0;
-    	c.fill = GridBagConstraints.BOTH;
-
     	ButtonGroup graphCompatGroup = new ButtonGroup();
     	this.otnRadioButton = new JRadioButton("OTN", true );
     	this.vnsRadioButton = new JRadioButton("VNS");
     	graphCompatGroup.add( otnRadioButton );
     	graphCompatGroup.add( vnsRadioButton );
 
+    	GridBagConstraints c = new GridBagConstraints();
+    	c.anchor = GridBagConstraints.CENTER;
+		c.gridx = 0;
+    	c.gridy = 0;
+    	c.fill = GridBagConstraints.HORIZONTAL;
+
     	graphPane.add ( otnRadioButton , c);
+    	
     	c.gridx = 1;
+
     	graphPane.add ( vnsRadioButton , c);
+
+    	c = new GridBagConstraints();
+    	c.anchor = GridBagConstraints.CENTER;
+		c.gridx = 0;
+		c.gridy = 1;
+		c.gridwidth = 2;
+    	c.fill = GridBagConstraints.HORIZONTAL;
+    	c.insets = new Insets(5,5,5,5);
 
     	final JButton vnskmlButton = new JButton("load kml (VNS only)");
     	vnskmlButton.setEnabled(false);
@@ -423,7 +461,9 @@ public class OTNGui {
         	}  
     	});
 
-    	otnRadioButton.addActionListener(new ActionListener() {
+      	graphPane.add ( vnskmlButton , c);
+
+      	otnRadioButton.addActionListener(new ActionListener() {
 	        @Override
 	        public void actionPerformed(ActionEvent e) {
 	        	if ( otnRadioButton.isSelected() ){
@@ -444,17 +484,12 @@ public class OTNGui {
     	});
 
     	c = new GridBagConstraints();
-    	c.anchor = GridBagConstraints.FIRST_LINE_START;
-		c.gridx = 0;
-    	c.gridy = 1;
-    	c.fill = GridBagConstraints.BOTH;
-    	graphPane.add ( vnskmlButton , c);
-
-    	c = new GridBagConstraints();
-    	c.anchor = GridBagConstraints.FIRST_LINE_START;
+    	c.anchor = GridBagConstraints.CENTER;
 		c.gridx = 0;
     	c.gridy = 2;
-    	c.fill = GridBagConstraints.BOTH;
+    	c.gridwidth = 2;
+    	c.fill = GridBagConstraints.HORIZONTAL;
+    	c.insets = new Insets(5,5,5,5);
 
     	JButton setStorageDirButton = new JButton("select storage Dir");
     	setStorageDirButton.addActionListener(new ActionListener(){  
@@ -473,6 +508,7 @@ public class OTNGui {
     	});  
 
     	setStorageDirButton.setActionCommand("load");
+
     	graphPane.add ( setStorageDirButton , c);
     }
 
