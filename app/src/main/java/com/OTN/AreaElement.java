@@ -8,13 +8,16 @@ public class AreaElement  {
 	private boolean complete = false;
 	private String areaName;
 	private String creationTime;
+	private String sonOf;
 
 	AreaElement (File osmfile ) {
 		if ( osmfile.exists() ){
 			this.osmfile = osmfile;
-		}	
+		}
+		this.areaName = "";
+		this.sonOf = "";
 	}
-	AreaElement () {
+	AreaElement (String father) {
 		File tempFile;
 		try {
 			tempFile = File.createTempFile("otnc", ".osm");
@@ -24,6 +27,8 @@ public class AreaElement  {
 		}
 		tempFile.deleteOnExit();
 		this.osmfile = tempFile;
+		this.areaName = "";
+		this.sonOf = father;
 	}
 
 	public File getOsmFile(){

@@ -28,6 +28,7 @@ public class OTNGui {
 	private JRadioButton otnRadioButton;
 	private JRadioButton vnsRadioButton;
 	private JTextField areaNameTF;
+	final private WorkflowTableDataModel workflowTableData;
 
 	public static void main(String[] args) {
 	new OTNGui();
@@ -37,6 +38,7 @@ public class OTNGui {
 		
 		this.otnc = new OTNCompanion();
 		this.areaElements = new LinkedList();
+		this.workflowTableData = new WorkflowTableDataModel() ;
 
 		this.frame = new JFrame("OTN-Companion");
 		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE); 
@@ -126,11 +128,8 @@ public class OTNGui {
 	            if (returnVal == JFileChooser.APPROVE_OPTION) {
 	            	File file = fc.getSelectedFile();
 	            	if ( file.exists() ){
-	            		areaElements.add ( new AreaElement ( file  ) );
-	            		areaElements.getLast().setName( areaNameTF.getText() );
-	            		selectedElement = areaElements.getLast();
+	            		workflowTableData.addAreaElement( file );
 	            	}
-
 	            }
         	}  
     	});  
@@ -153,7 +152,6 @@ public class OTNGui {
 	            	if ( file.exists() ){
 	            		selectedElement.setpolyBoundary(file);
 	            	}
-
 	            }
         	}  
     	});  
@@ -238,9 +236,9 @@ public class OTNGui {
 
 		/////////////////////////// TABLE & SCROLLPANE /////////////////////////////
 
-		WorkflowTableDataModel workflowTableData = new WorkflowTableDataModel() ;
+		
 
-		JTable wftable = new JTable(workflowTableData);
+		JTable wftable = new JTable(this.workflowTableData);
       	wftable.setFillsViewportHeight(true);
 
       	JScrollPane wfscrollpane = new JScrollPane(wftable);
@@ -329,11 +327,9 @@ public class OTNGui {
 						if ( ! selectedElement.isValid() ) {
 							return;
 						}
-						AreaElement inpunt = areaElements.getLast();
-						AreaElement output = new AreaElement();
-						areaElements.add (output);
-
-						OTNGuiFilter filter = new OTNGuiFilter( inpunt , output );
+						AreaElement input = workflowTableData.getLastAreaElement();
+						AreaElement output = workflowTableData.addAreaElement( input );
+						OTNGuiFilter filter = new OTNGuiFilter( input , output );
 			       		}  
 		    		});
 
