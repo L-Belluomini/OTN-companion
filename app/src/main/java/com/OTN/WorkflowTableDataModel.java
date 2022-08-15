@@ -43,7 +43,7 @@ public class WorkflowTableDataModel extends AbstractTableModel {
 
 
 	    	case 2:
-	    		return workflowelements.get(row).isValid();
+	    		return workflowelements.get(row).isComplete();
 
 	    }
     return null;

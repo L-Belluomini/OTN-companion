@@ -5,7 +5,6 @@ import java.io.*;
 public class AreaElement  {
 	private File osmfile;
 	private File polyFileBoundary;
-	private boolean complete = false;
 	private String areaName;
 	private String creationTime;
 	private String sonOf;
@@ -71,6 +70,6 @@ public class AreaElement  {
 		}
 	}
 	public boolean isComplete() {
-		return complete;
+		return this.polyFileBoundary.exists();
 	}
 }
