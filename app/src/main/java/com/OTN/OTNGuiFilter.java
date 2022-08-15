@@ -37,6 +37,7 @@ public class OTNGuiFilter {
 
 
 		JFrame filterFrame= new JFrame("Filter");    
+		// @gabri todo add father area name
         filterFrame.setLayout( new GridBagLayout() ); 
 		filterFrame.setVisible(true);
 
@@ -89,7 +90,7 @@ public class OTNGuiFilter {
 				}
 					
 				editor.setOutput( output.getOsmFile() );
-				
+
 				System.out.println("started time");
 
 				long start = System.currentTimeMillis();

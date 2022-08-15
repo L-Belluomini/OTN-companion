@@ -92,6 +92,7 @@ public class WorkflowTableDataModel extends AbstractTableModel {
     // hybrid
     public void deletRow ( int row){
     	workflowelements.remove( row );
+    	fireTableDataChanged();
     }
 
     // data

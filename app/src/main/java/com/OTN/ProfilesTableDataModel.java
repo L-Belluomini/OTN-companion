@@ -70,15 +70,22 @@ public class ProfilesTableDataModel extends AbstractTableModel {
     public boolean isCellEditable(int row, int col)
         { switch (col) { 
 	    	case  0 : // name
-	    		return true;
-	 
+	    		return false;  
 	    	
-	    	case 1: // creation time
-	    		return false;
+	    	case 1: //  "Vehicle" 
+	    		return true;
 
+	    	case 2: // , "Weighting" 
+	    		return true;
 
-	    	case 2: // is valid
-	    		return false;
+	    	case 3: // "Turn cost"
+	    		return true;
+
+	    	case 4: //  "CH" 
+    			return true;
+
+	    	case 5: // "LM"  
+	    		return true;
 
 	    }
 	    return false ; 
@@ -88,22 +95,34 @@ public class ProfilesTableDataModel extends AbstractTableModel {
         switch (col) { 
 	    	case  0 : // name
 	    	//.get(row).setName( value.toString() );
+	    		return;
+
+    		case 1: //  "Vehicle" 
+    			profiles.get(row).setVehicle( value.toString() );
 	    		break;
-	 
-	    	
-	    	case 1:
-	    		return;  // creation time
 
+	    	case 2: // , "Weighting" 
+	    		profiles.get(row).setWeighting( value.toString() );
+	    		break;
 
-	    	case 2:
-	    		return; // is valid
- 
+	    	case 3: // "Turn cost"
+	    		profiles.get(row).setTurnCosts( (boolean) value );
+	    		break;
+
+	    	case 4: //  "CH" 
+	    		// to do
+    			break;
+
+	    	case 5: // "LM" 
+	    		// to do
+	    		break;
 	    }
         fireTableCellUpdated(row, col);
     }
 
     public void deletRow ( int row){
     	profiles.remove( row ); // to do add remove ch profile
+    	fireTableDataChanged();
     }
 
 

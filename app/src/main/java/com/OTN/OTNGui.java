@@ -233,6 +233,7 @@ public class OTNGui {
 
     	JLabel workflowtitle = new JLabel("area workflow");
     	wftable.setFillsViewportHeight(true);
+		wftable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
     	GridBagConstraints c = new GridBagConstraints();
     	c.gridx = 0;
@@ -270,15 +271,20 @@ public class OTNGui {
       		deleteWFelementbutton.addActionListener(new ActionListener(){  
 				public void actionPerformed(ActionEvent e){
 					// @gabri to add confimation dialog
+					if ( wftable.getSelectedRows().length == 0 ) {
+						// to do @gabri add notification for selecte element
+						return;
+					}
+					String areaName = (String) workflowTableData.getValueAt( wftable.getSelectedRows()[0] , 0 );
 
-					String areaElementName = "";
-
-					JOptionPane.showConfirmDialog(null, 
-                	areaElementName+" will be permanently deleted in the workflow.\n"
-                	+"Are you sure you want to proceed?", "Delete " + areaElementName,JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-
-
-					workflowTableData.deletRow( wftable.getSelectedRows()[0] );
+					int paneReturnVal = JOptionPane.showConfirmDialog(frame, 
+                	 areaName+" will be permanently deleted in the workflow.\n"
+                	+"Are you sure you want to proceed?", "Delete " + areaName,JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+					
+					if ( paneReturnVal == 0 ){
+						workflowTableData.deletRow( wftable.getSelectedRows()[0] );
+					}
+					
 				}
 			});
 
@@ -301,6 +307,7 @@ public class OTNGui {
 
 				JButton savePolyButton = new JButton("save poly file");
 				savePolyButton.setEnabled(false);
+				//@leo to do
 
 				GridBagConstraints crab = new GridBagConstraints();
 				crab.gridx = 0;
@@ -341,7 +348,7 @@ public class OTNGui {
 		    	filterButton.setBackground( Color.CYAN );
 		    	filterButton.addActionListener( new ActionListener() {  
 					public void actionPerformed(ActionEvent e){ 
-						if ( ! selectedElement.isValid() ) {
+						if ( ! workflowTableData.getLastAreaElement().isValid() ) {
 							return;
 						}
 						AreaElement input = workflowTableData.getLastAreaElement();
@@ -371,6 +378,8 @@ public class OTNGui {
 
 		
       	profilesTable.setFillsViewportHeight(true);
+      	profilesTable.setRowHeight(15);
+      	profilesTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
       	JScrollPane profilesScrollpane = new JScrollPane(profilesTable);
 
@@ -398,15 +407,20 @@ public class OTNGui {
       			
       			deleteProfileButton.addActionListener(new ActionListener(){  
 					public void actionPerformed(ActionEvent e){
-						// @gabri to add confimation dialog
+						if ( profilesTable.getSelectedRows().length == 0 ) {
+							return;
+							//@gabri add notification
+						}
 
-						String profileName = "";
+						String profileName = (String) profilesTableData.getValueAt( profilesTable.getSelectedRows()[0] ,0 );;
 
-					JOptionPane.showConfirmDialog(null, 
-                	profileName+" will be permanently deleted from profiles.\n"
-                	+"Are you sure you want to proceed?", "Delete " + profileName,JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-
-						profilesTableData.deletRow( profilesTable.getSelectedRows()[0] );
+						int paneRetValue = JOptionPane.showConfirmDialog(null, 
+	                	profileName+" will be permanently deleted from profiles.\n"
+	                	+"Are you sure you want to proceed?", "Delete " + profileName,JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+						if ( paneRetValue == 0 ){
+							profilesTableData.deletRow( profilesTable.getSelectedRows()[0] );
+						}
+						
 					}
 				});
 
@@ -443,9 +457,9 @@ public class OTNGui {
 	  			c.gridx = 0;
 				c.gridy = 1;
 				JTextField profileNameTF = new JTextField();
-				newProfileDialog.add(profileNameTFle,c);
+				newProfileDialog.add(profileNameTF,c);
 
-				
+
 
 
 

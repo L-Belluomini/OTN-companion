@@ -69,6 +69,10 @@ public class AreaElement  {
 		}
 	}
 	public boolean isComplete() {
-		return this.polyFileBoundary.exists();
+		if ( this.polyFileBoundary != null ) {
+			return  this.polyFileBoundary.exists();
+		} else {
+			return false;
+		}
 	}
 }
