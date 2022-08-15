@@ -49,8 +49,8 @@ public class WorkflowTableDataModel extends AbstractTableModel {
     return null;
     }
 
-    public boolean isCellEditable(int row, int col)
-        { switch (col) { 
+    public boolean isCellEditable(int row, int col) { 
+    	switch (col) {
 	    	case  0 : // name
 	    		return true;
 	 
@@ -61,7 +61,6 @@ public class WorkflowTableDataModel extends AbstractTableModel {
 
 	    	case 2: // is valid
 	    		return false;
-
 	    }
 	    return false ; 
 	}
@@ -72,10 +71,11 @@ public class WorkflowTableDataModel extends AbstractTableModel {
         return getValueAt(0, c).getClass();
     }
 
-      public void setValueAt(Object value, int row, int col) {
+  	public void setValueAt(Object value, int row, int col) {
         switch (col) { 
 	    	case  0 : // name
 	    		 workflowelements.get(row).setName( value.toString() );
+	    		 break;
 	 
 	    	
 	    	case 1:
@@ -87,6 +87,11 @@ public class WorkflowTableDataModel extends AbstractTableModel {
  
 	    }
         fireTableCellUpdated(row, col);
+    }
+
+    // hybrid
+    public void deletRow ( int row){
+    	workflowelements.remove( row );
     }
 
     // data

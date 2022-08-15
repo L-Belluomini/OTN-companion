@@ -53,20 +53,59 @@ public class ProfilesTableDataModel extends AbstractTableModel {
 
 	    	case 4:
 	    	//return profiles.get(row).getVehicle();
-	    	return true;
+	    	return true; // to do
 
 
 	    	case 5:
-	    	return false;
+	    	return false; // to do
 
         }
-        return null;
-    
+    return null;
     }
 
     public Class getColumnClass(int c) {
         return getValueAt(0, c).getClass();
     }
+
+    public boolean isCellEditable(int row, int col)
+        { switch (col) { 
+	    	case  0 : // name
+	    		return true;
+	 
+	    	
+	    	case 1: // creation time
+	    		return false;
+
+
+	    	case 2: // is valid
+	    		return false;
+
+	    }
+	    return false ; 
+	}
+
+	public void setValueAt(Object value, int row, int col) {
+        switch (col) { 
+	    	case  0 : // name
+	    	//.get(row).setName( value.toString() );
+	    		break;
+	 
+	    	
+	    	case 1:
+	    		return;  // creation time
+
+
+	    	case 2:
+	    		return; // is valid
+ 
+	    }
+        fireTableCellUpdated(row, col);
+    }
+
+    public void deletRow ( int row){
+    	profiles.remove( row ); // to do add remove ch profile
+    }
+
 
     // data
 

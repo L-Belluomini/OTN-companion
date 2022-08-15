@@ -41,7 +41,6 @@ public class AreaElement  {
 	public void setpolyBoundary( File polyFileBoundary ){
 		if ( polyFileBoundary.exists() && polyFileBoundary.getName().endsWith(".poly") ){
 			this.polyFileBoundary = polyFileBoundary;
-			this.complete = true;
 			// to do add real check ?
 		}
 	}
@@ -63,7 +62,7 @@ public class AreaElement  {
 	}
 
 	public boolean isValid() {
-		if ( ! this.complete ){
+		if ( ! isComplete()  ){
 			return this.osmfile.exists();
 		} else {
 			return ( this.osmfile.exists() && this.polyFileBoundary.exists() );
