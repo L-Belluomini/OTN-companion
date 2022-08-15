@@ -14,6 +14,8 @@ import javax.swing.ImageIcon;
 import java.awt.Image;
 import javax.swing.JFrame;
 import java.time.*;
+import javax.swing.JOptionPane;
+import javax.swing.JDialog;
 
 
 public class OTNGui {
@@ -230,6 +232,7 @@ public class OTNGui {
     	this.tabs.add( "Area",paneArea );
 
     	JLabel workflowtitle = new JLabel("area workflow");
+    	wftable.setFillsViewportHeight(true);
 
     	GridBagConstraints c = new GridBagConstraints();
     	c.gridx = 0;
@@ -241,10 +244,6 @@ public class OTNGui {
     	paneArea.add(workflowtitle, c);
 
 		/////////////////////////// TABLE & SCROLLPANE /////////////////////////////
-
-		
-
-      	wftable.setFillsViewportHeight(true);
 
       	JScrollPane wfscrollpane = new JScrollPane(wftable);
 
@@ -271,6 +270,14 @@ public class OTNGui {
       		deleteWFelementbutton.addActionListener(new ActionListener(){  
 				public void actionPerformed(ActionEvent e){
 					// @gabri to add confimation dialog
+
+					String areaElementName = "";
+
+					JOptionPane.showConfirmDialog(null, 
+                	areaElementName+" will be permanently deleted in the workflow.\n"
+                	+"Are you sure you want to proceed?", "Delete " + areaElementName,JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+
+
 					workflowTableData.deletRow( wftable.getSelectedRows()[0] );
 				}
 			});
@@ -392,6 +399,13 @@ public class OTNGui {
       			deleteProfileButton.addActionListener(new ActionListener(){  
 					public void actionPerformed(ActionEvent e){
 						// @gabri to add confimation dialog
+
+						String profileName = "";
+
+					JOptionPane.showConfirmDialog(null, 
+                	profileName+" will be permanently deleted from profiles.\n"
+                	+"Are you sure you want to proceed?", "Delete " + profileName,JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+
 						profilesTableData.deletRow( profilesTable.getSelectedRows()[0] );
 					}
 				});
@@ -409,6 +423,32 @@ public class OTNGui {
       			newProfileButton.addActionListener(new ActionListener(){  
 				public void actionPerformed(ActionEvent e){
 				// @gabri add frame / dialog to set shit
+
+				JFrame f = new JFrame();
+
+				JDialog newProfileDialog = new JDialog(f, "Create new profile", true);
+
+				newProfileDialog.setVisible(true);
+				newProfileDialog.setLayout(new GridBagLayout());
+
+				GridBagConstraints c = new GridBagConstraints();
+				c.anchor = GridBagConstraints.FIRST_LINE_START;
+	  			c.gridx = 0;
+				c.gridy = 0;				
+				JLabel profileNamelabel = new JLabel("Name:");
+				newProfileDialog.add(profileNamelabel, c);
+
+				c = new GridBagConstraints();
+				c.anchor = GridBagConstraints.FIRST_LINE_START;
+	  			c.gridx = 0;
+				c.gridy = 1;
+				JTextField profileNameTF = new JTextField();
+				newProfileDialog.add(profileNameTFle,c);
+
+				
+
+
+
 					// start of shit
 					String name = "name";
 					String vehicle = "car";

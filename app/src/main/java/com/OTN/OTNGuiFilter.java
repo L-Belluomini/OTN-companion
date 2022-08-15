@@ -89,6 +89,7 @@ public class OTNGuiFilter {
 				}
 					
 				editor.setOutput( output.getOsmFile() );
+				
 				System.out.println("started time");
 
 				long start = System.currentTimeMillis();
