@@ -35,11 +35,13 @@ public class OTNGuiFilter {
 		editor.loadFile ( input.getOsmFile() );
 		System.out.println("editor initialized");
 
+		String fatherName = new String(input.getName());
 
-		JFrame filterFrame= new JFrame("Filter");    
-		// @gabri todo add father area name
+		JFrame filterFrame= new JFrame("Filter "+ fatherName);
         filterFrame.setLayout( new GridBagLayout() ); 
 		filterFrame.setVisible(true);
+		filterFrame.setResizable(false);
+		filterFrame.setIconImage(new ImageIcon(getClass().getResource("/otnLogo.png")).getImage());
 
 		Container content = filterFrame.getContentPane();
 
@@ -120,7 +122,7 @@ public class OTNGuiFilter {
 	  			c.gridx = 0;
 				c.gridy = 0;
 
-				bbdialogwait.setTitle("Bounding box generation");
+				bbdialogwait.setTitle("Filter generation");
 				bbdialogwait.setModal(true);
 				bbdialogwait.setSize(new Dimension(250,120));
 				bbdialogwait.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
@@ -138,7 +140,7 @@ public class OTNGuiFilter {
 
 				frame = new JFrame();
 
-				JOptionPane.showMessageDialog(frame,"Bounding box succesfully applied in " + timeElapsed +" ms.","Bounding box generation",
+				JOptionPane.showMessageDialog(frame,"Filter succesfully applied in " + timeElapsed +" ms.","Filter generation",
 				JOptionPane.PLAIN_MESSAGE);
 				frame.dispose();
         	}  
@@ -258,7 +260,7 @@ public class OTNGuiFilter {
    
     private void fillRadiusPane() {
     	JPanel radiusFilterPanel =new JPanel( new GridBagLayout() );  
-		this.tabs.add( "radius area",radiusFilterPanel );
+		this.tabs.add( "Radius area",radiusFilterPanel );
     	JLabel centerlat = new JLabel("Circle center lat:");
     	GridBagConstraints c = new GridBagConstraints();
     	c.anchor = GridBagConstraints.FIRST_LINE_END;
@@ -298,7 +300,7 @@ public class OTNGuiFilter {
     	c.gridy = 2;
     	c.fill = GridBagConstraints.BOTH;
     	c.gridwidth = 3;
-    	c.ipady= 3;
+    	c.insets = new Insets(5,5,5,5);
 
     	radiusFilterPanel.add ( new JSeparator (SwingConstants.HORIZONTAL) , c );
 
@@ -324,7 +326,7 @@ public class OTNGuiFilter {
 
     private void fillPolyPane () {
     	final JPanel polyFilterPanel =new JPanel( new GridBagLayout() );  
-		this.tabs.add( "poly file",polyFilterPanel );
+		this.tabs.add( "Poly file",polyFilterPanel );
 		final JFileChooser polyFilterFileChoser = new JFileChooser();
 
     	GridBagConstraints c = new GridBagConstraints();

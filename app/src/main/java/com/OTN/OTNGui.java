@@ -13,9 +13,9 @@ import java.awt.Color;
 import javax.swing.ImageIcon;
 import java.awt.Image;
 import javax.swing.JFrame;
-import java.time.*;
 import javax.swing.JOptionPane;
 import javax.swing.JDialog;
+import javax.swing.JCheckBox;
 
 
 public class OTNGui {
@@ -29,7 +29,6 @@ public class OTNGui {
 	private File vnsKmlFile;
 	private JRadioButton otnRadioButton;
 	private JRadioButton vnsRadioButton;
-	private JTextField areaNameTF;
 	final private WorkflowTableDataModel workflowTableData;
 	final private JTable wftable; 
 	final private ProfilesTableDataModel profilesTableData;
@@ -61,12 +60,15 @@ public class OTNGui {
 		c.gridx = 0;
     	c.gridy = 0;
     	c.weightx = 1;
-    	c.weighty = 1; 
+    	c.weighty = 1;
+    	c.gridwidth = 2;
     	c.fill = GridBagConstraints.BOTH; //tabs costraints
+
+    	//@Leo please disable all tabs until an OSM file is added with the loadButton
 
 		this.tabs = new JTabbedPane();
     	content.add(tabs , c);
-    	fillOSMPane();
+    	//fillOSMPane();
     	fillAreaPane();
     	fillProfilesPane();
     	fillGraphPane();
@@ -77,40 +79,86 @@ public class OTNGui {
     	/////////////////////////////// GENERATE BUTTON ///////////////////////////////////
 
 		c = new GridBagConstraints();
-    	c.fill = GridBagConstraints.VERTICAL;
-    	c.anchor = GridBagConstraints.LAST_LINE_END;
+       	c.anchor = GridBagConstraints.FIRST_LINE_START;
   	  	c.gridx = 0;
     	c.gridy = 1;
-    	c.insets = new Insets(0,0,0,5);//generatePanel costraints
+    	c.insets = new Insets(5,5,5,5);
 
-    	JPanel generatePanel = new JPanel();
+    	JPanel leftmainbuttons = new JPanel (new GridBagLayout());
 
-	    	JButton button = new JButton("generate");
-	    	button.addActionListener(new ActionListener(){  
-				public void actionPerformed(ActionEvent e){ 
-					if ( otnRadioButton.isSelected() ){
-						otnc.createGraph();
-					} else if ( vnsRadioButton.isSelected() && vnsKmlFile.exists() ) {
-					otnc.createVNSGraph(vnsKmlFile);
-					}
+    	GridBagConstraints lmbc = new GridBagConstraints();
+    	lmbc.anchor = GridBagConstraints.FIRST_LINE_START;
+		lmbc.gridx = 0;
+    	lmbc.gridy = 0;
 
-	        	}  
-	    	});
+    	JButton loadButton = new JButton("load OSM file");
+    	loadButton.addActionListener(new ActionListener(){  
+			public void actionPerformed(ActionEvent e){ 
+				fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+	            int returnVal = fc.showOpenDialog(frame);
+	            if (returnVal == JFileChooser.APPROVE_OPTION) {
+	            	File file = fc.getSelectedFile();
+	            	if ( file.exists() ){
+	            		workflowTableData.addAreaElement( file );
+	            		//@leo add default areaElement name when created
+	            	}
+	            }
+        	}  
+    	});  
+    	leftmainbuttons.add ( loadButton , lmbc);
 
-    	generatePanel.add(button);
+		lmbc = new GridBagConstraints();
+		lmbc.anchor = GridBagConstraints.FIRST_LINE_START;
+		lmbc.gridx = 1;
+    	lmbc.gridy = 0;
+    	lmbc.insets = new Insets(0,5,0,0);
 
-    	content.add(generatePanel, c);
+    	JButton polyButton = new JButton("load poly file");
+    	polyButton.addActionListener(new ActionListener(){  
+			public void actionPerformed(ActionEvent e){ 
+				fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+	            int returnVal = fc.showOpenDialog(frame);
+	            if (returnVal == JFileChooser.APPROVE_OPTION) {
+	            	File file = fc.getSelectedFile();
+	            	if ( file.exists() ){
+	            		workflowTableData.getLastAreaElement().setpolyBoundary(file);
+	            	}
+	            }
+        	}  
+    	});
+    	leftmainbuttons.add(polyButton, lmbc);
+
+    	content.add(leftmainbuttons, c);
+
+		c = new GridBagConstraints();
+    	c.fill = GridBagConstraints.VERTICAL;
+    	c.anchor = GridBagConstraints.LAST_LINE_END;
+  	  	c.gridx = 1;
+    	c.gridy = 1;
+    	c.insets = new Insets(5,5,5,5);
+
+    	JButton button = new JButton("generate");
+	   	button.addActionListener(new ActionListener(){  
+			public void actionPerformed(ActionEvent e){ 
+				if ( otnRadioButton.isSelected() ){
+					otnc.createGraph();
+				} else if ( vnsRadioButton.isSelected() && vnsKmlFile.exists() ) {
+				otnc.createVNSGraph(vnsKmlFile);
+				}
+        	}  
+    	});
+    	content.add(button, c);
 
     	frame.pack();
 	}	
 
 	/////////////////////////////// OSMPANE ///////////////////////////////////////////////////
 
-	private void fillOSMPane() {
+	/*private void fillOSMPane() {
 		JPanel paneOSM =new JPanel( new GridBagLayout() );  
     	this.tabs.add( "OSM file",paneOSM );
     	
-    	/*
+    
 		areaNameTF = new JTextField(15);
 		GridBagConstraints c = new GridBagConstraints();
     	c.anchor = GridBagConstraints.FIRST_LINE_START;
@@ -119,7 +167,7 @@ public class OTNGui {
     	c.insets = new Insets(0,0,0,5);
     	c.fill = GridBagConstraints.BOTH;
     	paneOSM.add ( areaNameTF , c);
-    	*/
+    
 
     	GridBagConstraints c = new GridBagConstraints();
     	c.anchor = GridBagConstraints.CENTER;
@@ -174,7 +222,7 @@ public class OTNGui {
 
     	paneOSM.add ( new JSeparator (SwingConstants.HORIZONTAL) , c );
 
-    	/*
+    	
     	c = new GridBagConstraints();
     	c.anchor = GridBagConstraints.FIRST_LINE_START;
 		c.gridx = 1;
@@ -193,7 +241,7 @@ public class OTNGui {
     	});  
 
     	paneOSM.add ( selectButton , c); 
-    	*/
+    	
 
     	c = new GridBagConstraints();
     	c.anchor = GridBagConstraints.CENTER;
@@ -203,9 +251,9 @@ public class OTNGui {
     	c.insets = new Insets(5,5,5,5);
 
     	JButton clearButton = new JButton("restore to original file");
-      			/*clearButton.addActionListener(new ActionListener(){  
+      			clearButton.addActionListener(new ActionListener(){  
 				public void actionPerformed(ActionEvent e){
-				}*/
+				}
 
 		//paneOSM.add(clearButton, c);
 
@@ -217,13 +265,15 @@ public class OTNGui {
     	c.insets = new Insets(5,5,5,5);
 
     	JButton discardButton = new JButton("discard file");
-      			/*discardButton.addActionListener(new ActionListener(){  
+      			discardButton.addActionListener(new ActionListener(){  
 				public void actionPerformed(ActionEvent e){
-				}*/
+				}
 
 		//paneOSM.add(discardButton, c);
 
 	}
+
+	*/
 
 	//////////////////////////////// WORKFLOW AREA ////////////////////////////////////////////////
 
@@ -247,6 +297,7 @@ public class OTNGui {
 		/////////////////////////// TABLE & SCROLLPANE /////////////////////////////
 
       	JScrollPane wfscrollpane = new JScrollPane(wftable);
+      	//@leo when an areaElement is created (be it from OSM file or a filter) the table doesn't update
 
     	c = new GridBagConstraints();
     	c.gridx = 0;
@@ -267,14 +318,17 @@ public class OTNGui {
 
       	JPanel areaButtonsPanel = new JPanel(new GridBagLayout());
 
-      		JButton deleteWFelementbutton = new JButton("delete");
+      		JButton deleteWFelementbutton = new JButton("delete area element");
       		deleteWFelementbutton.addActionListener(new ActionListener(){  
 				public void actionPerformed(ActionEvent e){
-					// @gabri to add confimation dialog
+
 					if ( wftable.getSelectedRows().length == 0 ) {
-						// to do @gabri add notification for selecte element
+						
+						JOptionPane.showMessageDialog(frame,"No area elements selected","Error",JOptionPane.ERROR_MESSAGE);
+
 						return;
 					}
+
 					String areaName = (String) workflowTableData.getValueAt( wftable.getSelectedRows()[0] , 0 );
 
 					int paneReturnVal = JOptionPane.showConfirmDialog(frame, 
@@ -342,7 +396,7 @@ public class OTNGui {
 		    	crab = new GridBagConstraints();
 		    	crab.gridx = 2;
 				crab.gridy = 0;
-				crab.insets = new Insets(0,5,0,1);
+				crab.insets = new Insets(0,5,0,0);
 
 		    	JButton filterButton = new JButton("filter area");
 		    	filterButton.setBackground( Color.CYAN );
@@ -354,6 +408,7 @@ public class OTNGui {
 						AreaElement input = workflowTableData.getLastAreaElement();
 						AreaElement output = workflowTableData.addAreaElement( input );
 						OTNGuiFilter filter = new OTNGuiFilter( input , output );
+						//@leo even if no filter is applied a new area element is added to the table
 			       		}  
 		    		});
 
@@ -378,7 +433,6 @@ public class OTNGui {
 
 		
       	profilesTable.setFillsViewportHeight(true);
-      	profilesTable.setRowHeight(15);
       	profilesTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
       	JScrollPane profilesScrollpane = new JScrollPane(profilesTable);
@@ -388,28 +442,20 @@ public class OTNGui {
     	c.gridy = 0;
     	c.weightx = 1;
     	c.weighty = 1;
+    	c.gridwidth = 2;
     	c.fill = GridBagConstraints.BOTH;
 
       	paneProfiles.add(profilesScrollpane, c);
 
       	/////////////////////////// BUTTONS ////////////////////////////////
 
-		c = new GridBagConstraints();
-		c.fill = GridBagConstraints.VERTICAL;
-		c.anchor = GridBagConstraints.LAST_LINE_END;
-	  	c.gridx = 0;
-		c.gridy = 1;
-		c.insets = new Insets(5,5,5,5); //profilesButtonsPanel costraints
-
-      	JPanel profilesButtonsPanel = new JPanel(new GridBagLayout());
-
-      		JButton deleteProfileButton = new JButton("delete profile");
+		   		JButton deleteProfileButton = new JButton("delete profile");
       			
       			deleteProfileButton.addActionListener(new ActionListener(){  
 					public void actionPerformed(ActionEvent e){
 						if ( profilesTable.getSelectedRows().length == 0 ) {
+							JOptionPane.showMessageDialog(frame,"No profiles selected","Error",JOptionPane.ERROR_MESSAGE);
 							return;
-							//@gabri add notification
 						}
 
 						String profileName = (String) profilesTableData.getValueAt( profilesTable.getSelectedRows()[0] ,0 );;
@@ -424,69 +470,163 @@ public class OTNGui {
 					}
 				});
 
-			GridBagConstraints cb = new GridBagConstraints();
-			cb.fill = GridBagConstraints.VERTICAL;
-			cb.anchor = GridBagConstraints.LAST_LINE_END;
-		  	cb.gridx = 0;
-			cb.gridy = 0;
+			c = new GridBagConstraints();
+			c.anchor = GridBagConstraints.FIRST_LINE_START;
+		  	c.gridx = 0;
+			c.gridy = 1;
+			c.insets = new Insets(5,5,5,5);
 
-			profilesButtonsPanel.add(deleteProfileButton, cb);
+			paneProfiles.add(deleteProfileButton, c);
 
 
       		JButton newProfileButton = new JButton("new profile");
       			newProfileButton.addActionListener(new ActionListener(){  
 				public void actionPerformed(ActionEvent e){
-				// @gabri add frame / dialog to set shit
 
-				JFrame f = new JFrame();
-
-				JDialog newProfileDialog = new JDialog(f, "Create new profile", true);
-
-				newProfileDialog.setVisible(true);
+				JDialog newProfileDialog = new JDialog(frame, "Create new profile", true);
 				newProfileDialog.setLayout(new GridBagLayout());
+				newProfileDialog.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
 				GridBagConstraints c = new GridBagConstraints();
-				c.anchor = GridBagConstraints.FIRST_LINE_START;
+				c.anchor = GridBagConstraints.FIRST_LINE_END;
 	  			c.gridx = 0;
-				c.gridy = 0;				
+				c.gridy = 0;
+				c.weightx = 1;
+				c.insets = new Insets(10,5,5,5);			
 				JLabel profileNamelabel = new JLabel("Name:");
 				newProfileDialog.add(profileNamelabel, c);
 
 				c = new GridBagConstraints();
-				c.anchor = GridBagConstraints.FIRST_LINE_START;
-	  			c.gridx = 0;
-				c.gridy = 1;
-				JTextField profileNameTF = new JTextField();
+	  			c.gridx = 1;
+				c.gridy = 0;
+				c.weightx = 1;
+				c.insets = new Insets(5,5,5,10);
+				JTextField profileNameTF = new JTextField(15);
 				newProfileDialog.add(profileNameTF,c);
 
+				c = new GridBagConstraints();
+				c.anchor = GridBagConstraints.FIRST_LINE_END;
+	  			c.gridx = 0;
+				c.gridy = 1;
+				c.weightx = 1;
+				c.insets = new Insets(5,10,5,5);			
+				JLabel profileVehiclelabel = new JLabel("Vehicle:");
+				newProfileDialog.add(profileVehiclelabel, c);
 
+				c = new GridBagConstraints();
+	  			c.gridx = 1;
+				c.gridy = 1;
+				c.weightx = 1;
+				c.insets = new Insets(5,5,5,10);
+				SpinnerListModel vehicleListModel = new SpinnerListModel(new String[] { 
+					"foot", "hike", "wheelchair","bike","racingbike","bike2",
+					"mtb","car","car4wd","motorcycle" });
+    			JSpinner vehicleSpinner = new JSpinner(vehicleListModel);
+    			Component vehicleSpinnerEditor = vehicleSpinner.getEditor();
+				JFormattedTextField ftf = ((JSpinner.DefaultEditor) vehicleSpinnerEditor).getTextField();
+				ftf.setColumns(13);
+    			newProfileDialog.add(vehicleSpinner,c);
 
+    			c.anchor = GridBagConstraints.FIRST_LINE_END;
+	  			c.gridx = 0;
+				c.gridy = 2;
+				c.weightx = 1;
+				c.insets = new Insets(5,10,5,5);		
+				JLabel profileWeightinglabel = new JLabel("Weighting:");
+				newProfileDialog.add(profileWeightinglabel, c);
 
+				c = new GridBagConstraints();
+	  			c.gridx = 1;
+				c.gridy = 2;
+				c.weightx = 1;
+				c.insets = new Insets(5,5,5,10);		
+				JTextField profileWeightingTF = new JTextField(15);
+				newProfileDialog.add(profileWeightingTF,c);
 
-					// start of shit
-					String name = "name";
-					String vehicle = "car";
-					String weighting = "fastest";
-					boolean tc = false;
-					boolean ch = true;
-					boolean lm = false;
-					// end of shit
-					// alternative set only name and make veretyng else modifiable in the table
-					profilesTableData.addProfile ( name , vehicle ,  weighting ,  tc , ch ,lm );
+				c = new GridBagConstraints();
+				c.anchor = GridBagConstraints.FIRST_LINE_START;
+	  			c.gridx = 0;
+				c.gridy = 3;
+				c.gridwidth = 2;
+				c.insets = new Insets(5,10,5,10);	
+				c.fill = GridBagConstraints.HORIZONTAL;	
+				JPanel profileBooleanPanel = new JPanel(new GridBagLayout());
+
+					GridBagConstraints pbpc = new GridBagConstraints();
+
+					pbpc.anchor = GridBagConstraints.CENTER;
+		  			pbpc.gridx = 0;
+					pbpc.gridy = 0;
+					pbpc.weightx = 1;			
+					
+					JLabel turnCostLabel = new JLabel("Turn cost:");
+					profileBooleanPanel.add(turnCostLabel, pbpc);
+					
+		  			pbpc.gridx = 1;
+					JCheckBox turnCostCheckbox = new JCheckBox();
+					profileBooleanPanel.add(turnCostCheckbox,pbpc);
+
+		  			pbpc.gridx = 2;
+					JLabel chLabel = new JLabel("ch:");
+					profileBooleanPanel.add(chLabel, pbpc);
+
+		  			pbpc.gridx = 3;
+					JCheckBox chCheckbox = new JCheckBox();
+					profileBooleanPanel.add(chCheckbox, pbpc);
+
+					pbpc.gridx = 4;
+					JLabel lmLabel = new JLabel("lm:");
+					profileBooleanPanel.add(lmLabel, pbpc);
+
+		  			pbpc.gridx = 5;
+					JCheckBox lmCheckbox = new JCheckBox();
+					profileBooleanPanel.add(lmCheckbox, pbpc);
+
+				newProfileDialog.add(profileBooleanPanel,c);
+
+				c = new GridBagConstraints();
+				c.gridx = 0;
+    			c.gridy = 4;
+    			c.fill = GridBagConstraints.BOTH;
+    			c.gridwidth = 2;
+    			c.insets = new Insets(5,5,5,5);
+    			newProfileDialog.add ( new JSeparator (SwingConstants.HORIZONTAL) , c );
+
+				final String name = profileNameTF.getText();
+				final String vehicle = (String) vehicleSpinner.getValue();
+				final String weighting = profileWeightingTF.getText();
+				final boolean tc = turnCostCheckbox.isSelected();
+				final boolean ch = chCheckbox.isSelected();
+				final boolean lm = lmCheckbox.isSelected();
+
+				JButton createProfileButton = new JButton("create profile");
+				c.anchor = GridBagConstraints.CENTER;
+	  			c.gridx = 0;
+				c.gridy = 5;
+				c.gridwidth = 2;
+				c.insets = new Insets(5,5,5,10);
+				newProfileDialog.add(createProfileButton, c);
+				createProfileButton.addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent e){
+					//@Leo not sure what's wrong with this button, does nothing, lots of exceptions pls fix
+					profilesTableData.addProfile ( name , vehicle ,  weighting ,  tc , ch , lm );
+	            	}
+
+				});
+
+				newProfileDialog.pack();
+				newProfileDialog.setVisible(true);
+				
 				}
 			});
 
-      		cb = new GridBagConstraints();
-			cb.fill = GridBagConstraints.VERTICAL;
-			cb.anchor = GridBagConstraints.LAST_LINE_END;
-		  	cb.gridx = 1;
-			cb.gridy = 0;
-			cb.insets = new Insets(0,5,0,3);
+      		c = new GridBagConstraints();
+			c.anchor = GridBagConstraints.LAST_LINE_END;
+		  	c.gridx = 1;
+			c.gridy = 1;
+			c.insets = new Insets(5,5,5,5);
 
-			profilesButtonsPanel.add(newProfileButton, cb);
-
-
-      	paneProfiles.add(profilesButtonsPanel,c);
+			paneProfiles.add(newProfileButton, c);
 	}
 
 	//////////////////////////////////// GRAPH PANE ////////////////////////////////////
