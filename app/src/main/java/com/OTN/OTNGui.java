@@ -1,5 +1,6 @@
 package com.OTN;
 
+import com.formdev.flatlaf.FlatDarkLaf;
 import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;
@@ -36,6 +37,11 @@ public class OTNGui {
 
 	public static void main(String[] args) {
 	new OTNGui();
+	try {
+    	UIManager.setLookAndFeel( new FlatDarkLaf() );
+		} catch( Exception ex ) {
+    	System.err.println( "Failed to initialize LaF" );
+		}
     }
 	
 	OTNGui () {
