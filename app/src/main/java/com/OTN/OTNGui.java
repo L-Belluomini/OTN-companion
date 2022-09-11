@@ -21,7 +21,7 @@ import javax.swing.JCheckBox;
 public class OTNGui {
 
 	private JFrame frame;
-	private JTabbedPane tabs;
+	final private JTabbedPane tabs;
 	private OTNCompanion otnc;
 	final JFileChooser fc = new JFileChooser();
 	final private LinkedList<AreaElement> areaElements;
@@ -100,6 +100,9 @@ public class OTNGui {
 	            	File file = fc.getSelectedFile();
 	            	if ( file.exists() ){
 	            		workflowTableData.addAreaElement( file );
+	            		tabs.setEnabledAt( tabs.indexOfTab("Profiles") , true );
+	            		tabs.setEnabledAt( tabs.indexOfTab("Graph") , true );
+
 	            		//@leo add default areaElement name when created
 	            	}
 	            }
@@ -403,6 +406,7 @@ public class OTNGui {
 		    	filterButton.addActionListener( new ActionListener() {  
 					public void actionPerformed(ActionEvent e){ 
 						if ( ! workflowTableData.getLastAreaElement().isValid() ) {
+							//@gabri display dialog for error
 							return;
 						}
 						AreaElement input = workflowTableData.getLastAreaElement();
@@ -424,6 +428,7 @@ public class OTNGui {
 	private void fillProfilesPane() {
 		JPanel paneProfiles =new JPanel(  new GridBagLayout() );  
     	this.tabs.add( "Profiles",paneProfiles );
+    	this.tabs.setEnabledAt( this.tabs.indexOfTab("Profiles") , false );
 
     	
     	profilesTableData.addProfile("car", "car", "fastest", false, false, true);
@@ -634,6 +639,7 @@ public class OTNGui {
 	private void fillGraphPane() {
 		JPanel graphPane =new JPanel( new GridBagLayout() );  
     	this.tabs.add( "Graph",graphPane );
+    	this.tabs.setEnabledAt( this.tabs.indexOfTab("Graph") , false );
 
     	ButtonGroup graphCompatGroup = new ButtonGroup();
     	this.otnRadioButton = new JRadioButton("OTN", true );
