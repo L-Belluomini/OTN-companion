@@ -36,13 +36,15 @@ public class OTNGui {
 	final private JTable profilesTable; 
 
 	public static void main(String[] args) {
-	new OTNGui();
 	try {
     	UIManager.setLookAndFeel( new FlatDarkLaf() );
 		} catch( Exception ex ) {
     	System.err.println( "Failed to initialize LaF" );
 		}
+	new OTNGui();
     }
+
+	
 	
 	OTNGui () {
 		
