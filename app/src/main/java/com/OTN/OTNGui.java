@@ -502,7 +502,7 @@ public class OTNGui {
       			newProfileButton.addActionListener(new ActionListener(){  
 				public void actionPerformed(ActionEvent e){
 
-				JDialog newProfileDialog = new JDialog(frame, "Create new profile", true);
+				final JDialog newProfileDialog = new JDialog(frame, "Create new profile", true);
 				newProfileDialog.setLayout(new GridBagLayout());
 				newProfileDialog.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -520,7 +520,7 @@ public class OTNGui {
 				c.gridy = 0;
 				c.weightx = 1;
 				c.insets = new Insets(5,5,5,10);
-				JTextField profileNameTF = new JTextField(15);
+				final JTextField profileNameTF = new JTextField(15);
 				newProfileDialog.add(profileNameTF,c);
 
 				c = new GridBagConstraints();
@@ -540,7 +540,7 @@ public class OTNGui {
 				SpinnerListModel vehicleListModel = new SpinnerListModel(new String[] { 
 					"foot", "hike", "wheelchair","bike","racingbike","bike2",
 					"mtb","car","car4wd","motorcycle" });
-    			JSpinner vehicleSpinner = new JSpinner(vehicleListModel);
+    			final JSpinner vehicleSpinner = new JSpinner(vehicleListModel);
     			Component vehicleSpinnerEditor = vehicleSpinner.getEditor();
 				JFormattedTextField ftf = ((JSpinner.DefaultEditor) vehicleSpinnerEditor).getTextField();
 				ftf.setColumns(13);
@@ -559,7 +559,7 @@ public class OTNGui {
 				c.gridy = 2;
 				c.weightx = 1;
 				c.insets = new Insets(5,5,5,10);		
-				JTextField profileWeightingTF = new JTextField(15);
+				final JTextField profileWeightingTF = new JTextField(15);
 				newProfileDialog.add(profileWeightingTF,c);
 
 				c = new GridBagConstraints();
@@ -582,7 +582,7 @@ public class OTNGui {
 					profileBooleanPanel.add(turnCostLabel, pbpc);
 					
 		  			pbpc.gridx = 1;
-					JCheckBox turnCostCheckbox = new JCheckBox();
+					final JCheckBox turnCostCheckbox = new JCheckBox();
 					profileBooleanPanel.add(turnCostCheckbox,pbpc);
 
 		  			pbpc.gridx = 2;
@@ -590,7 +590,7 @@ public class OTNGui {
 					profileBooleanPanel.add(chLabel, pbpc);
 
 		  			pbpc.gridx = 3;
-					JCheckBox chCheckbox = new JCheckBox();
+					final JCheckBox chCheckbox = new JCheckBox();
 					profileBooleanPanel.add(chCheckbox, pbpc);
 
 					pbpc.gridx = 4;
@@ -598,7 +598,7 @@ public class OTNGui {
 					profileBooleanPanel.add(lmLabel, pbpc);
 
 		  			pbpc.gridx = 5;
-					JCheckBox lmCheckbox = new JCheckBox();
+					final JCheckBox lmCheckbox = new JCheckBox();
 					profileBooleanPanel.add(lmCheckbox, pbpc);
 
 				newProfileDialog.add(profileBooleanPanel,c);
@@ -610,13 +610,14 @@ public class OTNGui {
     			c.gridwidth = 2;
     			c.insets = new Insets(5,5,5,5);
     			newProfileDialog.add ( new JSeparator (SwingConstants.HORIZONTAL) , c );
-
+    			/*
 				final String name = profileNameTF.getText();
 				final String vehicle = (String) vehicleSpinner.getValue();
 				final String weighting = profileWeightingTF.getText();
 				final boolean tc = turnCostCheckbox.isSelected();
 				final boolean ch = chCheckbox.isSelected();
 				final boolean lm = lmCheckbox.isSelected();
+				*/
 
 				JButton createProfileButton = new JButton("create profile");
 				c.anchor = GridBagConstraints.CENTER;
@@ -627,10 +628,9 @@ public class OTNGui {
 				newProfileDialog.add(createProfileButton, c);
 				createProfileButton.addActionListener(new ActionListener(){
 					public void actionPerformed(ActionEvent e){
-					//@Leo not sure what's wrong with this button, does nothing, lots of exceptions pls fix
-					profilesTableData.addProfile ( name , vehicle ,  weighting ,  tc , ch , lm );
+						profilesTableData.addProfile ( profileNameTF.getText() , (String) vehicleSpinner.getValue() ,  profileWeightingTF.getText() ,  turnCostCheckbox.isSelected() , chCheckbox.isSelected() , lmCheckbox.isSelected() );
+	            		newProfileDialog.dispose();
 	            	}
-
 				});
 
 				newProfileDialog.pack();
