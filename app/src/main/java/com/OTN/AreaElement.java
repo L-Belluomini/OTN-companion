@@ -26,8 +26,18 @@ public class AreaElement  {
 		}
 		tempFile.deleteOnExit();
 		this.osmfile = tempFile;
-		this.areaName = "";
 		this.sonOf = father;
+
+		
+		int undersocreIndex = father.lastIndexOf("_");
+		if ( undersocreIndex == -1 ) {
+			this.areaName = father + "_1";
+			return;
+		}
+		int index = Integer.parseInt(father.substring(undersocreIndex +1));
+		this.areaName = father.substring(0, undersocreIndex + 1 ) + Integer.toString(index + 1); 
+
+		
 	}
 
 	public File getOsmFile(){

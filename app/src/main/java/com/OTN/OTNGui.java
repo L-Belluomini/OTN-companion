@@ -39,7 +39,8 @@ public class OTNGui {
 	final private WorkflowTableDataModel workflowTableData;
 	final private JTable wftable; 
 	final private ProfilesTableDataModel profilesTableData;
-	final private JTable profilesTable; 
+	final private JTable profilesTable;
+	final JButton loadButton;
 
 	public static void main(String[] args) {
 	new OTNGui();
@@ -101,7 +102,7 @@ public class OTNGui {
 		lmbc.gridx = 0;
     	lmbc.gridy = 0;
 
-    	JButton loadButton = new JButton("load OSM file");
+    	loadButton = new JButton("load OSM file");
     	loadButton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){ 
 				fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -112,8 +113,9 @@ public class OTNGui {
 	            		workflowTableData.addAreaElement( file );
 	            		tabs.setEnabledAt( tabs.indexOfTab("Profiles") , true );
 	            		tabs.setEnabledAt( tabs.indexOfTab("Graph") , true );
-
-	            		//@leo add default areaElement name when created
+	            		workflowTableData.getLastAreaElement().setName( file.getName().substring(0, file.getName().lastIndexOf(".")) );
+	            		//@leo name cleansing
+	            		loadButton.setEnabled(false);
 	            	}
 	            }
         	}  
@@ -354,6 +356,9 @@ public class OTNGui {
 					
 					if ( paneReturnVal == 0 ){
 						workflowTableData.deletRow( wftable.getSelectedRows()[0] );
+					}
+					if ( wftable.getRowCount() == 0 ) {
+						loadButton.setEnabled(true);
 					}
 					
 				}
