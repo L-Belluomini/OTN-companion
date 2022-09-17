@@ -4,10 +4,13 @@ import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
+
 import java.io.*;
+
 import java.util.List;
 import java.util.LinkedList;
 import java.awt.Container;
+
 import java.awt.Dimension;
 import java.awt.Color;
 import javax.swing.ImageIcon;
@@ -16,6 +19,10 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JDialog;
 import javax.swing.JCheckBox;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 
 public class OTNGui {
@@ -39,6 +46,9 @@ public class OTNGui {
     }
 	
 	OTNGui () {
+		
+		Logger logger = LoggerFactory.getLogger(OTNGui.class);
+    	logger.info("Hello World");
 		
 		this.otnc = new OTNCompanion();
 		this.areaElements = new LinkedList();
