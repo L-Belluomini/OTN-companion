@@ -146,6 +146,7 @@ public class ProfilesTableDataModel extends AbstractTableModel {
 			 LMProfile lmProfile =  new LMProfile( name );
 			 this.lmProfiles.add( lmProfile );
 		}
+		   fireTableDataChanged();
 	}
 
 	public List<Profile> getProfiles(){
