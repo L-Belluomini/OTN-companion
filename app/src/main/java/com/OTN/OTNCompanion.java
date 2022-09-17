@@ -15,6 +15,9 @@ import java.util.*;
 import java.io.*;
 import java.time.Instant;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 // TODO ? extends SwingWorker <Void, Void>
 public class OTNCompanion 
@@ -25,12 +28,16 @@ public class OTNCompanion
     private GraphHopperConfig ghConfig = null;
     private String storageDir ="";
     private AreaElement area;
+    private Logger logger;
 
 
     public OTNCompanion() {
+        logger = LoggerFactory.getLogger(OTNCompanion.class);
+        logger.info("OTNCompanion created");
     }
     public void setOsmArea ( AreaElement earea ){
         this.area = earea;
+        logger.info("area setted {}",earea);
 
     }
 
@@ -58,7 +65,12 @@ public class OTNCompanion
             this.chProfiles.add( new CHProfile("car"));
 
         }
-        
+
+        this.ConsolidateProfiles();
+
+    }
+
+    private void ConsolidateProfiles(){
         this.ghConfig = new GraphHopperConfig();
         
         if (  this.profiles.size() != 0 ){
@@ -70,8 +82,7 @@ public class OTNCompanion
         if ( this.lmProfiles.size() != 0 ){
             ghConfig.setLMProfiles(lmProfiles);
         }
-        
-        System.out.println("profile creation ended");
+
     }
 
     public void setProfiles ( ProfilesTableDataModel  tableprofiles ){
@@ -84,6 +95,8 @@ public class OTNCompanion
         chProfiles.addAll( tableprofiles.getCHprofiles( ) );
         lmProfiles.clear();
         lmProfiles.addAll(  tableprofiles.getlmProfiles( ) );
+        
+        this.ConsolidateProfiles();
     }
 
     private void storeProfiles(){

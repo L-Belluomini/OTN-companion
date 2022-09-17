@@ -9,6 +9,9 @@ import com.graphhopper.config.Profile;
 
 import java.util.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class ProfilesTableDataModel extends AbstractTableModel {
 	// table 
 	private String[] columnNames = { "Name" , "Vehicle" , "Weighting" , "Turn cost" , "CH" , "LM"  };
@@ -17,7 +20,10 @@ public class ProfilesTableDataModel extends AbstractTableModel {
     private List<CHProfile> chProfiles = new LinkedList<CHProfile>();
     private List<LMProfile> lmProfiles = new LinkedList<LMProfile>();
 	
-	ProfilesTableDataModel() {}
+	ProfilesTableDataModel() {
+		Logger logger = LoggerFactory.getLogger(ProfilesTableDataModel.class);
+    	logger.info("ProfilesTableDataModel created");
+	}
 
 	// table 
 

@@ -7,6 +7,9 @@ import java.time.*;
 import java.util.*;
 import java.io.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class WorkflowTableDataModel extends AbstractTableModel {
 	// table 
 	private String[] columnNames = { "Name" , "Time created", "Valid"};
@@ -14,6 +17,8 @@ public class WorkflowTableDataModel extends AbstractTableModel {
 	private LinkedList<AreaElement> workflowelements ;
 
 	WorkflowTableDataModel() {
+		Logger logger = LoggerFactory.getLogger(WorkflowTableDataModel.class);
+    	logger.info("WorkflowTableDataModel created");
 		workflowelements = new LinkedList<AreaElement>();
 	}
 
