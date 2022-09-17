@@ -48,7 +48,7 @@ public class OTNGui {
 	OTNGui () {
 		
 		Logger logger = LoggerFactory.getLogger(OTNGui.class);
-    	logger.info("Hello World");
+    	logger.info("otngui created");
 		
 		this.otnc = new OTNCompanion();
 		this.areaElements = new LinkedList();
@@ -153,6 +153,10 @@ public class OTNGui {
     	JButton button = new JButton("generate");
 	   	button.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){ 
+				// set area elemnt for graph
+				otnc.setOsmArea( workflowTableData.getLastAreaElement() );
+				// set profikes for graphs
+				otnc.setProfiles( profilesTableData );
 				if ( otnRadioButton.isSelected() ){
 					otnc.createGraph();
 				} else if ( vnsRadioButton.isSelected() && vnsKmlFile.exists() ) {
