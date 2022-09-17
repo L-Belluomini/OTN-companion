@@ -426,6 +426,7 @@ public class OTNGui {
 						AreaElement input = workflowTableData.getLastAreaElement();
 						AreaElement output = workflowTableData.addAreaElement( input );
 						OTNGuiFilter filter = new OTNGuiFilter( input , output );
+						workflowTableData.fireTableDataChanged();
 						//@leo even if no filter is applied a new area element is added to the table
 			       		}  
 		    		});
