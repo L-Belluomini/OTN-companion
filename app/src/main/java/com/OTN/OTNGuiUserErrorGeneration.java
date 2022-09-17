@@ -1,8 +1,8 @@
 package com.OTN;
 
 public class OTNGuiUserErrorGeneration {
-	JFrame frame;
-
+	
+/*
 	public OTNGuiUserErrorGeneration(){}
 
 	String str;
@@ -13,11 +13,9 @@ public class OTNGuiUserErrorGeneration {
 
 	public void showdialog() {
 
-		frame = new JFrame;
+		frame = new JFrame();
 
-		JOptionPane.showMessageDialog(frame,
-		this.str
-    	JOptionPane.WARNING_MESSAGE);
+		JOptionPane.showMessageDialog(frame,this.str,JOptionPane.WARNING_MESSAGE);
 	}
 
 	public bool isErrorPresent ( ) {
@@ -27,6 +25,6 @@ public class OTNGuiUserErrorGeneration {
 			return false;
 		}
 	}
-
+*/
 
 }
