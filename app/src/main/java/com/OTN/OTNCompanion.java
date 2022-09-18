@@ -149,9 +149,9 @@ public class OTNCompanion
         }
 
 
-        File dir = new File (storageDir +  File.pathSeparator + area.getName().replaceAll("\\s+","") );
+        File dir = new File (storageDir +  File.separator + area.getName().replaceAll("\\s+","") );
         dir.mkdir();
-        storageDir = dir.getPath();
+        this.storageDir = dir.getPath();
 
         System.out.println("creating graph in " + storageDir );
         System.out.println("based on file " + area.getOsmFile().getPath() );
