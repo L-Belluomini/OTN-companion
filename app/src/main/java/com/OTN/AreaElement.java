@@ -72,12 +72,9 @@ public class AreaElement  {
 	}
 
 	public boolean isValid() {
-		if ( ! isComplete()  ){
-			return this.osmfile.exists();
-		} else {
-			return ( this.osmfile.exists() && this.polyFileBoundary.exists() );
-		}
+		return this.osmfile.exists();		
 	}
+
 	public boolean isComplete() {
 		if ( this.polyFileBoundary != null ) {
 			return  this.polyFileBoundary.exists();
