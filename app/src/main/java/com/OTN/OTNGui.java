@@ -433,7 +433,8 @@ public class OTNGui {
 		    	filterButton.addActionListener( new ActionListener() {  
 					public void actionPerformed(ActionEvent e){ 
 						if ( ! workflowTableData.getLastAreaElement().isValid() ) {
-							//@gabri display dialog for error
+							JOptionPane.showMessageDialog(frame,"The selected area element is not valid","Error",JOptionPane.ERROR_MESSAGE);
+							//@leo fix the isValid method/isValid column in the table
 							return;
 						}
 						AreaElement input = workflowTableData.getLastAreaElement();
