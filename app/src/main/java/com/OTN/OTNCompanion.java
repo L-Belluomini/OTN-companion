@@ -116,7 +116,7 @@ public class OTNCompanion
         File myObj=null;
 
         try {
-        myObj = new File(storageDir +  File.pathSeparator + "config.json");
+        myObj = new File(storageDir +  File.separator + "config.json");
         if (myObj.createNewFile()) {
         System.out.println("File created: " + myObj.getName());
         } else {
@@ -175,6 +175,34 @@ public class OTNCompanion
         long finish = System.currentTimeMillis();
         long timeElapsed = finish - start;
         System.out.println("graph finished, took:"+ Long.toString(timeElapsed/1000)+ " s");
+        
+        FileInputStream fis = null;
+        FileOutputStream fos = null;
+
+        // copy poly
+        if ( this.area.getPolyFile().exists() ) {
+            fis = null;
+            fos = null;
+            try {
+                fis = new FileInputStream( this.area.getPolyFile() );
+                fos = new FileOutputStream(storageDir +  File.separator + "area.poly");
+                int c;
+
+                while ((c = fis.read()) != -1) {
+                    fos.write(c);
+                }
+                System.out.println( "copied poly file successfully" );
+                if (fis != null) {
+                    fis.close();
+                }
+                if (fos != null) {
+                    fos.close();
+                }
+
+            } catch (IOException ex) {
+                System.out.println(ex.toString());
+            }
+        }
         storeProfiles();
     }
 
@@ -198,7 +226,7 @@ public class OTNCompanion
 
         try {
             fis = new FileInputStream(kmlFile);
-            fos = new FileOutputStream(storageDir +  File.pathSeparator + "area.kml");
+            fos = new FileOutputStream(storageDir +  File.separator + "area.kml");
             int c;
 
             while ((c = fis.read()) != -1) {
@@ -217,32 +245,9 @@ public class OTNCompanion
             System.out.println(ex.toString());
         }
 
-    
-
-        // copy poly
-        fis = null;
-        fos = null;
-        try {
-            fis = new FileInputStream( this.area.getPolyFile() );
-            fos = new FileOutputStream(storageDir +  File.pathSeparator + "area.poly");
-            int c;
-
-            while ((c = fis.read()) != -1) {
-                fos.write(c);
-            }
-            System.out.println( "copied poly file successfully" );
-            if (fis != null) {
-                fis.close();
-            }
-            if (fos != null) {
-                fos.close();
-            }
-
-        } catch (IOException ex) {
-            System.out.println(ex.toString());
-        }
+         // create timestamp & .timestamp
         try{
-            // create timestamp & .timestamp
+           
         File areatimestamtp = new File (storageDir +  File.pathSeparator + "area.timestamp" );
         FileWriter timewriter = new FileWriter( areatimestamtp );
         BufferedWriter timebuffer = new BufferedWriter(timewriter);
