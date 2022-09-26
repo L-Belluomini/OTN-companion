@@ -5,6 +5,7 @@ import java.util.*;
 
 import javax.swing.SwingWorker;
 
+import org.apache.xerces.dom.EntityImpl;
 import org.openstreetmap.osmosis.core.domain.v0_6.*;
 import org.openstreetmap.osmosis.core.task.v0_6.*;
 import org.openstreetmap.osmosis.core.filter.common.*;
@@ -19,13 +20,19 @@ import de.topobyte.osm4j.core.model.iface.EntityType;
 import de.topobyte.osm4j.core.model.iface.OsmNode;
 import de.topobyte.osm4j.core.model.util.OsmModelUtil;
 import de.topobyte.osm4j.xml.dynsax.OsmXmlIterator;
-
+import de.topobyte.osm4j.diskstorage.*;
+import de.topobyte.osm4j.utils.OsmFile;
 
 public class OSMAnalyzer extends SwingWorker <Void, Void> {
 	private RunnableSource osmReader;
 	private String filePath;
 	private Sink osmXmlwriter;
 	private File tempFile;
+	private File nodeDataFile;
+	private File nodeIndexFile;
+	private File wayDataFile;
+	private File wayIndexFile;
+	private EntityProviderImpl database;
 
 public OSMAnalyzer (File file) {
 	filePath = file.getPath();
@@ -62,8 +69,8 @@ public OSMAnalyzer (File file) {
 
 
 	}
-	@Override
-	public Void doInBackground() {
+	
+	private Void oldDo() {
 		Map<String,Set<String>>map = new HashMap <String,Set<String>> ( );
 		Set<String> keys = new HashSet<String>( );
 		Set<String> boundaryValues = new HashSet<String>( );
@@ -111,14 +118,42 @@ public OSMAnalyzer (File file) {
 			
 		}
 		return null;
-
+	}
+	
+	@Override
+	public Void doInBackground() {
+		
+		return null;
 	}
 
 	@Override
     public void done() {
     	return ;
     }
-
 	
-
+	private void setupDB() { 
+		try {
+			nodeDataFile = File.createTempFile("osmData", DbExtensions.EXTENSION_DATA );
+			nodeIndexFile = File.createTempFile("osmData", DbExtensions.EXTENSION_INDEX );
+			wayDataFile = File.createTempFile("osmData", DbExtensions.EXTENSION_DATA);
+			wayIndexFile = File.createTempFile("osmData", DbExtensions.EXTENSION_INDEX );
+			
+			nodeDataFile.deleteOnExit();
+			nodeIndexFile.deleteOnExit();
+			wayDataFile.deleteOnExit();
+			wayIndexFile.deleteOnExit();
+		} catch (IOException ex) {
+			System.out.println(ex.toString());
+			return;
+		}
+		
+		try {
+			
+			database = new EntityProviderImpl(EntityDbSetup.createNodeDb(new File(filePath).toPath(), nodeIndexFile.toPath(), nodeDataFile.toPath()), 
+												EntityDbSetup.createWayDb(new File(filePath).toPath(), wayIndexFile.toPath(), wayDataFile.toPath(), true) );
+		} catch (IOException ex) {
+			System.out.println(ex.toString());
+			return;
+		}
+	}
 }

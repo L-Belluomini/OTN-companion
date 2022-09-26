@@ -24,11 +24,11 @@
     </repository>
     <repository>
         <id>topobyte.de</id>
-        <url>http://mvn.topobyte.de</url>
+        <url>https://mvn.topobyte.de</url>
     </repository>
        <repository>
         <id>slimjars.com</id>
-        <url>http://mvn.slimjars.com</url>
+        <url>https://mvn.slimjars.com</url>
     </repository>
   </repositories>
   
@@ -66,6 +66,11 @@
       <artifactId>osm4j-xml</artifactId>
       <version>0.1.0</version>
     </dependency>
+	<dependency>
+		<groupId>de.topobyte</groupId>
+		<artifactId>osm4j-incubating</artifactId>
+		<version>1.2.0</version>
+	</dependency>
     <dependency>
     <groupId>com.formdev</groupId>
     <artifactId>flatlaf</artifactId>
