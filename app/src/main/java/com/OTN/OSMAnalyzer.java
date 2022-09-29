@@ -1,6 +1,8 @@
 package com.OTN;
 
 import java.io.*;
+import java.nio.*;
+import java.nio.file.Paths;
 import java.util.*;
 
 import javax.swing.SwingWorker;
@@ -21,6 +23,9 @@ import de.topobyte.osm4j.core.model.iface.OsmNode;
 import de.topobyte.osm4j.core.model.util.OsmModelUtil;
 import de.topobyte.osm4j.xml.dynsax.OsmXmlIterator;
 import de.topobyte.osm4j.diskstorage.*;
+import de.topobyte.osm4j.diskstorage.nodedb.*;
+import de.topobyte.osm4j.diskstorage.waydb.*;
+import de.topobyte.osm4j.diskstorage.vardb.*;
 import de.topobyte.osm4j.utils.OsmFile;
 
 public class OSMAnalyzer extends SwingWorker <Void, Void> {
@@ -32,13 +37,15 @@ public class OSMAnalyzer extends SwingWorker <Void, Void> {
 	private File nodeIndexFile;
 	private File wayDataFile;
 	private File wayIndexFile;
-	private EntityProviderImpl database;
+	private EntityProviderImpl provider;
+	private NodeDB nodeProvider;
+	//private 
 
-public OSMAnalyzer (File file) {
-	filePath = file.getPath();
-	System.out.println(filePath);
-	loadFile(file);
-}
+	public OSMAnalyzer (File file) {
+		filePath = file.getPath();
+		System.out.println(filePath);
+		loadFile(file);
+	}
 
 
 	private void loadFile( File file) {
@@ -137,6 +144,7 @@ public OSMAnalyzer (File file) {
 			nodeIndexFile = File.createTempFile("osmData", DbExtensions.EXTENSION_INDEX );
 			wayDataFile = File.createTempFile("osmData", DbExtensions.EXTENSION_DATA);
 			wayIndexFile = File.createTempFile("osmData", DbExtensions.EXTENSION_INDEX );
+
 			
 			nodeDataFile.deleteOnExit();
 			nodeIndexFile.deleteOnExit();
@@ -148,9 +156,16 @@ public OSMAnalyzer (File file) {
 		}
 		
 		try {
+
+			EntityDbSetup.createNodeDb( Paths.get(filePath) , nodeIndexFile.toPath() , nodeDataFile.toPath() );
+			EntityDbSetup.createWayDb( Paths.get(filePath), wayIndexFile.toPath(), wayDataFile.toPath(), true);
 			
-			database = new EntityProviderImpl(EntityDbSetup.createNodeDb(new File(filePath).toPath(), nodeIndexFile.toPath(), nodeDataFile.toPath()), 
-												EntityDbSetup.createWayDb(new File(filePath).toPath(), wayIndexFile.toPath(), wayDataFile.toPath(), true) );
+
+			VarDB<WayRecordWithTags> varDB = new VarDB<>(wayDataFile.toPath(), wayIndexFile.toPath() , new WayRecordWithTags(0));
+			NodeDB nodeDB = new NodeDB( nodeDataFile.toPath() , nodeIndexFile.toPath() );
+			
+
+			provider = new EntityProviderImpl(nodeDB,varDB);
 		} catch (IOException ex) {
 			System.out.println(ex.toString());
 			return;
