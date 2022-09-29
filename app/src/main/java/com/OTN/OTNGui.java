@@ -163,22 +163,29 @@ public class OTNGui {
     	JButton button = new JButton("generate");
 	   	button.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){ 
-				// set area elemnt for graph
 
+				OTNUserErrorGeneration userError = new OTNUserErrorGeneration();
 
-				if(workflowTableData.size()==0){
+				if(workflowTableData.getRowCount()==0){
+					userError.addError("There is no area element");
+				 }
+				
+				// other test (TO DO valid area)
 
-					OTNUserErrorGeneration userError = new OTNUserErrorGeneration();
-
-					userError.addError("There is no valid area element");
-					userError.showDialog();
+				if(profilesTableData.getRowCount()==0){
+					userError.addError("There are no profiles");
 				}
-				//showdialog
+
+				if(! otnc.isStorageDirSet()){
+					userError.addError("Storage Dir not set");
+				}
+
+				if (userError.showDialog()) {
+					return;
+				}
+
 				otnc.setOsmArea( workflowTableData.getLastAreaElement() );
 
-
-
-				// set profikes for graphs
 				otnc.setProfiles( profilesTableData );
 				if ( otnRadioButton.isSelected() ){
 					otnc.createGraph();

@@ -1,10 +1,20 @@
 package com.OTN;
 
+import javax.swing.*;
+import java.awt.*;
+
+import java.util.List;
+import java.util.LinkedList;
+
+import javax.swing.JFrame;
+//import javax.swing.JOptionPane;
+import javax.swing.JDialog;
+
 public class OTNUserErrorGeneration {
 	
 	LinkedList<String> errors;
 
-	public OTNGuiUserErrorGeneration(){
+	public OTNUserErrorGeneration(){
 	
 		this.errors = new LinkedList();
 
@@ -12,44 +22,41 @@ public class OTNUserErrorGeneration {
 
 	public void addError( String error ){
 
-		this.errors.add();
+		this.errors.add(error);
 	}
 
-	public void showdialog() {
+	public boolean showDialog() {
 		
 		if(errors.size()==0){
-			return;
+			return false;
 		}
 
-				JDialog errorDialog = new JDialog();
+		JDialog errorDialog = new JDialog();
 
-				errorDialog.setLayout( new GridBagLayout() );
+		errorDialog.setLayout( new GridBagLayout() );
+		errorDialog.setTitle("User error generation");
+		errorDialog.setSize(new Dimension(250,120));
 
-				GridBagConstraints c = new GridBagConstraints();
-				c.anchor = GridBagConstraints.CENTER;
-	  			c.gridx = 0;
-				c.gridy = 0;
+		GridBagConstraints c = new GridBagConstraints();
+		c.anchor = GridBagConstraints.CENTER;
+	  	c.gridx = 0;
+		c.gridy = 0;
 
-				errorDialog.setTitle("User error generation");
-				errorDialog.setSize(new Dimension(250,120));
-
-				// add "title explanation and formattation"
-				JLabel text = new JLabel();
+		// add title, explanation, and formattation"
 
 
-				for(String idk:errors){
-					text = new JLabel (idk);
-					errorDialog.add(text, c);
-				}
+		JLabel errorText = new JLabel();
+
+		for(String idk:errors){
+				errorText = new JLabel (idk);
+				c.gridy ++;
+				errorDialog.add(errorText, c);
+		}
 
 				
-				
-				errorDialog.setVisible(true);
+		errorDialog.setVisible(true);
 
-
-		frame = new JFrame();
-
-		JOptionPane.showMessageDialog(frame,this.str,JOptionPane.WARNING_MESSAGE);
+		return true;
 	}
 
 

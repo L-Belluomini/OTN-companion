@@ -46,6 +46,18 @@ public class OTNCompanion
         System.out.println("set stroge Dir:" + storageDir);
     }
 
+    public boolean isStorageDirSet (){
+        if(storageDir.length()==0){
+            return false;
+        }
+
+        if( ! new File(storageDir).isDirectory() ){
+            return false;
+        }
+
+        return true;
+    }
+
     public void createAddProfiles(boolean defaultProfile ){
 
         System.out.println("creating profiles");
