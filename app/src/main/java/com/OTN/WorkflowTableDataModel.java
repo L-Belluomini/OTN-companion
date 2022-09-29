@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 public class WorkflowTableDataModel extends AbstractTableModel {
 	// table 
-	private String[] columnNames = { "Name" , "Time created", "Valid"};
+	private String[] columnNames = { "Name" , "Time created", "Borders"};
 	// data
 	private LinkedList<AreaElement> workflowelements ;
 
@@ -64,7 +64,7 @@ public class WorkflowTableDataModel extends AbstractTableModel {
 	    		return false;
 
 
-	    	case 2: // is valid
+	    	case 2: // Borders
 	    		return false;
 	    }
 	    return false ; 
@@ -88,7 +88,7 @@ public class WorkflowTableDataModel extends AbstractTableModel {
 
 
 	    	case 2:
-	    		return; // is valid
+	    		return; // Borders
  
 	    }
         fireTableCellUpdated(row, col);

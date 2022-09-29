@@ -132,6 +132,8 @@ public class OSMEditor extends SwingWorker <Void, Void>{
 
 		}
 
+		//TO DO test for file extension
+
 	}
 	void setOutput (File file) {
 		if (filter == null ) {

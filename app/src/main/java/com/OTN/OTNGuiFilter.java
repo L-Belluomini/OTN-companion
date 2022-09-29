@@ -72,22 +72,28 @@ public class OTNGuiFilter {
 
 		///////////////////////////// SELECT BUTTON ///////////////////7//////////////
 
-    	JButton filterButton = new JButton("select");
+    	JButton filterButton = new JButton("filter");
     	filterButton.addActionListener( new ActionListener(){  
 			public void actionPerformed(ActionEvent e){
 				
 				switch( tabs.getSelectedIndex( ) ){
 					case 0:
 						System.out.println( "selected bb panel" );
-						SetBBFilter();
+						if ( setBBFilter() ){
+							return;
+						};
 						break;
 					case 1:
 						System.out.println( "selected radius panel" );
-						SetCircleFilter();
+						if ( setCircleFilter() ){
+							return;
+						}
 						break;
 					case 2:
 						System.out.println( "selected poly panel" );
-						setPolyFilter();
+						if (setPolyFilter() ){
+							return;
+						}
 						break;
 				}
 					
@@ -350,38 +356,92 @@ public class OTNGuiFilter {
 
     /////////////////////////////////////// FILTER METHODS //////////////////////////////////////////////
 
-	private void SetBBFilter(){
+
+	private boolean setBBFilter(){
+
+		OTNUserErrorGeneration filterError = new OTNUserErrorGeneration("Filter error(s)");
+
+		if( topTF.getText().length() == 0){
+			filterError.addError("top coords not found");
+		}
+		
+		if( bottomTF.getText().length() == 0){
+			filterError.addError("bottom coords not found");
+		}
+		
+		if( leftTF.getText().length() == 0){
+			filterError.addError("left coords not found");
+		}
+		
+		if( rightTF.getText().length() == 0){
+			filterError.addError("right coords not found");
+		}
+
+		if(filterError.showDialog()){
+			return true;
+		}
+
 		Float top = Float.parseFloat ( topTF.getText() );
 		Float bottom = Float.parseFloat ( bottomTF.getText() );
 		Float left = Float.parseFloat ( leftTF.getText() );
 		Float right =Float.parseFloat ( rightTF.getText() );
 
-		if ( top != null && bottom != null && left != null && right != null ){
-			System.out.println("filter data valid");
-			editor.setFilter(left , right , top , bottom );
-			System.out.println("set coords");
-		}
+		editor.setFilter(left , right , top , bottom);
+
+		return false;
 	}
 
-	private void SetCircleFilter(){
+	private boolean setCircleFilter(){
+		
+		OTNUserErrorGeneration filterError = new OTNUserErrorGeneration("Filter error(s)");
+
+		if (radiusTF.getText().length() == 0){
+			filterError.addError("Radius not found");		
+		}
+
+		if (centerlatTF.getText().length() == 0){
+			filterError.addError("Center latitude not found");		
+		}
+
+		if (centerlongTF.getText().length() == 0){
+			filterError.addError("Center longitude not found");		
+		}
+
+		if(filterError.showDialog()){
+			return true;
+		}
+
 		Float radius = Float.parseFloat ( radiusTF.getText() );
 		Float centerlat = Float.parseFloat ( centerlatTF.getText() );
 		Float centerlong = Float.parseFloat ( centerlongTF.getText() );
 
-		if (radius != null && centerlong != null && centerlat != null){
-			System.out.println("filter data valid");
-			editor.setFilter( centerlat , centerlong , radius );
-			System.out.println("set coords");
+		editor.setFilter( centerlat , centerlong , radius );
 
-		}
+		return false;
 	}
 
-	private void setPolyFilter(){
-		if ( polyFilterFile.getName().endsWith(".poly") ){
-			System.out.println("filter file valid");
-			editor.setFilter( polyFilterFile);
-			System.out.println("set poly file for direct filter");
+	private boolean setPolyFilter(){
 
+		OTNUserErrorGeneration filterError = new OTNUserErrorGeneration("Filter error(s)");
+
+		if ( polyFilterFile == null ){
+			filterError.addError("Poly file object not assigned");
+		} else {
+			if ( ! polyFilterFile.exists() ){
+			filterError.addError("Poly file not found");
+			}
+
+			if ( ! polyFilterFile.getName().endsWith(".poly") ){
+				filterError.addError("Poly file not valid");
+			}
 		}
+
+		if(filterError.showDialog()){
+			return true;
 		}
+
+		editor.setFilter( polyFilterFile);
+
+		return false;
+	}
 }

@@ -164,7 +164,8 @@ public class OTNGui {
 	   	button.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){ 
 
-				OTNUserErrorGeneration userError = new OTNUserErrorGeneration();
+				OTNUserErrorGeneration userError = new OTNUserErrorGeneration("Graph generation error(s)");
+
 
 				if(workflowTableData.getRowCount()==0){
 					userError.addError("There is no area element");

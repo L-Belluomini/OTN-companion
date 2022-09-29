@@ -13,11 +13,11 @@ import javax.swing.JDialog;
 public class OTNUserErrorGeneration {
 	
 	LinkedList<String> errors;
+	String title;
 
-	public OTNUserErrorGeneration(){
-	
-		this.errors = new LinkedList();
-
+	public OTNUserErrorGeneration(String etitle){
+		this.title = etitle;
+		this.errors = new LinkedList();	
 	}
 
 	public void addError( String error ){
@@ -34,7 +34,7 @@ public class OTNUserErrorGeneration {
 		JDialog errorDialog = new JDialog();
 
 		errorDialog.setLayout( new GridBagLayout() );
-		errorDialog.setTitle("User error generation");
+		errorDialog.setTitle(title);
 		errorDialog.setSize(new Dimension(250,120));
 
 		GridBagConstraints c = new GridBagConstraints();
