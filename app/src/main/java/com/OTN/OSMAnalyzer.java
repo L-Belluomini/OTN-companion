@@ -77,7 +77,7 @@ public class OSMAnalyzer extends SwingWorker <Void, Void> {
 
 	}
 	
-	private Void oldDo() {
+	private void filter() {
 		Map<String,Set<String>>map = new HashMap <String,Set<String>> ( );
 		Set<String> keys = new HashSet<String>( );
 		Set<String> boundaryValues = new HashSet<String>( );
@@ -94,41 +94,47 @@ public class OSMAnalyzer extends SwingWorker <Void, Void> {
 			tempFile.deleteOnExit();
 		} catch (IOException ex) {
 			System.out.println(ex.toString());
-			return null;
+			return ;
 		}
 		osmXmlwriter = new XmlWriter( tempFile , CompressionMethod.None );
 		filter.setSink(osmXmlwriter);
 		System.out.println("analizer filter running");
 		osmReader.run();
 		System.out.println("analizer filter finished");
+
+	}
+
+	private void scan() {
+		
+		System.out.println("started scan");
+
 		InputStream filterdStream;
 		try {
 		filterdStream = new FileInputStream( tempFile.getPath());
 		} catch (IOException ex) {
 			System.out.println(ex.toString());
-			return null;
+			return ;
 		}
 		geoPoliticalBoundires result = new geoPoliticalBoundires(filePath);
 		OsmIterator iterator = new OsmXmlIterator(filterdStream, false);
+		System.out.println("started scan iterator");
 		for (EntityContainer container : iterator) {
 			if (container.getType() == de.topobyte.osm4j.core.model.iface.EntityType.Relation) {
-				/*for ( int keyIndex =0; keyIndex < container.getEntity().getNumberOfTags(); keyIndex ++ ){
-					if ( container.getEntity().getTag(keyIndex).getKey() == "admin_level" && container.getEntity().getTag(keyIndex).getValue == 2 ) {
-						System.out.println( container.toString() );
-						
 
-					}
-				}
-				
 				System.out.println(  container.getEntity().toString() );
-			*/}
+			} 
 			
 		}
-		return null;
+		return;
 	}
 	
 	@Override
 	public Void doInBackground() {
+
+		filter ();
+		scan();
+		setupDB();
+		System.out.println("analyze backgorund done");
 		
 		return null;
 	}
@@ -139,6 +145,7 @@ public class OSMAnalyzer extends SwingWorker <Void, Void> {
     }
 	
 	private void setupDB() { 
+		System.out.println("started db");
 		try {
 			nodeDataFile = File.createTempFile("osmData", DbExtensions.EXTENSION_DATA );
 			nodeIndexFile = File.createTempFile("osmData", DbExtensions.EXTENSION_INDEX );
@@ -154,21 +161,31 @@ public class OSMAnalyzer extends SwingWorker <Void, Void> {
 			System.out.println(ex.toString());
 			return;
 		}
+
+		NodeDB nodeDB;
+		VarDB<WayRecordWithTags> varDB;
+
 		
 		try {
 
 			EntityDbSetup.createNodeDb( Paths.get(filePath) , nodeIndexFile.toPath() , nodeDataFile.toPath() );
 			EntityDbSetup.createWayDb( Paths.get(filePath), wayIndexFile.toPath(), wayDataFile.toPath(), true);
+			System.out.println("db set up");
+
+			varDB = new VarDB<>(wayDataFile.toPath(), wayIndexFile.toPath() , new WayRecordWithTags(0));
+			nodeDB = new NodeDB( nodeDataFile.toPath() , nodeIndexFile.toPath() );
+			
 			
 
-			VarDB<WayRecordWithTags> varDB = new VarDB<>(wayDataFile.toPath(), wayIndexFile.toPath() , new WayRecordWithTags(0));
-			NodeDB nodeDB = new NodeDB( nodeDataFile.toPath() , nodeIndexFile.toPath() );
-			
-
-			provider = new EntityProviderImpl(nodeDB,varDB);
 		} catch (IOException ex) {
 			System.out.println(ex.toString());
 			return;
 		}
+
+
+		
+
+		provider = new EntityProviderImpl(nodeDB,varDB);
+		System.out.println("db loaded");
 	}
 }
