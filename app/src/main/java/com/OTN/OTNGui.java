@@ -422,18 +422,18 @@ public class OTNGui {
 
 				JButton analyzebutton = new JButton("analyze");
 		    	analyzebutton.setBackground( Color.CYAN );
-		    	analyzebutton.setEnabled(false);
+		    	//analyzebutton.setEnabled(false);
 
 		    	analyzebutton.addActionListener(new ActionListener(){  
 					public void actionPerformed(ActionEvent e){ 
-						/*
-						if (areaElements.getLast() == null ){
+						
+						if ( workflowTableData.getLastAreaElement() == null ){
 							System.out.println("no osm file set");
 							return;
 						}
-						OSMAnalyzer analizer = new OSMAnalyzer ( areaElements.getLast().getOsmFile() );
+						OSMAnalyzer analizer = new OSMAnalyzer ( workflowTableData.getLastAreaElement().getOsmFile() );
 						analizer.execute();
-						*/
+						
 		        	}  
 		    	});
 
