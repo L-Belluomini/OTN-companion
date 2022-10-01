@@ -117,6 +117,20 @@ public class OTNGui {
 	            int returnVal = fc.showOpenDialog(frame);
 	            if (returnVal == JFileChooser.APPROVE_OPTION) {
 	            	File file = fc.getSelectedFile();
+
+	            	OTNUserErrorGeneration userError = new OTNUserErrorGeneration("File error(s)");
+
+	            	String filename = file.getName();
+					String extension = filename.substring(filename.lastIndexOf(".") + 1, filename.length());
+
+					if (! extension.equals("pbf")) {
+    				userError.addError("Invalid file extension");
+    				}
+
+    				if (userError.showDialog()) {
+					return;
+					}
+
 	            	if ( file.exists() ){
 	            		workflowTableData.addAreaElement( file );
 	            		tabs.setEnabledAt( tabs.indexOfTab("Profiles") , true );
@@ -169,7 +183,7 @@ public class OTNGui {
 
 				if(workflowTableData.getRowCount()==0){
 					userError.addError("There is no area element");
-				 }
+				}
 				
 				// other test (TO DO valid area)
 
