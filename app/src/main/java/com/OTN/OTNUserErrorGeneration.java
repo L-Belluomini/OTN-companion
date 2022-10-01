@@ -31,7 +31,7 @@ public class OTNUserErrorGeneration {
 			return false;
 		}
 
-		JDialog errorDialog = new JDialog();
+		/*JDialog errorDialog = new JDialog();
 
 		errorDialog.setLayout( new GridBagLayout() );
 		errorDialog.setTitle(title);
@@ -40,21 +40,25 @@ public class OTNUserErrorGeneration {
 		GridBagConstraints c = new GridBagConstraints();
 		c.anchor = GridBagConstraints.CENTER;
 	  	c.gridx = 0;
-		c.gridy = 0;
+		c.gridy = 0;*/
 
 		// add title, explanation, and formattation"
 
 
 		JLabel errorText = new JLabel();
 
-		for(String idk:errors){
-				errorText = new JLabel (idk);
-				c.gridy ++;
-				errorDialog.add(errorText, c);
+		for(String text:errors){
+				errorText = new JLabel (text);
+				//c.gridy ++;
+				//errorDialog.add(errorText, c);
 		}
 
+		JFrame frame = new JFrame();
+
+		JOptionPane.showMessageDialog(frame, errorText, title, JOptionPane.ERROR_MESSAGE);
+
 				
-		errorDialog.setVisible(true);
+		//errorDialog.setVisible(true);
 
 		return true;
 	}
