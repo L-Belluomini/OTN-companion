@@ -124,22 +124,25 @@ public class OTNGui {
 	            	String filename = file.getName();
 					String extension = filename.substring(filename.lastIndexOf(".") + 1, filename.length());
 
-					if (! extension.equals("pbf")) {
-    				userError.addError("Invalid file extension");
+					if (! file.exists() ){
+					userError.addError("File does not exist");
+					} else {
+						if (! extension.equals("pbf"/* @Gabri check and add other supported extensions*/) ) {
+    					userError.addError("Invalid file extension");
+    					}
     				}
 
-    				if (userError.showDialog()) {
+    				if ( userError.showDialog() ) {
 					return;
 					}
-
-	            	if ( file.exists() ){
-	            		workflowTableData.addAreaElement( file );
-	            		tabs.setEnabledAt( tabs.indexOfTab("Profiles") , true );
-	            		tabs.setEnabledAt( tabs.indexOfTab("Graph") , true );
-	            		workflowTableData.getLastAreaElement().setName( file.getName().substring(0, file.getName().lastIndexOf(".")) );
-	            		//@leo name cleansing
-	            		loadButton.setEnabled(false);
-	            	}
+	            	
+	            	workflowTableData.addAreaElement( file );
+	            	tabs.setEnabledAt( tabs.indexOfTab("Profiles") , true );
+	            	tabs.setEnabledAt( tabs.indexOfTab("Graph") , true );
+	            	workflowTableData.getLastAreaElement().setName( file.getName().substring(0, file.getName().lastIndexOf(".")) );
+	            	//@leo name cleansing
+	            	loadButton.setEnabled(false);
+	            	
 	            }
         	}  
     	});  
@@ -200,6 +203,9 @@ public class OTNGui {
 					return;
 				}
 
+				long start = System.currentTimeMillis();
+				System.out.println("started time");
+
 				otnc.setOsmArea( workflowTableData.getLastAreaElement() );
 
 				otnc.setProfiles( profilesTableData );
@@ -208,8 +214,46 @@ public class OTNGui {
 				} else if ( vnsRadioButton.isSelected() && vnsKmlFile.exists() ) {
 				otnc.createVNSGraph(vnsKmlFile);
 				}
+
+				///////////////////// WAIT DIALOG/////////////
+
+
+				/*final JDialog dialogwait = new JDialog();
+
+				System.out.println("started time");
+
+				long start = System.currentTimeMillis();
+
+				dialogwait.setLayout( new GridBagLayout() );
+
+				GridBagConstraints c = new GridBagConstraints();
+				c.anchor = GridBagConstraints.CENTER;
+	  			c.gridx = 0;
+				c.gridy = 0;
+
+				dialogwait.setTitle("Graph generation");
+				dialogwait.setModal(true);
+				dialogwait.setSize(new Dimension(250,120));
+				dialogwait.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+				JLabel text = new JLabel ("This may take a while...");
+				dialogwait.add(text, c);
+				dialogwait.setVisible(true);
+
+				long finish = System.currentTimeMillis();
+				
+				System.out.println("Graph generated");
+  
+				long timeElapsed = finish - start;
+
+				dialogwait.dispose();
+
+				frame = new JFrame();
+				JOptionPane.showMessageDialog(frame,"Graph succesfully generated in " + timeElapsed +" ms.","Filter generation",
+				JOptionPane.PLAIN_MESSAGE);
+				frame.dispose();*/
         	}  
     	});
+    	
     	content.add(button, c);
 
     	lmbc = new GridBagConstraints();
