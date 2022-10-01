@@ -22,10 +22,12 @@ import de.topobyte.osm4j.core.model.iface.EntityType;
 import de.topobyte.osm4j.core.model.iface.OsmNode;
 import de.topobyte.osm4j.core.model.util.OsmModelUtil;
 import de.topobyte.osm4j.xml.dynsax.OsmXmlIterator;
+
 import de.topobyte.osm4j.diskstorage.*;
 import de.topobyte.osm4j.diskstorage.nodedb.*;
 import de.topobyte.osm4j.diskstorage.waydb.*;
 import de.topobyte.osm4j.diskstorage.vardb.*;
+import de.topobyte.osm4j.diskstorage.tasks.*;
 import de.topobyte.osm4j.utils.OsmFile;
 
 public class OSMAnalyzer extends SwingWorker <Void, Void> {
@@ -118,21 +120,25 @@ public class OSMAnalyzer extends SwingWorker <Void, Void> {
 		geoPoliticalBoundires result = new geoPoliticalBoundires(filePath);
 		OsmIterator iterator = new OsmXmlIterator(filterdStream, false);
 		System.out.println("started scan iterator");
+		/*
 		for (EntityContainer container : iterator) {
 			if (container.getType() == de.topobyte.osm4j.core.model.iface.EntityType.Relation) {
 
-				System.out.println(  container.getEntity().toString() );
-			} 
+				System.out.println(  "relation"+ Long.toString( container.getEntity().getId() )  );
+			} else{
+				System.out.println( "way" +  Long.toString( container.getEntity().getId() ) );
+			}
 			
 		}
+		*/
 		return;
 	}
 	
 	@Override
 	public Void doInBackground() {
 
-		filter ();
-		scan();
+		//filter ();
+		//scan();
 		setupDB();
 		System.out.println("analyze backgorund done");
 		
@@ -145,6 +151,7 @@ public class OSMAnalyzer extends SwingWorker <Void, Void> {
     }
 	
 	private void setupDB() { 
+
 		System.out.println("started db");
 		try {
 			nodeDataFile = File.createTempFile("osmData", DbExtensions.EXTENSION_DATA );
@@ -162,12 +169,43 @@ public class OSMAnalyzer extends SwingWorker <Void, Void> {
 			return;
 		}
 
+
+		new File(filePath).setLastModified( System.currentTimeMillis() );
+
 		NodeDB nodeDB;
 		VarDB<WayRecordWithTags> varDB;
 
+		System.out.println("started doing..");
 		
+		InputStream filterdStream;
+		try {
+		filterdStream = new FileInputStream( filePath); // testing only
+		} catch (IOException ex) {
+			System.out.println(ex.toString());
+			return ;
+		}
+
+		//OsmIterator iterator = new OsmXmlIterator(filterdStream, false);
+
+
+		
+
 		try {
 
+			System.out.println("started populating");
+		
+			NodeDbPopulator populator = new NodeDbPopulator( Paths.get(filePath) , nodeIndexFile.toPath() , nodeDataFile.toPath() );
+			populator.execute();
+
+			System.out.println("populating done");
+		
+		} catch (IOException ex) {
+			System.out.println(ex.toString());
+			return;
+		}
+		
+		try {
+			System.out.println("loading db");
 			EntityDbSetup.createNodeDb( Paths.get(filePath) , nodeIndexFile.toPath() , nodeDataFile.toPath() );
 			EntityDbSetup.createWayDb( Paths.get(filePath), wayIndexFile.toPath(), wayDataFile.toPath(), true);
 			System.out.println("db set up");
@@ -181,6 +219,7 @@ public class OSMAnalyzer extends SwingWorker <Void, Void> {
 			System.out.println(ex.toString());
 			return;
 		}
+		
 
 
 		
