@@ -201,32 +201,37 @@ public class OTNCompanion
         
         FileInputStream fis = null;
         FileOutputStream fos = null;
+        storeProfiles();
 
         // copy poly
-        if ( this.area.getPolyFile().exists() ) {
-            fis = null;
+        if ( ! ( this.area.getPolyFile() == null ) ) {
+            if (this.area.getPolyFile().exists() ) {
+                fis = null;
             fos = null;
-            try {
-                fis = new FileInputStream( this.area.getPolyFile() );
-                fos = new FileOutputStream(storageDir +  File.separator + "area.poly");
-                int c;
+                try {
+                    fis = new FileInputStream( this.area.getPolyFile() );
+                    fos = new FileOutputStream(storageDir +  File.separator + "area.poly");
+                    int c;
 
-                while ((c = fis.read()) != -1) {
-                    fos.write(c);
-                }
-                System.out.println( "copied poly file successfully" );
-                if (fis != null) {
-                    fis.close();
-                }
-                if (fos != null) {
-                    fos.close();
-                }
+                    while ((c = fis.read()) != -1) {
+                        fos.write(c);
+                    }
+                    System.out.println( "copied poly file successfully" );
+                    if (fis != null) {
+                        fis.close();
+                    }
+                    if (fos != null) {
+                        fos.close();
+                    }
 
-            } catch (IOException ex) {
-                System.out.println(ex.toString());
+                } catch (IOException ex) {
+                    System.out.println(ex.toString());
+                }
             }
+
         }
-        storeProfiles();
+            
+        
     }
 
     public boolean isAnyProfileSet(){
