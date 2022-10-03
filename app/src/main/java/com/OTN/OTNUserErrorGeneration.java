@@ -6,8 +6,13 @@ import java.awt.*;
 import java.util.List;
 import java.util.LinkedList;
 
+import java.awt.Component;
+
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+
 import javax.swing.JFrame;
-//import javax.swing.JOptionPane;
+import javax.swing.JOptionPane;
 import javax.swing.JDialog;
 
 public class OTNUserErrorGeneration {
@@ -33,7 +38,7 @@ public class OTNUserErrorGeneration {
 
 		JFrame frame = new JFrame();
 
-		JOptionPane.showMessageDialog(frame, errors, title, JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showOptionDialog(frame, getPanel(), title, JOptionPane.OK_CANCEL_OPTION,  JOptionPane.ERROR_MESSAGE, null, null, null);
 
 		/*JDialog errorDialog = errorPane.createDialog(title);
 
@@ -47,7 +52,7 @@ public class OTNUserErrorGeneration {
 		c.anchor = GridBagConstraints.CENTER;
 	  	c.gridx = 0;
 		c.gridy = 0;
-		c.gridy = 0;*/
+		c.gridy = 0;
 
 
 		JLabel errorText = new JLabel();
@@ -57,11 +62,32 @@ public class OTNUserErrorGeneration {
 				errorDialog.add(errorText);
 				//c.gridy ++;
 				//errorDialog.add(errorText, c);
-		}
-
-		errorDialog.setVisible(true);*/
+		}*/
 
 		return true;
+	}
+
+	private JPanel getPanel() {
+
+	JPanel panel = new JPanel(new GridBagLayout());
+
+	GridBagConstraints c = new GridBagConstraints();
+
+	c.anchor = GridBagConstraints.FIRST_LINE_START;
+  	c.gridx = 0;
+	c.gridy = 0;
+	c.insets = new Insets(5,5,5,5);
+
+	JLabel errorText = new JLabel();
+
+	for(String text:errors){
+		errorText = new JLabel (text);
+		panel.add(errorText);
+		c.gridy ++;
+		panel.add(errorText, c);
+		}
+
+	return panel;
 	}
 
 
