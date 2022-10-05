@@ -501,7 +501,7 @@ public class OTNGui {
 				rightareaButtons.add(savePolyButton, crab);
 
 				JButton analyzebutton = new JButton("analyze");
-		    	analyzebutton.setBackground( Color.CYAN );
+		    	analyzebutton.setBackground( Color.decode("#2a5285") );
 		    	//analyzebutton.setEnabled(false);
 
 		    	analyzebutton.addActionListener(new ActionListener(){  
@@ -530,7 +530,7 @@ public class OTNGui {
 				crab.insets = new Insets(0,5,0,0);
 
 		    	JButton filterButton = new JButton("filter area");
-		    	filterButton.setBackground( Color.CYAN );
+		    	filterButton.setBackground( Color.decode("#2a5285") );
 		    	filterButton.addActionListener( new ActionListener() {  
 					public void actionPerformed(ActionEvent e){ 
 						if ( ! workflowTableData.getLastAreaElement().isValid() ) {

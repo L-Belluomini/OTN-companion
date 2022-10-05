@@ -361,6 +361,7 @@ public class OTNGuiFilter {
 
 		OTNUserErrorGeneration filterError = new OTNUserErrorGeneration("Filter error(s)");
 
+
 		if( topTF.getText().length() == 0){
 			filterError.addError("Top coords not found");
 		}
@@ -377,6 +378,11 @@ public class OTNGuiFilter {
 			filterError.addError("Right coords not found");
 		}
 
+		if(filterError.showDialog()){
+			return true;
+		}
+
+		
 		Float top = Float.parseFloat ( topTF.getText() );
 		Float bottom = Float.parseFloat ( bottomTF.getText() );
 		Float left = Float.parseFloat ( leftTF.getText() );
@@ -387,7 +393,7 @@ public class OTNGuiFilter {
 		}
 
 		if(Double.compare(left, right) > 0){
-			filterError.addError("Left longitude further east than west longitude");
+			filterError.addError("Left longitude further east than right longitude");
 		}
 
 		if(filterError.showDialog()){
