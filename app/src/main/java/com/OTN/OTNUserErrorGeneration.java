@@ -52,11 +52,21 @@ public class OTNUserErrorGeneration {
 	c.anchor = GridBagConstraints.FIRST_LINE_START;
   	c.gridx = 0;
 	c.gridy = 0;
+	c.insets = new Insets(0,0,5,0);
+
+	JLabel explanationText = new JLabel("<html>User imput error(s) detected.<br>Please resolve the following issues and try again.</html>");
+
+	panel.add(explanationText, c);
+
+	c = new GridBagConstraints();
+	c.anchor = GridBagConstraints.FIRST_LINE_START;
+  	c.gridx = 0;
+	c.gridy = 1;
 
 	JLabel errorText = new JLabel();
 
 	for(String text:errors){
-		errorText = new JLabel (text);
+		errorText = new JLabel ("- " + text);
 		panel.add(errorText);
 		c.gridy ++;
 		panel.add(errorText, c);
