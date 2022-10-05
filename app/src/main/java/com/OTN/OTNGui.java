@@ -127,7 +127,7 @@ public class OTNGui {
 					if (! file.exists() ){
 					userError.addError("File does not exist");
 					} else {
-						if (! extension.equals("pbf"/* @Gabri check and add other supported extensions*/) ) {
+						if (! (extension.equals("pbf") || extension.equals("osm") || extension.equals("bz2")  ) ) {
     					userError.addError("Invalid file extension");
     					}
     				}
