@@ -532,12 +532,22 @@ public class OTNGui {
 		    	JButton filterButton = new JButton("filter area");
 		    	filterButton.setBackground( Color.decode("#2a5285") );
 		    	filterButton.addActionListener( new ActionListener() {  
-					public void actionPerformed(ActionEvent e){ 
-						if ( ! workflowTableData.getLastAreaElement().isValid() ) {
-							JOptionPane.showMessageDialog(frame,"The selected area element is not valid","Error",JOptionPane.ERROR_MESSAGE);
-							//@leo fix the isValid method/isValid column in the table
+					public void actionPerformed(ActionEvent e){
+
+						OTNUserErrorGeneration filterAreaError = new OTNUserErrorGeneration("Area Error(s)");
+
+						if( workflowTableData.getRowCount()==0){
+							filterAreaError.addError("There is no area element to filter");
+						}else{ 
+							if ( ! workflowTableData.getLastAreaElement().isValid() ) {
+								filterAreaError.addError("The selected area element is not valid");
+							}
+						}
+
+						if (filterAreaError.showDialog()) {
 							return;
 						}
+
 						AreaElement input = workflowTableData.getLastAreaElement();
 						AreaElement output = workflowTableData.addAreaElement( input );
 						OTNGuiFilter filter = new OTNGuiFilter( input , output );
