@@ -188,6 +188,8 @@ public class OTNCompanion
         long timeElapsed = finish - start;
         System.out.println("graph finished, took:"+ Long.toString(timeElapsed/1000)+ " s");
         
+        storeProfiles();
+        
         FileInputStream fis = null;
         FileOutputStream fos = null;
 
@@ -215,7 +217,7 @@ public class OTNCompanion
                 System.out.println(ex.toString());
             }
         }
-        storeProfiles();
+        
     }
 
     public boolean isAnyProfileSet(){

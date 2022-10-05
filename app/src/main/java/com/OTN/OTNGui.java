@@ -123,7 +123,7 @@ public class OTNGui {
 	            	String filename = file.getName();
 					String extension = filename.substring(filename.lastIndexOf(".") + 1, filename.length());
 
-					if (! extension.equals("pbf")) {
+					if (! (extension.equals("pbf") || extension.equals("osm") || extension.equals("bz2")  ) ) {
     				userError.addError("Invalid file extension");
     				}
 
@@ -495,8 +495,8 @@ public class OTNGui {
     	this.tabs.setEnabledAt( this.tabs.indexOfTab("Profiles") , false );
 
     	
-    	profilesTableData.addProfile("car", "car", "fastest", false, false, true);
-		profilesTableData.addProfile("foot", "foot", "fastest", false, false, true);
+    	profilesTableData.addProfile("car", "car", "fastest", false, true, false);
+		profilesTableData.addProfile("foot", "foot", "fastest", false, true, false);
 
 		/////////////////////////// TABLE & SCROLLPANE /////////////////////////////
 
