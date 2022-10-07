@@ -169,20 +169,26 @@ public class OSMEditor extends SwingWorker <Void, Void>{
 
 			tmpStgring = areaElement.getName();
 			buffer.write(tmpStgring);
+			buffer.newLine();
 			tmpStgring = "ExactBoundingBox";
 			buffer.write(tmpStgring);
-			
+			buffer.newLine();
+
 			tmpStgring = Double.toString(left) + " " + Double.toString(top) + System.lineSeparator(); 
 			buffer.write(tmpStgring);  
+			buffer.newLine();
 
 			tmpStgring = Double.toString(right) + " " + Double.toString(bottom) + System.lineSeparator(); 
 			buffer.write(tmpStgring);  
+			buffer.newLine();
 
 			tmpStgring = Double.toString(left) + " " + Double.toString(bottom) + System.lineSeparator(); 
 			buffer.write(tmpStgring);  
+			buffer.newLine();
 
 			tmpStgring = "END";
 			buffer.write(tmpStgring);
+			buffer.newLine();
 			tmpStgring = "END";
 			buffer.write(tmpStgring);
 			buffer.flush();
@@ -214,18 +220,22 @@ public class OSMEditor extends SwingWorker <Void, Void>{
 
 			tmpStgring = areaElement.getName();
 			buffer.write(tmpStgring);
+			buffer.newLine();
 			tmpStgring = "RadiusArea";
 			buffer.write(tmpStgring);
+			buffer.newLine();
 
 			for ( int  i = 0; i < radiusCosSin.length; i++ ) {
 				tmpLong = centerLong + ( ( ( rMteters * radiusCosSin[1][i]) / 2 * 3.14 * earthRadiusM ) * 360 );
 				tmpLat = centerLat + ( ( ( rMteters * radiusCosSin[0][i]) / 2 * 3.14 * ( earthRadiusM * Math.cos ( tmpLong ) ) ) * 360 );
 				tmpStgring = Double.toString(tmpLong) + " " + Double.toString(tmpLat) + System.lineSeparator(); 
-				buffer.write(tmpStgring);  
+				buffer.write(tmpStgring);
+				buffer.newLine();  
 			}
 			System.out.println("finished loop for poly file");
 			tmpStgring = "END";
 			buffer.write(tmpStgring);
+			buffer.newLine();
 			tmpStgring = "END";
 			buffer.write(tmpStgring);
 			buffer.flush();
