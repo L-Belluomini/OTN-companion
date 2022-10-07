@@ -26,18 +26,19 @@ public class OTNGuiFilter {
 	static private JTabbedPane tabs;
 	private File polyFilterFile;
 	JFrame frame;
+	final JFrame filterFrame;
 
 	OTNGuiFilter(AreaElement einput , AreaElement eoutput ) {
 		this.input = einput;
 		this.output= eoutput;
 		System.out.println("filter gui initialized");
-		editor = new OSMEditor();
+		editor = new OSMEditor(output);
 		editor.loadFile ( input.getOsmFile() );
 		System.out.println("editor initialized");
 
 		String fatherName = new String(input.getName());
 
-		JFrame filterFrame= new JFrame("Filter "+ fatherName);
+		filterFrame= new JFrame("Filter "+ fatherName);
         filterFrame.setLayout( new GridBagLayout() ); 
 		filterFrame.setVisible(true);
 		filterFrame.setResizable(false);
@@ -149,6 +150,8 @@ public class OTNGuiFilter {
 				JOptionPane.showMessageDialog(frame,"Filter succesfully applied in " + timeElapsed +" ms.","Filter generation",
 				JOptionPane.PLAIN_MESSAGE);
 				frame.dispose();
+				filterFrame.dispose();
+
         	}  
     	});
 
