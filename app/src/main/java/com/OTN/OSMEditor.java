@@ -14,6 +14,7 @@ public class OSMEditor extends SwingWorker <Void, Void>{
 	private RunnableSource osmReader;
 	private AreaFilter filter;
 	private Sink osmXmlwriter;
+	private AreaElement areaElement;
 
 	private final double[][] radiusCosSin = {
 		{ // sin
@@ -106,7 +107,9 @@ public class OSMEditor extends SwingWorker <Void, Void>{
 	
 	private final double earthRadiusM = 6371000;
 
-	OSMEditor(){
+	OSMEditor(AreaElement eareaElement){
+		areaElement = eareaElement;
+
 	}
 
 	void loadFile(File file) {
@@ -151,6 +154,46 @@ public class OSMEditor extends SwingWorker <Void, Void>{
 
 		filter = new  BoundingBoxFilter(IdTrackerType.Dynamic , left , right , top , bottom , true , true , false , true  );
 		osmReader.setSink(filter);
+
+		String tmpStgring;
+		double tmpLat;
+		double tmpLong;
+		File tempFile = null;
+		System.out.println("started creating poly file  border");
+
+		try {
+			tempFile = File.createTempFile("BoundingBoxArea", ".poly");
+			tempFile.deleteOnExit();
+			FileWriter writer = new FileWriter( tempFile );
+			BufferedWriter buffer = new BufferedWriter(writer);
+
+			tmpStgring = areaElement.getName();
+			buffer.write(tmpStgring);
+			tmpStgring = "ExactBoundingBox";
+			buffer.write(tmpStgring);
+			
+			tmpStgring = Double.toString(left) + " " + Double.toString(top) + System.lineSeparator(); 
+			buffer.write(tmpStgring);  
+
+			tmpStgring = Double.toString(right) + " " + Double.toString(bottom) + System.lineSeparator(); 
+			buffer.write(tmpStgring);  
+
+			tmpStgring = Double.toString(left) + " " + Double.toString(bottom) + System.lineSeparator(); 
+			buffer.write(tmpStgring);  
+
+			tmpStgring = "END";
+			buffer.write(tmpStgring);
+			tmpStgring = "END";
+			buffer.write(tmpStgring);
+			buffer.flush();
+
+
+		} catch (IOException ex) {
+			System.out.println(ex.toString());
+		}
+		areaElement.setpolyBoundary( tempFile );
+
+
 	}
 
 	void setFilter( double centerLat,
@@ -169,7 +212,7 @@ public class OSMEditor extends SwingWorker <Void, Void>{
 			FileWriter writer = new FileWriter( tempFile );
 			BufferedWriter buffer = new BufferedWriter(writer);
 
-			tmpStgring = tempFile.getName();
+			tmpStgring = areaElement.getName();
 			buffer.write(tmpStgring);
 			tmpStgring = "RadiusArea";
 			buffer.write(tmpStgring);
@@ -192,10 +235,15 @@ public class OSMEditor extends SwingWorker <Void, Void>{
 
 		filter = new  PolygonFilter( IdTrackerType.Dynamic, tempFile, true ,true , false , true );
 		osmReader.setSink(filter);
+
+		areaElement.setpolyBoundary( tempFile );
+
 	}
-	void setFilter(File plyFile ) {
-		filter = new  PolygonFilter( IdTrackerType.Dynamic, plyFile, true ,true , false , true );
+
+	void setFilter(File polyFile ) {
+		filter = new  PolygonFilter( IdTrackerType.Dynamic, polyFile, true ,true , false , true );
 		osmReader.setSink(filter);
+		areaElement.setpolyBoundary( polyFile );
 	}
 
 

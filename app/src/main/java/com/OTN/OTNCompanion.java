@@ -196,10 +196,10 @@ public class OTNCompanion
         if ( ! ( this.area.getPolyFile() == null ) ) {
             if (this.area.getPolyFile().exists() ) {
                 fis = null;
-            fos = null;
+                fos = null;
                 try {
                     fis = new FileInputStream( this.area.getPolyFile() );
-                    fos = new FileOutputStream(storageDir +  File.separator + "area.poly");
+                    fos = new FileOutputStream(storageDir +  File.separator + area.getName().replaceAll("\\s+","") +".poly");
                     int c;
 
                     while ((c = fis.read()) != -1) {
