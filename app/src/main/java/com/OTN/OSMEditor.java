@@ -6,8 +6,12 @@ import org.openstreetmap.osmosis.core.filter.common.*;
 import org.openstreetmap.osmosis.xml.common.CompressionMethod;
 import org.openstreetmap.osmosis.xml.v0_6.*;
 import org.openstreetmap.osmosis.areafilter.v0_6.*;
+
 import java.io.*;
 import javax.swing.SwingWorker;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OSMEditor extends SwingWorker <Void, Void>{
 
@@ -15,7 +19,7 @@ public class OSMEditor extends SwingWorker <Void, Void>{
 	private AreaFilter filter;
 	private Sink osmXmlwriter;
 	private AreaElement areaElement;
-
+	private Logger logger;
 	private final double[][] radiusCosSin = {
 		{ // sin
 			0
@@ -109,6 +113,7 @@ public class OSMEditor extends SwingWorker <Void, Void>{
 
 	OSMEditor(AreaElement eareaElement){
 		areaElement = eareaElement;
+		logger = LoggerFactory.getLogger(OSMEditor.class);
 
 	}
 
@@ -140,7 +145,7 @@ public class OSMEditor extends SwingWorker <Void, Void>{
 	}
 	void setOutput (File file) {
 		if (filter == null ) {
-			System.out.println("filter type and cords not set");
+			logger.warn("filter type and cords not set");
 			return;
 		}
 		osmXmlwriter = new XmlWriter( file , CompressionMethod.None );
@@ -159,7 +164,7 @@ public class OSMEditor extends SwingWorker <Void, Void>{
 		double tmpLat;
 		double tmpLong;
 		File tempFile = null;
-		System.out.println("started creating poly file  border");
+		logger.info("started creating poly file  border");
 
 		try {
 			tempFile = File.createTempFile("BoundingBoxArea", ".poly");
@@ -225,12 +230,14 @@ public class OSMEditor extends SwingWorker <Void, Void>{
 			buffer.write(tmpStgring);
 			buffer.newLine();
 
-			for ( int  i = 0; i < radiusCosSin.length; i++ ) {
+			logger.info( Integer.toString( radiusCosSin[0].length ) ) ;
+
+			for ( int  i = 0; i < radiusCosSin[0].length; i++ ) {
 				tmpLong = centerLong + ( ( ( rMteters * radiusCosSin[1][i]) / 2 * 3.14 * earthRadiusM ) * 360 );
 				tmpLat = centerLat + ( ( ( rMteters * radiusCosSin[0][i]) / 2 * 3.14 * ( earthRadiusM * Math.cos ( tmpLong ) ) ) * 360 );
 				tmpStgring = Double.toString(tmpLong) + " " + Double.toString(tmpLat) + System.lineSeparator(); 
+				logger.info( tmpStgring );
 				buffer.write(tmpStgring);
-				buffer.newLine();  
 			}
 			System.out.println("finished loop for poly file");
 			tmpStgring = "END";
