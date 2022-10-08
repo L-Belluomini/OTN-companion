@@ -209,8 +209,12 @@ public class OTNGui {
 				otnc.setOsmArea( workflowTableData.getLastAreaElement() );
 
 				otnc.setProfiles( profilesTableData );
+				OTNcSwingWorker otncWorker = new OTNcSwingWorker ( otnc );
+
+
 				if ( otnRadioButton.isSelected() ){
-					otnc.createGraph();
+					//otnc.createGraph();
+					otncWorker.execute(); // @gabri ecco lo swing worker, per il momneto disabilitiamo tutta la parte relativa a vns
 				} else if ( vnsRadioButton.isSelected() && vnsKmlFile.exists() ) {
 				otnc.createVNSGraph(vnsKmlFile);
 				}
