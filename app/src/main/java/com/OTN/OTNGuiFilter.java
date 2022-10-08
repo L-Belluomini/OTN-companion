@@ -146,7 +146,7 @@ public class OTNGuiFilter {
 				bbdialogwait.dispose();
 
 				frame = new JFrame();
-
+				// todo @gabri change display time to s or mm:ss 
 				JOptionPane.showMessageDialog(frame,"Filter succesfully applied in " + timeElapsed +" ms.","Filter generation",
 				JOptionPane.PLAIN_MESSAGE);
 				frame.dispose();
