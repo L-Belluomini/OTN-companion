@@ -294,13 +294,12 @@ public class OTNCompanion
     }
     public void completeVNSGraph(File kmlFile ){
         
-        File dir = new File ( this.storageDir)
+        File dir = new File ( this.storageDir);
         
         FileInputStream fis = null;
         FileOutputStream fos = null;
 
         // test if generate has run
-        
         /*if ( dir.isDirectory() ) {
             
         try {

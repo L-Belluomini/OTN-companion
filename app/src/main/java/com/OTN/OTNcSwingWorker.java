@@ -10,11 +10,18 @@ public class OTNcSwingWorker extends SwingWorker <Void, Void>{
 	
 	public OTNCompanion otncsw;
 	
-	public OTNcSwingWorker(){}
+	public OTNcSwingWorker(){
+		otncsw = new OTNCompanion();
+	}
+
+	public OTNcSwingWorker( OTNCompanion eotnc ){
+		otncsw = eotnc;
+	}
+
 
 	@Override
 	public Void doInBackground(){
-	otncsw.	
+	otncsw.createGraph();
 		
 		return null;
 	}
