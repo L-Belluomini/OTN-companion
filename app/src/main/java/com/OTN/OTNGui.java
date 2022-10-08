@@ -10,8 +10,8 @@ import java.io.*;
 
 import java.util.List;
 import java.util.LinkedList;
-import java.awt.Container;
 
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Color;
 import javax.swing.ImageIcon;
@@ -123,22 +123,25 @@ public class OTNGui {
 	            	String filename = file.getName();
 					String extension = filename.substring(filename.lastIndexOf(".") + 1, filename.length());
 
-					if (! (extension.equals("pbf") || extension.equals("osm") || extension.equals("bz2")  ) ) {
-    				userError.addError("Invalid file extension");
+					if (! file.exists() ){
+					userError.addError("File does not exist");
+					} else {
+						if (! (extension.equals("pbf") || extension.equals("osm") || extension.equals("bz2")  ) ) {
+    					userError.addError("Invalid file extension");
+    					}
     				}
 
-    				if (userError.showDialog()) {
+    				if ( userError.showDialog() ) {
 					return;
 					}
-
-	            	if ( file.exists() ){
-	            		workflowTableData.addAreaElement( file );
-	            		tabs.setEnabledAt( tabs.indexOfTab("Profiles") , true );
-	            		tabs.setEnabledAt( tabs.indexOfTab("Graph") , true );
-	            		workflowTableData.getLastAreaElement().setName( file.getName().substring(0, file.getName().lastIndexOf(".")) );
-	            		//@leo name cleansing
-	            		loadButton.setEnabled(false);
-	            	}
+	            	
+	            	workflowTableData.addAreaElement( file );
+	            	tabs.setEnabledAt( tabs.indexOfTab("Profiles") , true );
+	            	tabs.setEnabledAt( tabs.indexOfTab("Graph") , true );
+	            	workflowTableData.getLastAreaElement().setName( file.getName().substring(0, file.getName().lastIndexOf(".")) );
+	            	//@leo name cleansing
+	            	loadButton.setEnabled(false);
+	            	
 	            }
         	}  
     	});  
@@ -199,6 +202,9 @@ public class OTNGui {
 					return;
 				}
 
+				long start = System.currentTimeMillis();
+				System.out.println("started time");
+
 				otnc.setOsmArea( workflowTableData.getLastAreaElement() );
 
 				otnc.setProfiles( profilesTableData );
@@ -207,8 +213,46 @@ public class OTNGui {
 				} else if ( vnsRadioButton.isSelected() && vnsKmlFile.exists() ) {
 				otnc.createVNSGraph(vnsKmlFile);
 				}
+
+				///////////////////// WAIT DIALOG/////////////
+
+
+				/*final JDialog dialogwait = new JDialog();
+
+				System.out.println("started time");
+
+				long start = System.currentTimeMillis();
+
+				dialogwait.setLayout( new GridBagLayout() );
+
+				GridBagConstraints c = new GridBagConstraints();
+				c.anchor = GridBagConstraints.CENTER;
+	  			c.gridx = 0;
+				c.gridy = 0;
+
+				dialogwait.setTitle("Graph generation");
+				dialogwait.setModal(true);
+				dialogwait.setSize(new Dimension(250,120));
+				dialogwait.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+				JLabel text = new JLabel ("This may take a while...");
+				dialogwait.add(text, c);
+				dialogwait.setVisible(true);
+
+				long finish = System.currentTimeMillis();
+				
+				System.out.println("Graph generated");
+  
+				long timeElapsed = finish - start;
+
+				dialogwait.dispose();
+
+				frame = new JFrame();
+				JOptionPane.showMessageDialog(frame,"Graph succesfully generated in " + timeElapsed +" ms.","Filter generation",
+				JOptionPane.PLAIN_MESSAGE);
+				frame.dispose();*/
         	}  
     	});
+    	
     	content.add(button, c);
 
     	frame.pack();
@@ -435,7 +479,7 @@ public class OTNGui {
 				rightareaButtons.add(savePolyButton, crab);
 
 				JButton analyzebutton = new JButton("analyze");
-		    	analyzebutton.setBackground( Color.CYAN );
+		    	analyzebutton.setBackground( Color.decode("#2a5285") );
 		    	//analyzebutton.setEnabled(false);
 
 		    	analyzebutton.addActionListener(new ActionListener(){  
@@ -464,14 +508,24 @@ public class OTNGui {
 				crab.insets = new Insets(0,5,0,0);
 
 		    	JButton filterButton = new JButton("filter area");
-		    	filterButton.setBackground( Color.CYAN );
+		    	filterButton.setBackground( Color.decode("#2a5285") );
 		    	filterButton.addActionListener( new ActionListener() {  
-					public void actionPerformed(ActionEvent e){ 
-						if ( ! workflowTableData.getLastAreaElement().isValid() ) {
-							JOptionPane.showMessageDialog(frame,"The selected area element is not valid","Error",JOptionPane.ERROR_MESSAGE);
-							//@leo fix the isValid method/isValid column in the table
+					public void actionPerformed(ActionEvent e){
+
+						OTNUserErrorGeneration filterAreaError = new OTNUserErrorGeneration("Area Error(s)");
+
+						if( workflowTableData.getRowCount()==0){
+							filterAreaError.addError("There is no area element to filter");
+						}else{ 
+							if ( ! workflowTableData.getLastAreaElement().isValid() ) {
+								filterAreaError.addError("The selected area element is not valid");
+							}
+						}
+
+						if (filterAreaError.showDialog()) {
 							return;
 						}
+
 						AreaElement input = workflowTableData.getLastAreaElement();
 						AreaElement output = workflowTableData.addAreaElement( input );
 						OTNGuiFilter filter = new OTNGuiFilter( input , output );

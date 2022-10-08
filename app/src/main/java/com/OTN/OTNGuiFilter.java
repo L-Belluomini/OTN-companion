@@ -26,18 +26,19 @@ public class OTNGuiFilter {
 	static private JTabbedPane tabs;
 	private File polyFilterFile;
 	JFrame frame;
+	final JFrame filterFrame;
 
 	OTNGuiFilter(AreaElement einput , AreaElement eoutput ) {
 		this.input = einput;
 		this.output= eoutput;
 		System.out.println("filter gui initialized");
-		editor = new OSMEditor();
+		editor = new OSMEditor(output);
 		editor.loadFile ( input.getOsmFile() );
 		System.out.println("editor initialized");
 
 		String fatherName = new String(input.getName());
 
-		JFrame filterFrame= new JFrame("Filter "+ fatherName);
+		filterFrame= new JFrame("Filter "+ fatherName);
         filterFrame.setLayout( new GridBagLayout() ); 
 		filterFrame.setVisible(true);
 		filterFrame.setResizable(false);
@@ -149,6 +150,8 @@ public class OTNGuiFilter {
 				JOptionPane.showMessageDialog(frame,"Filter succesfully applied in " + timeElapsed +" ms.","Filter generation",
 				JOptionPane.PLAIN_MESSAGE);
 				frame.dispose();
+				filterFrame.dispose();
+
         	}  
     	});
 
@@ -361,30 +364,44 @@ public class OTNGuiFilter {
 
 		OTNUserErrorGeneration filterError = new OTNUserErrorGeneration("Filter error(s)");
 
+
 		if( topTF.getText().length() == 0){
-			filterError.addError("top coords not found");
+			filterError.addError("Top coords not found");
 		}
 		
 		if( bottomTF.getText().length() == 0){
-			filterError.addError("bottom coords not found");
+			filterError.addError("Bottom coords not found");
 		}
 		
 		if( leftTF.getText().length() == 0){
-			filterError.addError("left coords not found");
+			filterError.addError("Left coords not found");
 		}
 		
 		if( rightTF.getText().length() == 0){
-			filterError.addError("right coords not found");
+			filterError.addError("Right coords not found");
 		}
 
 		if(filterError.showDialog()){
 			return true;
 		}
 
+		
 		Float top = Float.parseFloat ( topTF.getText() );
 		Float bottom = Float.parseFloat ( bottomTF.getText() );
 		Float left = Float.parseFloat ( leftTF.getText() );
 		Float right =Float.parseFloat ( rightTF.getText() );
+
+		if(Double.compare(bottom, top) > 0){
+			filterError.addError("Bottom latitude is higher than top latitude");
+		}
+
+		if(Double.compare(left, right) > 0){
+			filterError.addError("Left longitude further east than right longitude");
+		}
+
+		if(filterError.showDialog()){
+			return true;
+		}
 
 		editor.setFilter(left , right , top , bottom);
 

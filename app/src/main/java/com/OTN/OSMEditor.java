@@ -6,15 +6,20 @@ import org.openstreetmap.osmosis.core.filter.common.*;
 import org.openstreetmap.osmosis.xml.common.CompressionMethod;
 import org.openstreetmap.osmosis.xml.v0_6.*;
 import org.openstreetmap.osmosis.areafilter.v0_6.*;
+
 import java.io.*;
 import javax.swing.SwingWorker;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OSMEditor extends SwingWorker <Void, Void>{
 
 	private RunnableSource osmReader;
 	private AreaFilter filter;
 	private Sink osmXmlwriter;
-
+	private AreaElement areaElement;
+	private Logger logger;
 	private final double[][] radiusCosSin = {
 		{ // sin
 			0
@@ -106,7 +111,10 @@ public class OSMEditor extends SwingWorker <Void, Void>{
 	
 	private final double earthRadiusM = 6371000;
 
-	OSMEditor(){
+	OSMEditor(AreaElement eareaElement){
+		areaElement = eareaElement;
+		logger = LoggerFactory.getLogger(OSMEditor.class);
+
 	}
 
 	void loadFile(File file) {
@@ -137,7 +145,7 @@ public class OSMEditor extends SwingWorker <Void, Void>{
 	}
 	void setOutput (File file) {
 		if (filter == null ) {
-			System.out.println("filter type and cords not set");
+			logger.warn("filter type and cords not set");
 			return;
 		}
 		osmXmlwriter = new XmlWriter( file , CompressionMethod.None );
@@ -151,6 +159,52 @@ public class OSMEditor extends SwingWorker <Void, Void>{
 
 		filter = new  BoundingBoxFilter(IdTrackerType.Dynamic , left , right , top , bottom , true , true , false , true  );
 		osmReader.setSink(filter);
+
+		String tmpStgring;
+		double tmpLat;
+		double tmpLong;
+		File tempFile = null;
+		logger.info("started creating poly file  border");
+
+		try {
+			tempFile = File.createTempFile("BoundingBoxArea", ".poly");
+			tempFile.deleteOnExit();
+			FileWriter writer = new FileWriter( tempFile );
+			BufferedWriter buffer = new BufferedWriter(writer);
+
+			tmpStgring = areaElement.getName();
+			buffer.write(tmpStgring);
+			buffer.newLine();
+			tmpStgring = "ExactBoundingBox";
+			buffer.write(tmpStgring);
+			buffer.newLine();
+
+			tmpStgring = Double.toString(left) + " " + Double.toString(top) + System.lineSeparator(); 
+			buffer.write(tmpStgring);  
+			buffer.newLine();
+
+			tmpStgring = Double.toString(right) + " " + Double.toString(bottom) + System.lineSeparator(); 
+			buffer.write(tmpStgring);  
+			buffer.newLine();
+
+			tmpStgring = Double.toString(left) + " " + Double.toString(bottom) + System.lineSeparator(); 
+			buffer.write(tmpStgring);  
+			buffer.newLine();
+
+			tmpStgring = "END";
+			buffer.write(tmpStgring);
+			buffer.newLine();
+			tmpStgring = "END";
+			buffer.write(tmpStgring);
+			buffer.flush();
+
+
+		} catch (IOException ex) {
+			System.out.println(ex.toString());
+		}
+		areaElement.setpolyBoundary( tempFile );
+
+
 	}
 
 	void setFilter( double centerLat,
@@ -169,20 +223,26 @@ public class OSMEditor extends SwingWorker <Void, Void>{
 			FileWriter writer = new FileWriter( tempFile );
 			BufferedWriter buffer = new BufferedWriter(writer);
 
-			tmpStgring = tempFile.getName();
+			tmpStgring = areaElement.getName();
 			buffer.write(tmpStgring);
+			buffer.newLine();
 			tmpStgring = "RadiusArea";
 			buffer.write(tmpStgring);
+			buffer.newLine();
 
-			for ( int  i = 0; i < radiusCosSin.length; i++ ) {
+			logger.info( Integer.toString( radiusCosSin[0].length ) ) ;
+
+			for ( int  i = 0; i < radiusCosSin[0].length; i++ ) {
 				tmpLong = centerLong + ( ( ( rMteters * radiusCosSin[1][i]) / 2 * 3.14 * earthRadiusM ) * 360 );
 				tmpLat = centerLat + ( ( ( rMteters * radiusCosSin[0][i]) / 2 * 3.14 * ( earthRadiusM * Math.cos ( tmpLong ) ) ) * 360 );
 				tmpStgring = Double.toString(tmpLong) + " " + Double.toString(tmpLat) + System.lineSeparator(); 
-				buffer.write(tmpStgring);  
+				logger.info( tmpStgring );
+				buffer.write(tmpStgring);
 			}
 			System.out.println("finished loop for poly file");
 			tmpStgring = "END";
 			buffer.write(tmpStgring);
+			buffer.newLine();
 			tmpStgring = "END";
 			buffer.write(tmpStgring);
 			buffer.flush();
@@ -192,10 +252,15 @@ public class OSMEditor extends SwingWorker <Void, Void>{
 
 		filter = new  PolygonFilter( IdTrackerType.Dynamic, tempFile, true ,true , false , true );
 		osmReader.setSink(filter);
+
+		areaElement.setpolyBoundary( tempFile );
+
 	}
-	void setFilter(File plyFile ) {
-		filter = new  PolygonFilter( IdTrackerType.Dynamic, plyFile, true ,true , false , true );
+
+	void setFilter(File polyFile ) {
+		filter = new  PolygonFilter( IdTrackerType.Dynamic, polyFile, true ,true , false , true );
 		osmReader.setSink(filter);
+		areaElement.setpolyBoundary( polyFile );
 	}
 
 
