@@ -36,6 +36,8 @@ public class OTNGuiFilter {
 		editor.loadFile ( input.getOsmFile() );
 		System.out.println("editor initialized");
 
+		
+
 		String fatherName = new String(input.getName());
 
 		filterFrame= new JFrame("Filter "+ fatherName);
@@ -43,6 +45,7 @@ public class OTNGuiFilter {
 		filterFrame.setVisible(true);
 		filterFrame.setResizable(false);
 		filterFrame.setIconImage(new ImageIcon(getClass().getResource("/otnLogo.png")).getImage());
+
 
 		Container content = filterFrame.getContentPane();
 
@@ -161,6 +164,12 @@ public class OTNGuiFilter {
 
     	filterFrame.pack();
 	
+	}
+
+	public void addWindowListener(WindowAdapter listener){
+		System.out.println("interal adder firing");
+		filterFrame.addWindowListener(listener);
+
 	}
 
     ////////////////////////////////////// BB FILTER PANNEL ///////////////////////////////////////////////
