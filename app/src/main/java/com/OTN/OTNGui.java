@@ -21,8 +21,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JDialog;
 import javax.swing.JCheckBox;
 
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.TimeUnit;
 
 
 
@@ -202,30 +208,39 @@ public class OTNGui {
 					return;
 				}
 
-				long start = System.currentTimeMillis();
-				System.out.println("started time");
-
 				otnc.setOsmArea( workflowTableData.getLastAreaElement() );
 
 				otnc.setProfiles( profilesTableData );
 				OTNcSwingWorker otncWorker = new OTNcSwingWorker ( otnc );
 
+				long start = System.currentTimeMillis();
+				
+				System.out.println("started time");
+
+				final JDialog dialogwait = new JDialog();
+
+
+				otncWorker.addPropertyChangeListener(new PropertyChangeListener() {
+			        @Override
+			        public void propertyChange(PropertyChangeEvent evt) {
+			           if (evt.getPropertyName().equals("state")) {
+			               if (evt.getNewValue() == SwingWorker.StateValue.DONE) {
+			                  dialogwait.dispose();
+			               }
+			            }
+			        }
+			    });
+
+
 
 				if ( otnRadioButton.isSelected() ){
 					//otnc.createGraph();
-					otncWorker.execute(); // @gabri ecco lo swing worker, per il momneto disabilitiamo tutta la parte relativa a vns
+					otncWorker.execute();// @gabri ecco lo swing worker, per il momneto disabilitiamo tutta la parte relativa a vns
 				} else if ( vnsRadioButton.isSelected() && vnsKmlFile.exists() ) {
 				otnc.createVNSGraph(vnsKmlFile);
 				}
 
 				///////////////////// WAIT DIALOG/////////////
-
-
-				/*final JDialog dialogwait = new JDialog();
-
-				System.out.println("started time");
-
-				long start = System.currentTimeMillis();
 
 				dialogwait.setLayout( new GridBagLayout() );
 
@@ -248,12 +263,15 @@ public class OTNGui {
   
 				long timeElapsed = finish - start;
 
+				long timeSeconds = TimeUnit.MILLISECONDS.toSeconds(timeElapsed);
+
+
 				dialogwait.dispose();
 
 				frame = new JFrame();
-				JOptionPane.showMessageDialog(frame,"Graph succesfully generated in " + timeElapsed +" ms.","Filter generation",
+				JOptionPane.showMessageDialog(frame,"Graph succesfully generated in " + timeSeconds +" s.","Filter generation",
 				JOptionPane.PLAIN_MESSAGE);
-				frame.dispose();*/
+				frame.dispose();
         	}  
     	});
     	
