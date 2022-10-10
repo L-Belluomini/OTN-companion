@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.awt.Container;
+import java.util.concurrent.TimeUnit;
 
 public class OTNGuiFilter {
 
@@ -146,11 +147,12 @@ public class OTNGuiFilter {
 
 				long timeElapsed = finish - start;
 
+				long timeSeconds = TimeUnit.MILLISECONDS.toSeconds(timeElapsed);
+
 				bbdialogwait.dispose();
 
 				frame = new JFrame();
-				// todo @gabri change display time to s or mm:ss 
-				JOptionPane.showMessageDialog(frame,"Filter succesfully applied in " + timeElapsed +" ms.","Filter generation",
+				JOptionPane.showMessageDialog(frame,"Filter succesfully applied in " + timeSeconds +" ms.","Filter generation",
 				JOptionPane.PLAIN_MESSAGE);
 				frame.dispose();
 				filterFrame.dispose();
