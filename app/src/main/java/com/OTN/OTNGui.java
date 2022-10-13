@@ -208,8 +208,12 @@ public class OTNGui {
 				otnc.setOsmArea( workflowTableData.getLastAreaElement() );
 
 				otnc.setProfiles( profilesTableData );
+				OTNcSwingWorker otncWorker = new OTNcSwingWorker ( otnc );
+
+
 				if ( otnRadioButton.isSelected() ){
-					otnc.createGraph();
+					//otnc.createGraph();
+					otncWorker.execute(); // @gabri ecco lo swing worker, per il momneto disabilitiamo tutta la parte relativa a vns
 				} else if ( vnsRadioButton.isSelected() && vnsKmlFile.exists() ) {
 				otnc.createVNSGraph(vnsKmlFile);
 				}
@@ -529,6 +533,17 @@ public class OTNGui {
 						AreaElement input = workflowTableData.getLastAreaElement();
 						AreaElement output = workflowTableData.addAreaElement( input );
 						OTNGuiFilter filter = new OTNGuiFilter( input , output );
+
+						filter.addWindowListener ( new WindowAdapter() {
+					        @Override
+					        public void windowClosing(WindowEvent e) {
+					        	//System.out.println("filter windows listener firing"+ Long.toString( workflowTableData.getLastAreaElement().getOsmFile().length() ) );
+					        	if (  workflowTableData.getLastAreaElement().getOsmFile().length() < 1 ) {
+					        		
+					        		workflowTableData.deletRow( workflowTableData.getRowCount() -1);
+					        	}
+					        } });
+
 						workflowTableData.fireTableDataChanged();
 						//@leo even if no filter is applied a new area element is added to the table
 			       		}  

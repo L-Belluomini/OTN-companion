@@ -59,11 +59,11 @@ public class ProfilesTableDataModel extends AbstractTableModel {
 
 	    	case 4:
 	    	//return profiles.get(row).getVehicle();
-	    	return true; // to do
+	    	return isProfileCH( profiles.get( row ) ); 
 
 
 	    	case 5:
-	    	return false; // to do
+	    	return isProfilelm( profiles.get( row ) ); 
 
         }
     return null;
@@ -116,11 +116,22 @@ public class ProfilesTableDataModel extends AbstractTableModel {
 	    		break;
 
 	    	case 4: //  "CH" 
-	    		// to do
+	    		if ( (boolean) value ){
+	    			CHProfile chPrpfile =  new CHProfile( profiles.get(row).getName() );
+			 		this.chProfiles.add(chPrpfile);	
+	    		} else {
+	    			this.chProfiles.remove ( findInCh( profiles.get(row).getName() ) );
+	    		}
+	    		
     			break;
 
 	    	case 5: // "LM" 
-	    		// to do
+	    		if ( (boolean) value ){
+	    			LMProfile lmPrpfile =  new LMProfile( profiles.get(row).getName() );
+			 		this.lmProfiles.add(lmPrpfile);	
+	    		} else {
+	    			this.lmProfiles.remove ( findInLm( profiles.get(row).getName() ) );
+	    		}
 	    		break;
 	    }
         fireTableCellUpdated(row, col);
@@ -158,6 +169,75 @@ public class ProfilesTableDataModel extends AbstractTableModel {
 	public List<LMProfile>  getlmProfiles(){
 		return lmProfiles;
 	}
+
+	public int findInCh(String name){
+		int index =0;
+		for( CHProfile profile : this.chProfiles ) {
+			if ( profile.getProfile() == name ){
+				return index;
+			}
+			index ++;
+		}
+		return -1;
+
+	}
+
+	public int findInLm(String name){
+		int index =0;
+		for( LMProfile profile : this.lmProfiles ) {
+			if ( profile.getProfile() == name ){
+				return index;
+			}
+			index ++;
+		}
+		return -1;
+
+	}
+
+	public int findInProfiles(String name){
+		int index =0;
+		for( Profile profile : this.profiles ) {
+			if ( profile.getName() == name ){
+				return index;
+			}
+			index ++;
+		}
+		return -1;
+
+	}
+
+	public boolean checkValidProfiles(){
+		for( CHProfile profile : this.chProfiles ) {
+			if ( findInProfiles( profile.getProfile() ) == -1 ){
+				return false;
+			}
+		}
+		for( LMProfile profile : this.lmProfiles ) {
+			if ( findInProfiles( profile.getProfile() ) == -1 ){
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public boolean isProfileCH(Profile profile ) {
+        for (CHProfile chprofile : chProfiles ) {
+            if ( chprofile.getProfile().equals( profile.getName() ) ) {
+                return true;
+            }
+
+        }
+            return false;
+    }
+    public boolean isProfilelm(Profile profile ) {
+        for (LMProfile lmprofile : lmProfiles ) {
+            if ( lmprofile.getProfile().equals( profile.getName() ) ) {
+                return true;
+            }
+
+        }
+        return false;
+    }
 
 
 }

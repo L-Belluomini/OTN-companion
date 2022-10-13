@@ -282,6 +282,70 @@ public class OTNCompanion
         }
         
     }
+
+ public void setForVNSGraph(){
+        profiles.clear();
+        chProfiles.clear();
+        lmProfiles.clear();
+        
+        this.profiles.add(new Profile("car").setVehicle("car").setWeighting("fastest").setTurnCosts(false));
+        this.chProfiles.add( new CHProfile("car"));
+    }
+    public void completeVNSGraph(File kmlFile ){
+        
+        File dir = new File ( this.storageDir);
+        
+        FileInputStream fis = null;
+        FileOutputStream fos = null;
+
+        // test if generate has run
+        /*if ( dir.isDirectory() ) {
+            
+        try {
+            fis = new FileInputStream(kmlFile);
+            fos = new FileOutputStream(storageDir +  File.separator + "area.kml");
+            int c;
+
+            while ((c = fis.read()) != -1) {
+                fos.write(c);
+            }
+            System.out.println( "copied kml file successfully" );
+            
+            if (fis != null) {
+                fis.close();
+            }
+            if (fos != null) {
+                fos.close();
+            }
+
+        }catch (IOException ex) {
+            System.out.println(ex.toString());
+        }
+
+         // create timestamp & .timestamp
+        try{
+           
+        File areatimestamtp = new File (storageDir +  File.pathSeparator + "area.timestamp" );
+        FileWriter timewriter = new FileWriter( areatimestamtp );
+        BufferedWriter timebuffer = new BufferedWriter(timewriter);
+        timebuffer.write( Instant.now().toString()  );
+        timebuffer.flush();
+
+        File timestamp =new File (storageDir +  File.pathSeparator + "timestamp" );
+        timewriter = new FileWriter( timestamp );
+        timebuffer = new BufferedWriter(timewriter);
+        timebuffer.write( Instant.now().toString()  );
+        timebuffer.flush();
+        System.out.println( "created timestamps file successfully" );
+
+        } catch (Exception ex) {
+            System.out.println(ex.toString());
+        }
+
+        }*/
+
+    }
+
 /*
     @Override
     public Void doInBackground(){
