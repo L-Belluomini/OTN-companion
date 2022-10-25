@@ -164,7 +164,20 @@ public class OTNGui {
 	   	button.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){ 
 				// set area elemnt for graph
+
+
+				if(workflowTableData.size()==0){
+
+					OTNUserErrorGeneration userError = new OTNUserErrorGeneration();
+
+					userError.addError("There is no valid area element");
+					userError.showDialog();
+				}
+				//showdialog
 				otnc.setOsmArea( workflowTableData.getLastAreaElement() );
+
+
+
 				// set profikes for graphs
 				otnc.setProfiles( profilesTableData );
 				if ( otnRadioButton.isSelected() ){
