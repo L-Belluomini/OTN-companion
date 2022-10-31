@@ -47,7 +47,6 @@ public class OTNGui {
 	final private JTable wftable; 
 	final private ProfilesTableDataModel profilesTableData;
 	final private JTable profilesTable;
-	final JButton loadButton;
 
 
 	public static void main(String[] args) {
@@ -104,84 +103,14 @@ public class OTNGui {
 
     	/////////////////////////////// GENERATE BUTTON ///////////////////////////////////
 
-		c = new GridBagConstraints();
-       	c.anchor = GridBagConstraints.FIRST_LINE_START;
-  	  	c.gridx = 0;
-    	c.gridy = 1;
-    	c.insets = new Insets(5,5,5,5);
-
-    	JPanel leftmainbuttons = new JPanel (new GridBagLayout());
-
-    	GridBagConstraints lmbc = new GridBagConstraints();
-    	lmbc.anchor = GridBagConstraints.FIRST_LINE_START;
-		lmbc.gridx = 0;
-    	lmbc.gridy = 0;
-
-    	loadButton = new JButton("load OSM file");
-    	loadButton.addActionListener(new ActionListener(){  
-			public void actionPerformed(ActionEvent e){ 
-				fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-	            int returnVal = fc.showOpenDialog(frame);
-	            if (returnVal == JFileChooser.APPROVE_OPTION) {
-	            	File file = fc.getSelectedFile();
-
-	            	OTNUserErrorGeneration userError = new OTNUserErrorGeneration("File error(s)");
-
-	            	String filename = file.getName();
-					String extension = filename.substring(filename.lastIndexOf(".") + 1, filename.length());
-
-					if (! file.exists() ){
-					userError.addError("File does not exist");
-					} else {
-						if (! (extension.equals("pbf") || extension.equals("osm") || extension.equals("bz2")  ) ) {
-    					userError.addError("Invalid file extension");
-    					}
-    				}
-
-    				if ( userError.showDialog() ) {
-					return;
-					}
-	            	
-	            	workflowTableData.addAreaElement( file );
-	            	tabs.setEnabledAt( tabs.indexOfTab("Profiles") , true );
-	            	tabs.setEnabledAt( tabs.indexOfTab("Graph") , true );
-	            	workflowTableData.getLastAreaElement().setName( file.getName().substring(0, file.getName().lastIndexOf(".")) );
-	            	//@leo name cleansing
-	            	loadButton.setEnabled(false);
-	            	
-	            }
-        	}  
-    	});  
-    	leftmainbuttons.add ( loadButton , lmbc);
-
-		lmbc = new GridBagConstraints();
-		lmbc.anchor = GridBagConstraints.FIRST_LINE_START;
-		lmbc.gridx = 1;
-    	lmbc.gridy = 0;
-    	lmbc.insets = new Insets(0,5,0,0);
-
-    	JButton polyButton = new JButton("load poly file");
-    	polyButton.addActionListener(new ActionListener(){  
-			public void actionPerformed(ActionEvent e){ 
-				fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-	            int returnVal = fc.showOpenDialog(frame);
-	            if (returnVal == JFileChooser.APPROVE_OPTION) {
-	            	File file = fc.getSelectedFile();
-	            	if ( file.exists() ){
-	            		workflowTableData.getLastAreaElement().setpolyBoundary(file);
-	            	}
-	            }
-        	}  
-    	});
-    	leftmainbuttons.add(polyButton, lmbc);
-
-    	content.add(leftmainbuttons, c);
+	
 
 		c = new GridBagConstraints();
     	c.fill = GridBagConstraints.VERTICAL;
-    	c.anchor = GridBagConstraints.LAST_LINE_END;
-  	  	c.gridx = 1;
+    	c.anchor = GridBagConstraints.CENTER;
+  	  	c.gridx = 0;
     	c.gridy = 1;
+    	c.weightx = 1;
     	c.insets = new Insets(5,5,5,5);
 
     	JButton button = new JButton("generate");
@@ -431,13 +360,99 @@ public class OTNGui {
 		JPanel paneArea =new JPanel( new GridBagLayout() );  
     	this.tabs.add( "Area",paneArea );
 
+    	/////////////////////////////////// LOAD BUTTONS /////////////////////////////
+
+    	GridBagConstraints c = new GridBagConstraints();
+       	c.anchor = GridBagConstraints.CENTER;
+       	c.fill = GridBagConstraints.BOTH;
+       	c.weightx = 1;
+  	  	c.gridx = 0;
+    	c.gridy = 0;
+    	c.insets = new Insets(5,5,5,5);
+
+    	JPanel loadButtons = new JPanel (new GridBagLayout());
+
+    	GridBagConstraints lbc = new GridBagConstraints();
+		lbc.gridx = 0;
+    	lbc.gridy = 0;
+    	//lbc.weightx = 1;
+
+    	final JButton loadButton = new JButton("load OSM file");
+    	loadButton.addActionListener(new ActionListener(){  
+			public void actionPerformed(ActionEvent e){ 
+				fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+	            int returnVal = fc.showOpenDialog(frame);
+	            if (returnVal == JFileChooser.APPROVE_OPTION) {
+	            	File file = fc.getSelectedFile();
+
+	            	OTNUserErrorGeneration userError = new OTNUserErrorGeneration("File error(s)");
+
+	            	String filename = file.getName();
+					String extension = filename.substring(filename.lastIndexOf(".") + 1, filename.length());
+
+					if (! file.exists() ){
+					userError.addError("File does not exist");
+					} else {
+						if (! (extension.equals("pbf") || extension.equals("osm") || extension.equals("bz2")  ) ) {
+    					userError.addError("Invalid file extension");
+    					}
+    				}
+
+    				if ( userError.showDialog() ) {
+					return;
+					}
+	            	
+	            	workflowTableData.addAreaElement( file );
+	            	tabs.setEnabledAt( tabs.indexOfTab("Profiles") , true );
+	            	tabs.setEnabledAt( tabs.indexOfTab("Graph") , true );
+	            	workflowTableData.getLastAreaElement().setName( file.getName().substring(0, file.getName().lastIndexOf(".")) );
+	            	//@leo name cleansing
+	            	loadButton.setEnabled(false);
+	            	
+	            }
+        	}  
+    	});  
+    	loadButtons.add ( loadButton , lbc);
+
+		lbc = new GridBagConstraints();
+		lbc.gridx = 1;
+    	lbc.gridy = 0;
+    	lbc.insets = new Insets (0,5,0,0);
+    	//lbc.weightx = 1;
+
+    	JButton polyButton = new JButton("load poly file");
+    	polyButton.addActionListener(new ActionListener(){  
+			public void actionPerformed(ActionEvent e){ 
+				fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+	            int returnVal = fc.showOpenDialog(frame);
+	            if (returnVal == JFileChooser.APPROVE_OPTION) {
+	            	File file = fc.getSelectedFile();
+	            	if ( file.exists() ){
+	            		workflowTableData.getLastAreaElement().setpolyBoundary(file);
+	            	}
+	            }
+        	}  
+    	});
+
+    	loadButtons.add(polyButton, lbc);
+
+    	paneArea.add(loadButtons, c);
+
+		c = new GridBagConstraints();
+		c.gridx = 0;
+    	c.gridy = 1;
+    	c.fill = GridBagConstraints.BOTH;
+    	paneArea.add ( new JSeparator (SwingConstants.HORIZONTAL) , c );
+
+    	////////////////////////////// WORKFLOW TITLE ///////////////////////////
+
     	JLabel workflowtitle = new JLabel("area workflow");
     	wftable.setFillsViewportHeight(true);
 		wftable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
-    	GridBagConstraints c = new GridBagConstraints();
+    	c = new GridBagConstraints();
     	c.gridx = 0;
-    	c.gridy = 0;
+    	c.gridy = 2;
     	c.weightx = 1;
     	c.anchor = GridBagConstraints.CENTER;
     	c.insets = new Insets (5,5,5,5);
@@ -451,7 +466,7 @@ public class OTNGui {
 
     	c = new GridBagConstraints();
     	c.gridx = 0;
-    	c.gridy = 1;
+    	c.gridy = 3;
     	c.weightx = 1;
     	c.weighty = 1;
     	c.fill = GridBagConstraints.BOTH;
@@ -463,7 +478,7 @@ public class OTNGui {
 		c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 	  	c.gridx = 0;
-		c.gridy = 2;
+		c.gridy = 4;
 		c.insets = new Insets(5,5,5,5); //areaButtonsPanel costraints
 
       	JPanel areaButtonsPanel = new JPanel(new GridBagLayout());
