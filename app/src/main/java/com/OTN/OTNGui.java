@@ -150,7 +150,7 @@ public class OTNGui {
 				final JDialog dialogwait = new JDialog();
 
 
-				otncWorker.addPropertyChangeListener(new PropertyChangeListener() {
+				otncWorker.addPropertyChangeListener(new PropertyChangeListener() { // listener to kill dialog after worker finishes
 			        @Override
 			        public void propertyChange(PropertyChangeEvent evt) {
 			           if (evt.getPropertyName().equals("state")) {
@@ -162,13 +162,14 @@ public class OTNGui {
 			    });
 
 
-
 				if ( otnRadioButton.isSelected() ){
 					//otnc.createGraph();
 					otncWorker.execute();// @gabri ecco lo swing worker, per il momneto disabilitiamo tutta la parte relativa a vns
-				} else if ( vnsRadioButton.isSelected() && vnsKmlFile.exists() ) {
-				otnc.createVNSGraph(vnsKmlFile);
+				}/*
+				 else if ( vnsRadioButton.isSelected() && vnsKmlFile.exists() ) {
+					//otnc.createVNSGraph(vnsKmlFile);
 				}
+				*/
 
 				///////////////////// WAIT DIALOG/////////////
 
@@ -185,8 +186,9 @@ public class OTNGui {
 				dialogwait.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 				JLabel text = new JLabel ("This may take a while...");
 				dialogwait.add(text, c);
-				dialogwait.setVisible(true);
+				dialogwait.setVisible(true); // tis is blocking, listener will kill it
 
+				// tis continue when worker is finised
 				long finish = System.currentTimeMillis();
 				
 				System.out.println("Graph generated");
@@ -194,7 +196,6 @@ public class OTNGui {
 				long timeElapsed = finish - start;
 
 				long timeSeconds = TimeUnit.MILLISECONDS.toSeconds(timeElapsed);
-
 
 				dialogwait.dispose();
 
