@@ -198,7 +198,7 @@ public class OTNCompanion
                 fos = null;
                 try {
                     fis = new FileInputStream( this.area.getPolyFile() );
-                    fos = new FileOutputStream(storageDir +  File.separator + area.getName().replaceAll("\\s+","") +".poly");
+                    fos = new FileOutputStream(storageDir +  File.separator + "border" +".poly");
                     int c;
 
                     while ((c = fis.read()) != -1) {
