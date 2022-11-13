@@ -19,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-// TODO ? extends SwingWorker <Void, Void>
 public class OTNCompanion 
 {
     private List<Profile> profiles = new LinkedList<Profile>();
@@ -193,7 +192,7 @@ public class OTNCompanion
         storeProfiles();
 
         // copy poly
-        if ( ! ( this.area.getPolyFile() == null ) ) {
+        if (  ( this.area.getPolyFile() =! null ) ) {
             if (this.area.getPolyFile().exists() ) {
                 fis = null;
                 fos = null;
@@ -219,13 +218,14 @@ public class OTNCompanion
             }
 
         }
+        tis.storageDir= "";
             
-        
     }
 
     public boolean isAnyProfileSet(){
         return ! profiles.isEmpty( );  
     }
+
 
     public void createVNSGraph(File kmlFile ){
         profiles.clear();
@@ -284,7 +284,7 @@ public class OTNCompanion
         
     }
 
- public void setForVNSGraph(){
+    public void setForVNSGraph(){
         profiles.clear();
         chProfiles.clear();
         lmProfiles.clear();
@@ -292,8 +292,9 @@ public class OTNCompanion
         this.profiles.add(new Profile("car").setVehicle("car").setWeighting("fastest").setTurnCosts(false));
         this.chProfiles.add( new CHProfile("car"));
     }
+    
     public void completeVNSGraph(File kmlFile ){
-        
+    
         File dir = new File ( this.storageDir);
         
         FileInputStream fis = null;
@@ -344,27 +345,6 @@ public class OTNCompanion
         }
 
         }*/
-
     }
-
-/*
-    @Override
-    public Void doInBackground(){
-        if ( false ){
-             System.out.println("reader not set");
-             return null;
-        } 
-        
-        System.out.println("running actual filter");
-        osmReader.run();
-        
-        return null;
-    }
-
-    @Override
-    public void done() {
-        return;
-    }
-    */
 }
 
