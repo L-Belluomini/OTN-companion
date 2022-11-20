@@ -203,7 +203,7 @@ public class OTNCompanion
         storeProfiles();
 
         // copy poly
-        if (  ( this.area.getPolyFile() =! null ) ) {
+        if (  ( this.area.getPolyFile() != null ) ) {
             if (this.area.getPolyFile().exists() ) {
                 fis = null;
                 fos = null;
@@ -229,7 +229,7 @@ public class OTNCompanion
             }
 
         }
-        tis.storageDir= "";
+        this.storageDir= "";
             
     }
 
