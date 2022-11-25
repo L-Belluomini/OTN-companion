@@ -430,6 +430,7 @@ public class OTNGui {
 	            	File file = fc.getSelectedFile();
 	            	if ( file.exists() ){
 	            		workflowTableData.getLastAreaElement().setpolyBoundary(file);
+	            		workflowTableData.fireTableDataChanged();
 	            	}
 	            }
         	}  

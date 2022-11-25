@@ -106,6 +106,7 @@ public class WorkflowTableDataModel extends AbstractTableModel {
 	AreaElement areaElement = new AreaElement(osmfile);
 	areaElement.setCreationTime ( LocalDateTime.now().toString() );
 	workflowelements.add(areaElement);
+	fireTableDataChanged();
 	}
 
 	public AreaElement addAreaElement (AreaElement areaFather ) {
