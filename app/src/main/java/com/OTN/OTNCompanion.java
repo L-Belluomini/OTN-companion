@@ -28,6 +28,7 @@ public class OTNCompanion
     private String storageDir ="";
     private AreaElement area;
     private Logger logger;
+    private ElevationManager eleManager;
 
 
     public OTNCompanion() {
@@ -38,6 +39,11 @@ public class OTNCompanion
         this.area = earea;
         logger.info("area setted {}",earea);
 
+    }
+
+    public void setEleManage(ElevationManager eleManagerE ) {
+        logger.info(" eleManager sett");
+        this.eleManager = eleManagerE;
     }
 
     public void setStorageDir ( String storageDir ) {
@@ -179,6 +185,11 @@ public class OTNCompanion
         }*/
 
         hopper.init(tmp);
+        if ( this.eleManager != null ) {
+            logger.info("ele provider configed ");
+            hopper.setElevationProvider ( this.eleManager); 
+        }
+        
         hopper.setGraphHopperLocation(this.storageDir); // move to ghConfig ?
         System.out.println("creating graph, this may take a while....");
         long start = System.currentTimeMillis();
