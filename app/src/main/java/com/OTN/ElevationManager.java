@@ -19,14 +19,14 @@ public class ElevationManager implements ElevationProvider {
 
 	private File DTEDdir;
 	
-	public ElevationManager(File dtDir) {
-		/*if (FilenameUtils.getExtension(dtDir.getPath()).equals("dt0")){
-			
+	public ElevationManager(File dtFile) {
+		/*if (FilenameUtils.getExtension(dtFile.getPath()).equals("dt0")){
+			dt0Analyzer = new DTEDAnalyzer(dtFile);
 		} else {
 			//TODO gestisci l'errore di file
 		}*/
-		
-		DTEDdir = dtDir;
+		dt0Analyzer = new DTEDAnalyzer(dtFile);
+
 	}
 	
 	@Override
