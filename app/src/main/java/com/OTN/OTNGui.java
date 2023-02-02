@@ -75,7 +75,7 @@ public class OTNGui {
 		this.frame = new JFrame("OTN-Companion");
 		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE); 
 		frame.setVisible(true);
-		frame.setIconImage(new ImageIcon(getClass().getResource("/otnLogo.png")).getImage());
+		frame.setIconImage(new ImageIcon(getClass().getResource("/otn_logo_shield_minimal_32x32.png")).getImage());
 
 		Container content = frame.getContentPane();
 
@@ -464,7 +464,6 @@ public class OTNGui {
 		/////////////////////////// TABLE & SCROLLPANE /////////////////////////////
 
       	JScrollPane wfscrollpane = new JScrollPane(wftable);
-      	//@leo when an areaElement is created (be it from OSM file or a filter) the table doesn't update
 
     	c = new GridBagConstraints();
     	c.gridx = 0;
@@ -473,7 +472,34 @@ public class OTNGui {
     	c.weighty = 1;
     	c.fill = GridBagConstraints.BOTH;
 
+    	wfscrollpane.setOpaque(false);
+    	wfscrollpane.getViewport().setBackground ( 
+    		new Color(wfscrollpane.getBackground().getRed(),
+    		wfscrollpane.getBackground().getGreen(),
+    		wfscrollpane.getBackground().getBlue(), 125)
+    	);
+    	wftable.setOpaque(false);
+    	wftable.setBackground(
+    		new Color(wftable.getBackground().getRed(),
+    		wftable.getBackground().getGreen(),
+    		wftable.getBackground().getBlue(), 125)
+    	);
+
       	paneArea.add(wfscrollpane, c);
+
+		ImageIcon backgroundimage = new ImageIcon(getClass().getResource("/florence_street_map.png"));
+
+      	JLabel background = new JLabel();
+      	background.setIcon(backgroundimage);
+
+      	c = new GridBagConstraints();
+    	c.gridx = 0; 
+    	c.gridy = 3;
+    	c.weightx = 1;
+    	c.weighty = 1;
+    	c.fill = GridBagConstraints.BOTH;
+
+    	paneArea.add(background, c);
 
       	/////////////////////////// BUTTONS ////////////////////////////////
 
