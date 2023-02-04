@@ -691,14 +691,12 @@ public class OTNGui {
 				c.gridy = 1;
 				c.weightx = 1;
 				c.insets = new Insets(5,5,5,10);
-				SpinnerListModel vehicleListModel = new SpinnerListModel(new String[] { 
+				
+				final JComboBox  vehicleBox = new JComboBox ( new String[] { 
 					"foot", "hike", "wheelchair","bike","racingbike","bike2",
 					"mtb","car","car4wd","motorcycle" });
-    			final JSpinner vehicleSpinner = new JSpinner(vehicleListModel);
-    			Component vehicleSpinnerEditor = vehicleSpinner.getEditor();
-				JFormattedTextField ftf = ((JSpinner.DefaultEditor) vehicleSpinnerEditor).getTextField();
-				ftf.setColumns(13);
-    			newProfileDialog.add(vehicleSpinner,c);
+    			newProfileDialog.add(vehicleBox,c);
+
 
     			c.anchor = GridBagConstraints.FIRST_LINE_END;
 	  			c.gridx = 0;
@@ -713,8 +711,9 @@ public class OTNGui {
 				c.gridy = 2;
 				c.weightx = 1;
 				c.insets = new Insets(5,5,5,10);		
-				final JTextField profileWeightingTF = new JTextField(15);
-				newProfileDialog.add(profileWeightingTF,c);
+				final JComboBox profileWeightingBox = new JComboBox ( new String[] { 
+					"fastest", "shortest", "short_fastest","curvature","custom" });
+				newProfileDialog.add(profileWeightingBox,c);
 
 				c = new GridBagConstraints();
 				c.anchor = GridBagConstraints.FIRST_LINE_START;
@@ -782,7 +781,7 @@ public class OTNGui {
 				newProfileDialog.add(createProfileButton, c);
 				createProfileButton.addActionListener(new ActionListener(){
 					public void actionPerformed(ActionEvent e){
-						profilesTableData.addProfile ( profileNameTF.getText() , (String) vehicleSpinner.getValue() ,  profileWeightingTF.getText() ,  turnCostCheckbox.isSelected() , chCheckbox.isSelected() , lmCheckbox.isSelected() );
+						profilesTableData.addProfile ( profileNameTF.getText() , (String) vehicleBox.getSelectedItem() ,  (String) profileWeightingBox.getSelectedItem() ,  turnCostCheckbox.isSelected() , chCheckbox.isSelected() , lmCheckbox.isSelected() );
 	            		newProfileDialog.dispose();
 	            	}
 				});
