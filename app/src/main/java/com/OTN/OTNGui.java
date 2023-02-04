@@ -30,6 +30,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.TimeUnit;
 
+import com.graphhopper.util.Constants;
+
 
 
 public class OTNGui {
@@ -55,6 +57,7 @@ public class OTNGui {
 		} catch( Exception ex ) {
     	System.err.println( "Failed to initialize LaF" );
 		}
+
 	new OTNGui();
     }
 
@@ -64,7 +67,7 @@ public class OTNGui {
 		
 		Logger logger = LoggerFactory.getLogger(OTNGui.class);
     	logger.info("otngui created");
-		
+		logger.info(Constants.VERSION);
 		this.otnc = new OTNCompanion();
 		this.areaElements = new LinkedList();
 		this.workflowTableData = new WorkflowTableDataModel();
@@ -394,7 +397,7 @@ public class OTNGui {
 					if (! file.exists() ){
 					userError.addError("File does not exist");
 					} else {
-						if (! (extension.equals("pbf") || extension.equals("osm") || extension.equals("bz2")  ) ) {
+						if (! (extension.equals("pbf") || extension.equals("osm") || extension.equals("bz2") ||  extension.equals("bzip2") ) ) {
     					userError.addError("Invalid file extension");
     					}
     				}
@@ -859,6 +862,8 @@ public class OTNGui {
     	ButtonGroup graphCompatGroup = new ButtonGroup();
     	this.otnRadioButton = new JRadioButton("OTN", true );
     	this.vnsRadioButton = new JRadioButton("VNS");
+    	vnsRadioButton.setEnabled(false);
+
     	graphCompatGroup.add( otnRadioButton );
     	graphCompatGroup.add( vnsRadioButton );
 
