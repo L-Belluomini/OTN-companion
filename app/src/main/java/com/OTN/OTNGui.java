@@ -16,10 +16,16 @@ import java.awt.Dimension;
 import java.awt.Color;
 import javax.swing.ImageIcon;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.File;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JDialog;
 import javax.swing.JCheckBox;
+
+import java.net.URL;
+import javax.imageio.ImageReader;
 
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
@@ -463,12 +469,33 @@ public class OTNGui {
     		wftable.getBackground().getBlue(), 125)
     	);
 
+    	wfscrollpane.setPreferredSize(new Dimension(500,250));
+
+    	//wfscrollpane.getViewport().setExtentSize(new Dimension(500,300));
+
+    	System.out.println(wfscrollpane.getPreferredSize());
+
       	paneArea.add(wfscrollpane, c);
 
 		ImageIcon backgroundimage = new ImageIcon(getClass().getResource("/florence_street_map.png"));
+		
+		Image img = backgroundimage.getImage().getScaledInstance(wfscrollpane.getPreferredSize().getWidth(), -1,  java.awt.Image.SCALE_DEFAULT);
+
+		//backgroundimage = new ImageIcon(img);
+
+		/*BufferedImage img = null;
+			try {
+			    img = ImageIO.read(new File("res/florence_street_map.png"));
+			} catch (IOException e) {
+			    e.printStackTrace();
+			}
+
+
+		Image dimg = img.getScaledInstance(300, -1,Image.SCALE_SMOOTH);
+
+		ImageIcon backgroundimage = new ImageIcon(dimg);*/
 
       	JLabel background = new JLabel();
-      	background.setIcon(backgroundimage);
 
       	c = new GridBagConstraints();
     	c.gridx = 0; 
@@ -476,6 +503,10 @@ public class OTNGui {
     	c.weightx = 1;
     	c.weighty = 1;
     	c.fill = GridBagConstraints.BOTH;
+
+    	//backgroundimage.setSize(wfscrollpane.getMinimumSize());
+
+    	//background.setIcon(backgroundimage);
 
     	paneArea.add(background, c);
 
