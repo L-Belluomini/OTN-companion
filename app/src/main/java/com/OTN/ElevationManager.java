@@ -25,7 +25,7 @@ public class ElevationManager implements ElevationProvider {
 		} else {
 			//TODO gestisci l'errore di file
 		}*/
-		dt0Analyzer = new DTEDAnalyzer(dtFile);
+		DTEDdir = dtFile;
 
 	}
 	
@@ -44,15 +44,17 @@ public class ElevationManager implements ElevationProvider {
 		int meridian = (int)longitude;
 		
 		String path = DTEDdir.toString() + 
-			File.separator + (meridian >= 0 ? "e" : "w") + String.format( "%03d", Math.abs(meridian)) +
-			File.separator + (parallel >= 0 ? "n" : "s") + String.format( "%02d", Math.abs(parallel));
+			File.separator + (meridian >= 0 ? "e" : "w") + String.format ( "%03d", Math.abs ( meridian ) ) +
+			File.separator + (parallel >= 0 ? "n" : "s") + String.format ( "%02d", Math.abs ( parallel ) );
+			
+			//System.out.println( path );
 			
 			if (new File(path + ".dt2").exists()) {
-				dtXAnalyzer = new DTEDAnalyzer(new File(DTEDdir + ".dt2"));
+				dtXAnalyzer = new DTEDAnalyzer(new File(path + ".dt2"));
 			} else if (new File(path + ".dt1").exists()) {
-				dtXAnalyzer = new DTEDAnalyzer(new File(DTEDdir + ".dt1"));
+				dtXAnalyzer = new DTEDAnalyzer(new File(path + ".dt1"));
 			} else if (new File(path + ".dt0").exists()) {
-				dtXAnalyzer = new DTEDAnalyzer(new File(DTEDdir + ".dt0"));
+				dtXAnalyzer = new DTEDAnalyzer(new File(path + ".dt0"));
 			} else {
 				
 			}
