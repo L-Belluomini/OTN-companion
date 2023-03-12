@@ -54,7 +54,7 @@ public class ElevationManager implements ElevationProvider {
 			} else if (new File(path + ".dt0").exists()) {
 				dtXAnalyzer = new DTEDAnalyzer(new File(DTEDdir + ".dt0"));
 			} else {
-				
+				System.out.println("File not found");
 			}
 		
 		
