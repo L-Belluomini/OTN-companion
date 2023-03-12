@@ -219,7 +219,7 @@ public class OTNGui {
     	JButton eleButton = new JButton("load elevation");
     	eleButton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){ 
-				fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 	            int returnVal = fc.showOpenDialog(frame);
 	            if (returnVal == JFileChooser.APPROVE_OPTION) {
 	            	File file = fc.getSelectedFile();
