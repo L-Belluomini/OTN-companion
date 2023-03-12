@@ -17,14 +17,16 @@ import com.graphhopper.reader.dem.ElevationProvider;
 
 public class ElevationManager implements ElevationProvider {
 
-	public  DTEDAnalyzer dt0Analyzer = null; 
+	private File DTEDdir;
 	
-	public ElevationManager(File dtFile) {
-		if (FilenameUtils.getExtension(dtFile.getPath()).equals("dt0")){
-			dt0Analyzer = new DTEDAnalyzer(dtFile);
+	public ElevationManager(File dtDir) {
+		/*if (FilenameUtils.getExtension(dtDir.getPath()).equals("dt0")){
+			
 		} else {
 			//TODO gestisci l'errore di file
-		}
+		}*/
+		
+		DTEDdir = dtDir;
 	}
 	
 	@Override
@@ -35,7 +37,28 @@ public class ElevationManager implements ElevationProvider {
 
 	@Override
 	public double getEle(double latitude, double longitude) {
-		double height = dt0Analyzer._getHeight(latitude, longitude);
+		
+		DTEDAnalyzer dtXAnalyzer = null; 
+		
+		int parallel = (int)latitude;
+		int meridian = (int)longitude;
+		
+		String path = DTEDdir.toString() + 
+			File.separator + (meridian >= 0 ? "e" : "w") + String.format( "%03d", Math.abs(meridian)) +
+			File.separator + (parallel >= 0 ? "n" : "s") + String.format( "%02d", Math.abs(parallel));
+			
+			if (new File(path + ".dt2").exists()) {
+				dtXAnalyzer = new DTEDAnalyzer(new File(DTEDdir + ".dt2"));
+			} else if (new File(path + ".dt1").exists()) {
+				dtXAnalyzer = new DTEDAnalyzer(new File(DTEDdir + ".dt1"));
+			} else if (new File(path + ".dt0").exists()) {
+				dtXAnalyzer = new DTEDAnalyzer(new File(DTEDdir + ".dt0"));
+			} else {
+				
+			}
+		
+		
+		double height = dtXAnalyzer._getHeight(latitude, longitude);
 		
 		if (Double.isNaN(height)) {
 			System.out.println("No height for point " + latitude + " - " + longitude);
@@ -48,6 +71,6 @@ public class ElevationManager implements ElevationProvider {
 	@Override
 	public void release() {
 		// TODO Auto-generated method stub
-		dt0Analyzer.close();
+		//dtXAnalyzer.close();
 	}
 }
