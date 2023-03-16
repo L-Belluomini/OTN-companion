@@ -89,6 +89,7 @@ public class OTNCompanion
 
     private void ConsolidateProfiles(){
         this.ghConfig = new GraphHopperConfig();
+        logger.info("creaing gh config");
         
         if (  this.profiles.size() != 0 ){
             ghConfig.setProfiles(profiles);
@@ -106,6 +107,7 @@ public class OTNCompanion
         if (tableprofiles.getProfiles().size() ==0 ) {
             return;
         }
+        logger.info("sein proiles from table");
         profiles.clear();
         profiles.addAll( tableprofiles.getProfiles() );
         chProfiles.clear();
@@ -229,6 +231,8 @@ public class OTNCompanion
             }
 
         }
+        
+        //cannot be run twice witot a storage dir
         this.storageDir= "";
             
     }
