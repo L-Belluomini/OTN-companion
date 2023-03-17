@@ -24,11 +24,13 @@ public class DTEDAnalyzer {
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+
 		}
 	}
 	
 	public double _getHeight(double latitude, double longitude){
 		try {	
+
 			raf.skipBytes(_NUM_LNG_LINES_OFFSET);
 			byte[] bytes = {
 					0, 0, 0, 0, 0, 0, 0, 0
@@ -88,10 +90,11 @@ public class DTEDAnalyzer {
 					break;
 				}
 			} while (true);
-
 			return _readAndInterp(raf, dataRecSize, xd - x, yd - y);
 		} catch (Exception e) {
-            //TODO Fai qualcosa
+			System.out.println( "ded Error " +e.toString() );
+			e.printStackTrace();
+
         }	
 		return Double.NaN;
 	}

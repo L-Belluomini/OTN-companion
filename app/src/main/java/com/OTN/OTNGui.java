@@ -211,10 +211,10 @@ public class OTNGui {
     	
     	content.add(button, c);
 
-    	lmbc = new GridBagConstraints();
-    	lmbc.anchor = GridBagConstraints.FIRST_LINE_START;
-		lmbc.gridx = 1;
-    	lmbc.gridy = 2;
+    	c = new GridBagConstraints();
+    	c.anchor = GridBagConstraints.FIRST_LINE_START;
+		c.gridx = 1;
+    	c.gridy = 2;
 
     	JButton eleButton = new JButton("load elevation");
     	eleButton.addActionListener(new ActionListener(){  
@@ -230,7 +230,7 @@ public class OTNGui {
 	            }
         	}  
     	});  
-    	leftmainbuttons.add ( eleButton , lmbc);
+    	content.add ( eleButton , c);
 
     	frame.pack();
 	}	
