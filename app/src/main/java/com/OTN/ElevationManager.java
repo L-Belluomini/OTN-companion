@@ -56,7 +56,7 @@ public class ElevationManager implements ElevationProvider {
 			} else if (new File(path + ".dt0").exists()) {
 				dtXAnalyzer = new DTEDAnalyzer(new File(path + ".dt0"));
 			} else {
-				
+				return 0.0;
 			}
 		
 		
@@ -64,7 +64,7 @@ public class ElevationManager implements ElevationProvider {
 		
 		if (Double.isNaN(height)) {
 			System.out.println("No height for point " + latitude + " - " + longitude);
-			return 0; // TODO da rivedere
+			return 0.0; // TODO da rivedere
 		}
 		return height;
 	}
