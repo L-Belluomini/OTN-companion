@@ -97,8 +97,6 @@ public class OTNGui {
     	c.gridwidth = 2;
     	c.fill = GridBagConstraints.BOTH; //tabs costraints
 
-    	//@Leo please disable all tabs until an OSM file is added with the loadButton
-
 		this.tabs = new JTabbedPane();
     	content.add(tabs , c);
     	//fillOSMPane();
@@ -474,17 +472,20 @@ public class OTNGui {
 
     	wfscrollpane.setPreferredSize(new Dimension(500,250));
 
+    	paneArea.add(wfscrollpane, c);
+
     	//wfscrollpane.getViewport().setExtentSize(new Dimension(500,300));
 
-    	System.out.println(wfscrollpane.getPreferredSize());
+    	/*System.out.println(wfscrollpane.getPreferredSize());
 
-      	paneArea.add(wfscrollpane, c);
+    	Double wfd = new Double(wfscrollpane.getPreferredSize().getWidth());
+    	int wfi = wfd.intValue();
 
 		ImageIcon backgroundimage = new ImageIcon(getClass().getResource("/florence_street_map.png"));
 		
-		Image img = backgroundimage.getImage().getScaledInstance(wfscrollpane.getPreferredSize().getWidth(), -1,  java.awt.Image.SCALE_DEFAULT);
+		Image img = backgroundimage.getImage().getScaledInstance(wfi, -1, java.awt.Image.SCALE_DEFAULT);
 
-		//backgroundimage = new ImageIcon(img);
+		backgroundimage = new ImageIcon(img);
 
 		/*BufferedImage img = null;
 			try {
@@ -507,9 +508,11 @@ public class OTNGui {
     	c.weighty = 1;
     	c.fill = GridBagConstraints.BOTH;
 
+    	StretchIcon backgroundimg = new StretchIcon(getClass().getResource("/florence_street_map.png"), true);
+
     	//backgroundimage.setSize(wfscrollpane.getMinimumSize());
 
-    	//background.setIcon(backgroundimage);
+    	background.setIcon(backgroundimg);
 
     	paneArea.add(background, c);
 
