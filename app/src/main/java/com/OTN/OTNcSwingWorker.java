@@ -21,8 +21,12 @@ public class OTNcSwingWorker extends SwingWorker <Void, Void>{
 
 	@Override
 	public Void doInBackground(){
-	otncsw.createGraph();
-		
+	try {
+		otncsw.createGraph();
+		} catch( Exception e ){
+			e.printStackTrace();
+
+		}
 		return null;
 	}
 

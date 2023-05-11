@@ -56,6 +56,7 @@ public class OTNGui {
 	final private ProfilesTableDataModel profilesTableData;
 	final private JTable profilesTable;
 
+
 	public static void main(String[] args) {
 	try {
     	UIManager.setLookAndFeel( new FlatDarkLaf() );
@@ -422,6 +423,28 @@ public class OTNGui {
     	});
 
     	loadButtons.add(polyButton, lbc);
+
+    	lbc = new GridBagConstraints();
+    	lbc.anchor = GridBagConstraints.FIRST_LINE_START;
+		lbc.gridx = 2;
+    	lbc.gridy = 0;
+    	lbc.insets = new Insets (0,5,0,0);
+
+    	JButton eleButton = new JButton("load elevation");
+    	eleButton.addActionListener(new ActionListener(){  
+			public void actionPerformed(ActionEvent e){ 
+				fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+	            int returnVal = fc.showOpenDialog(frame);
+	            if (returnVal == JFileChooser.APPROVE_OPTION) {
+	            	File file = fc.getSelectedFile();
+	            	if ( file.exists() ){
+	            		otnc.setEleManage(  new ElevationManager( file ) );
+
+	            	}
+	            }
+        	}  
+    	});  
+    	loadButtons.add (eleButton , lbc);
 
     	paneArea.add(loadButtons, c);
 

@@ -28,6 +28,7 @@ public class OTNCompanion
     private String storageDir ="";
     private AreaElement area;
     private Logger logger;
+    private ElevationManager eleManager;
 
 
     public OTNCompanion() {
@@ -38,6 +39,11 @@ public class OTNCompanion
         this.area = earea;
         logger.info("area setted {}",earea);
 
+    }
+
+    public void setEleManage(ElevationManager eleManagerE ) {
+        logger.info(" eleManager sett");
+        this.eleManager = eleManagerE;
     }
 
     public void setStorageDir ( String storageDir ) {
@@ -83,6 +89,7 @@ public class OTNCompanion
 
     private void ConsolidateProfiles(){
         this.ghConfig = new GraphHopperConfig();
+        logger.info("creaing gh config");
         
         if (  this.profiles.size() != 0 ){
             ghConfig.setProfiles(profiles);
@@ -100,6 +107,7 @@ public class OTNCompanion
         if (tableprofiles.getProfiles().size() ==0 ) {
             return;
         }
+        logger.info("sein proiles from table");
         profiles.clear();
         profiles.addAll( tableprofiles.getProfiles() );
         chProfiles.clear();
@@ -179,6 +187,11 @@ public class OTNCompanion
         }*/
 
         hopper.init(tmp);
+        if ( this.eleManager != null ) {
+            logger.info("ele provider configed ");
+            hopper.setElevationProvider ( this.eleManager); 
+        }
+        
         hopper.setGraphHopperLocation(this.storageDir); // move to ghConfig ?
         System.out.println("creating graph, this may take a while....");
         long start = System.currentTimeMillis();
@@ -218,6 +231,8 @@ public class OTNCompanion
             }
 
         }
+        
+        //cannot be run twice witot a storage dir
         this.storageDir= "";
             
     }
