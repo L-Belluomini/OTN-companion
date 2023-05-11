@@ -474,9 +474,7 @@ public class OTNGui {
 
     	paneArea.add(wfscrollpane, c);
 
-    	//wfscrollpane.getViewport().setExtentSize(new Dimension(500,300));
-
-    	/*System.out.println(wfscrollpane.getPreferredSize());
+    	/*
 
     	Double wfd = new Double(wfscrollpane.getPreferredSize().getWidth());
     	int wfi = wfd.intValue();
@@ -487,17 +485,7 @@ public class OTNGui {
 
 		backgroundimage = new ImageIcon(img);
 
-		/*BufferedImage img = null;
-			try {
-			    img = ImageIO.read(new File("res/florence_street_map.png"));
-			} catch (IOException e) {
-			    e.printStackTrace();
-			}
-
-
-		Image dimg = img.getScaledInstance(300, -1,Image.SCALE_SMOOTH);
-
-		ImageIcon backgroundimage = new ImageIcon(dimg);*/
+		*/
 
       	JLabel background = new JLabel();
 
