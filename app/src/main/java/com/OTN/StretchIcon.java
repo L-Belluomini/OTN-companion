@@ -294,7 +294,7 @@ public class StretchIcon extends ImageIcon {
       int iw = image.getWidth(c);
       int ih = image.getHeight(c);
 
-      if ( iw * ih < h * w) {
+      if ( h / w > ih / iw ) {
         iw = (h * iw) / ih;
         x += (w - iw) / 2;
         w = iw;
