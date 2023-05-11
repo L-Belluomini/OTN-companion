@@ -45,7 +45,7 @@ public class OTNGuiFilter {
         filterFrame.setLayout( new GridBagLayout() ); 
 		filterFrame.setVisible(true);
 		filterFrame.setResizable(false);
-		filterFrame.setIconImage(new ImageIcon(getClass().getResource("/otnLogo.png")).getImage());
+		filterFrame.setIconImage(new ImageIcon(getClass().getResource("/otn_logo_shield_minimal_32x32.png")).getImage());
 
 
 		Container content = filterFrame.getContentPane();
