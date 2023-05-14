@@ -54,7 +54,8 @@ public class OTNGui {
 	final private WorkflowTableDataModel workflowTableData;
 	final private JTable wftable; 
 	final private ProfilesTableDataModel profilesTableData;
-	final private JTable profilesTable;
+	final private ProfileTableRenderer profilesTable;
+
 
 
 	public static void main(String[] args) {
@@ -78,8 +79,9 @@ public class OTNGui {
 		this.areaElements = new LinkedList();
 		this.workflowTableData = new WorkflowTableDataModel();
 		this.wftable = new JTable(this.workflowTableData);
+		
 		profilesTableData = new ProfilesTableDataModel();
-		profilesTable = new JTable(profilesTableData);
+		profilesTable = new ProfileTableRenderer();
 
 		this.frame = new JFrame("OTN-Companion");
 		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE); 
@@ -668,13 +670,17 @@ public class OTNGui {
 	///////////////////////////////////// PROFILES PANE ///////////////////////////////////
 
 	private void fillProfilesPane() {
-		JPanel paneProfiles =new JPanel(  new GridBagLayout() );  
+		ProfileTableRenderer paneProfiles = new ProfileTableRenderer();
+
+		//JPanel paneProfiles =new JPanel(  new GridBagLayout() );  
     	this.tabs.add( "Profiles",paneProfiles );
     	this.tabs.setEnabledAt( this.tabs.indexOfTab("Profiles") , false );
 
-    	
+		/*
+
     	profilesTableData.addProfile("car", "car", "fastest", false, false, true);
 		profilesTableData.addProfile("foot", "foot", "fastest", false, false, true);
+
 
 		/////////////////////////// TABLE & SCROLLPANE /////////////////////////////
 
@@ -684,6 +690,8 @@ public class OTNGui {
 
       	JScrollPane profilesScrollpane = new JScrollPane(profilesTable);
 
+      	*/
+
     	GridBagConstraints c = new GridBagConstraints();
     	c.gridx = 0;
     	c.gridy = 0;
@@ -692,9 +700,11 @@ public class OTNGui {
     	c.gridwidth = 2;
     	c.fill = GridBagConstraints.BOTH;
 
-      	paneProfiles.add(profilesScrollpane, c);
+      	//paneProfiles.add(profilesScrollpane, c);
 
       	/////////////////////////// BUTTONS ////////////////////////////////
+
+		   		
 
 		   		JButton deleteProfileButton = new JButton("delete profile");
       			
@@ -837,6 +847,7 @@ public class OTNGui {
     			c.gridwidth = 2;
     			c.insets = new Insets(5,5,5,5);
     			newProfileDialog.add ( new JSeparator (SwingConstants.HORIZONTAL) , c );
+    			
     			/*
 				final String name = profileNameTF.getText();
 				final String vehicle = (String) vehicleSpinner.getValue();
@@ -844,7 +855,7 @@ public class OTNGui {
 				final boolean tc = turnCostCheckbox.isSelected();
 				final boolean ch = chCheckbox.isSelected();
 				final boolean lm = lmCheckbox.isSelected();
-				*/
+				*/ 
 
 				JButton createProfileButton = new JButton("create profile");
 				c.anchor = GridBagConstraints.CENTER;
@@ -873,7 +884,7 @@ public class OTNGui {
 			c.insets = new Insets(5,5,5,5);
 
 			paneProfiles.add(newProfileButton, c);
-	}
+	} 
 
 	//////////////////////////////////// GRAPH PANE ////////////////////////////////////
 
