@@ -294,11 +294,17 @@ public class StretchIcon extends ImageIcon {
       int iw = image.getWidth(c);
       int ih = image.getHeight(c);
 
-      if ( h / w > ih / iw ) {
+      Float componentRatio = (float) h / w;
+
+      Float imageRatio = (float) ih / iw;
+
+      if ( componentRatio > imageRatio ) {
+        //System.out.println("StretchIcon first case: " + ( componentRatio ) + " > " + ( imageRatio )  );
         iw = (h * iw) / ih;
         x += (w - iw) / 2;
         w = iw;
       } else {
+        //System.out.println("StretchIcon second case: " + ( componentRatio ) + " < " + ( imageRatio ) );
         ih = (w * ih) / iw;
         y += (h - ih) / 2;
         h = ih;
