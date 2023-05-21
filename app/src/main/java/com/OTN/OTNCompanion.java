@@ -63,6 +63,18 @@ public class OTNCompanion
         return true;
     }
 
+    public String getStorageDir (){
+        if(storageDir.length()==0){
+            return "";
+        }
+
+        if( ! new File(storageDir).isDirectory() ){
+            return "";
+        }
+
+        return storageDir;
+    }
+
     public void createAddProfiles(boolean defaultProfile ){
 
         System.out.println("creating profiles");
