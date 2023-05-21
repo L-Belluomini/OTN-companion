@@ -149,11 +149,12 @@ public class OTNGui {
 					return;
 				}
 
-				String targetdir = workflowTableData.getLastAreaElement().getName().replaceAll("\\s+","")
+				String targetdir = workflowTableData.getLastAreaElement().getName().replaceAll("\\s+","");
 
-				if ( targetdir.exists() ) {
-					workflowTableData.getLastAreaElement().setName( workflowTableData.getLastAreaElement().getName() + "_2" )
-				} 
+				if ( ! targetdir.isEmpty() ) {
+					workflowTableData.getLastAreaElement().setName( workflowTableData.getLastAreaElement().getName() + "_2" );
+				}
+
 				otnc.setOsmArea( workflowTableData.getLastAreaElement() );
 
 				otnc.setProfiles( profilesTableData );
@@ -230,7 +231,7 @@ public class OTNGui {
 	//////////////////////////////// AREAPANE ///////////////////////////////////////////////////
 
 	private void fillAreaPane() {
-		JPanel paneArea =new JPanel( new GridBagLayout() );  
+		JPanel paneArea =new JPanel( new GridBagLayout() );
     	this.tabs.add( "Area",paneArea );
 
     	/////////////////////////////////// LOAD BUTTONS /////////////////////////////
@@ -241,9 +242,12 @@ public class OTNGui {
        	c.weightx = 1;
   	  	c.gridx = 0;
     	c.gridy = 0;
-    	c.insets = new Insets(5,5,5,5);
+    	c.ipadx = 5;
+    	c.ipady = 5;
 
     	JPanel loadButtons = new JPanel (new GridBagLayout());
+
+    	loadButtons.setOpaque(true);
 
     	GridBagConstraints lbc = new GridBagConstraints();
 		lbc.gridx = 0;
@@ -340,20 +344,35 @@ public class OTNGui {
 
     	////////////////////////////// WORKFLOW TITLE ///////////////////////////
 
-    	JLabel workflowtitle = new JLabel("area workflow");
-    	wftable.setFillsViewportHeight(true);
-		wftable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-
     	c = new GridBagConstraints();
+    	c.anchor = GridBagConstraints.CENTER;
+    	c.fill = GridBagConstraints.BOTH;
+    	c.weightx = 1;
     	c.gridx = 0;
     	c.gridy = 2;
-    	c.weightx = 1;
-    	c.anchor = GridBagConstraints.CENTER;
-    	c.insets = new Insets (5,5,5,5);
+    	c.ipadx = 5;
+    	c.ipady = 5;
 
-    	paneArea.add(workflowtitle, c);
+    	JPanel wftitlepanel = new JPanel(new GridBagLayout());
+
+    	wftitlepanel.setOpaque(true);
+
+	    	JLabel workflowtitle = new JLabel("area workflow");
+
+	    	GridBagConstraints labelc = new GridBagConstraints();
+    		labelc.anchor = GridBagConstraints.CENTER;
+    		labelc.weightx = 1;
+    		labelc.gridx = 0;
+    		labelc.gridy = 0;
+
+		wftitlepanel.add(workflowtitle, labelc);
+
+    	paneArea.add(wftitlepanel, c);
 
 		/////////////////////////// TABLE & SCROLLPANE /////////////////////////////
+
+		wftable.setFillsViewportHeight(true);
+		wftable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
       	JScrollPane wfscrollpane = new JScrollPane(wftable);
 
@@ -381,21 +400,18 @@ public class OTNGui {
 
     	paneArea.add(wfscrollpane, c);
 
-      	JLabel areawfbackground = new JLabel();
-
-    	areawfbackground.setIcon(backgroundimg);
-
-    	paneArea.add(areawfbackground, c);
-
       	/////////////////////////// BUTTONS ////////////////////////////////
 
 		c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 	  	c.gridx = 0;
 		c.gridy = 4;
-		c.insets = new Insets(5,5,5,5); //areaButtonsPanel costraints
+		c.ipadx = 5;
+    	c.ipady = 5; //areaButtonsPanel costraints
 
       	JPanel areaButtonsPanel = new JPanel(new GridBagLayout());
+
+      	areaButtonsPanel.setOpaque(true);
 
       		JButton deleteWFelementbutton = new JButton("delete area element");
       		deleteWFelementbutton.addActionListener(new ActionListener(){  
@@ -430,6 +446,7 @@ public class OTNGui {
 		  	cab.gridx = 0;
 			cab.gridy = 0;
 			cab.weightx = 1;
+			cab.insets = new Insets(0,5,0,0);
 
 			areaButtonsPanel.add(deleteWFelementbutton, cab);
 
@@ -478,7 +495,7 @@ public class OTNGui {
 		    	crab = new GridBagConstraints();
 		    	crab.gridx = 2;
 				crab.gridy = 0;
-				crab.insets = new Insets(0,5,0,0);
+				crab.insets = new Insets(0,5,0,5);
 
 		    	JButton filterButton = new JButton("filter area");
 		    	filterButton.setBackground( Color.decode("#2a5285") );
@@ -522,6 +539,21 @@ public class OTNGui {
 	    	areaButtonsPanel.add (rightareaButtons , cab);
 
       	paneArea.add(areaButtonsPanel,c);
+
+      	JLabel areaPaneBackground = new JLabel();
+
+      	c = new GridBagConstraints();
+    	c.gridx = 0;
+    	c.gridy = 0;
+    	c.weightx = 1;
+    	c.weighty = 1;
+    	c.gridheight = 5;
+    	c.fill = GridBagConstraints.BOTH;
+
+
+    	areaPaneBackground.setIcon(backgroundimg);
+
+    	paneArea.add(areaPaneBackground, c);
 	}
 
 	///////////////////////////////////// PROFILES PANE ///////////////////////////////////
@@ -585,42 +617,38 @@ public class OTNGui {
 
       	paneProfiles.add(profilesScrollpane, c);
 
-      	JLabel profilesbackground = new JLabel();
-
-    	profilesbackground.setIcon(backgroundimg);
-
-    	paneProfiles.add(profilesbackground, c);
-
       	/////////////////////////// BUTTONS ////////////////////////////////
 
-		   		JButton deleteProfileButton = new JButton("delete profile");
-      			
-      			deleteProfileButton.addActionListener(new ActionListener(){  
-					public void actionPerformed(ActionEvent e){
-						if ( profilesTable.getSelectedRows().length == 0 ) {
-							JOptionPane.showMessageDialog(frame,"No profiles selected","Error",JOptionPane.ERROR_MESSAGE);
-							return;
-						}
+       	JPanel profilePaneButtons = new JPanel (new GridBagLayout());
 
-						String profileName = (String) profilesTableData.getValueAt( profilesTable.getSelectedRows()[0] ,0 );;
-
-						int paneRetValue = JOptionPane.showConfirmDialog(null, 
-	                	profileName+" will be permanently deleted from profiles.\n"
-	                	+"Are you sure you want to proceed?", "Delete " + profileName,JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-						if ( paneRetValue == 0 ){
-							profilesTableData.deletRow( profilesTable.getSelectedRows()[0] );
-						}
-						
-					}
-				});
-
-			c = new GridBagConstraints();
+      		c = new GridBagConstraints();
 			c.anchor = GridBagConstraints.FIRST_LINE_START;
 		  	c.gridx = 0;
-			c.gridy = 1;
+			c.gridy = 0;
 			c.insets = new Insets(5,5,5,5);
 
-			paneProfiles.add(deleteProfileButton, c);
+	   		JButton deleteProfileButton = new JButton("delete profile");
+  			
+  			deleteProfileButton.addActionListener(new ActionListener(){  
+				public void actionPerformed(ActionEvent e){
+					if ( profilesTable.getSelectedRows().length == 0 ) {
+						JOptionPane.showMessageDialog(frame,"No profiles selected","Error",JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+
+					String profileName = (String) profilesTableData.getValueAt( profilesTable.getSelectedRows()[0] ,0 );;
+
+					int paneRetValue = JOptionPane.showConfirmDialog(null, 
+                	profileName+" will be permanently deleted from profiles.\n"
+                	+"Are you sure you want to proceed?", "Delete " + profileName,JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+					if ( paneRetValue == 0 ){
+						profilesTableData.deletRow( profilesTable.getSelectedRows()[0] );
+					}
+					
+				}
+			});
+
+			profilePaneButtons.add(deleteProfileButton, c);
 
 
       		JButton newProfileButton = new JButton("new profile");
@@ -785,16 +813,40 @@ public class OTNGui {
       		c = new GridBagConstraints();
 			c.anchor = GridBagConstraints.LAST_LINE_END;
 		  	c.gridx = 1;
-			c.gridy = 1;
+			c.gridy = 0;
+			c.weightx = 1;
 			c.insets = new Insets(5,5,5,5);
 
-			paneProfiles.add(newProfileButton, c);
+			profilePaneButtons.add(newProfileButton, c);
+
+		c = new GridBagConstraints();
+  		c.fill = GridBagConstraints.BOTH;
+  		c.gridx = 0;
+  		c.gridy = 1;
+  		c.weightx = 1;
+
+  		paneProfiles.add(profilePaneButtons, c);
+
+	c = new GridBagConstraints();
+	c.gridx = 0;
+	c.gridy = 0;
+	c.weightx = 1;		
+	c.gridheight = 2;
+	c.fill = GridBagConstraints.BOTH;
+
+	JLabel profilesbackground = new JLabel();
+
+	profilesbackground.setIcon(backgroundimg);
+
+	paneProfiles.add(profilesbackground, c);
+
 	}
 
 	//////////////////////////////////// GRAPH PANE ////////////////////////////////////
 
 	private void fillGraphPane() {
-		JPanel graphPane =new JPanel( new GridBagLayout() );  
+		JPanel graphPane =new JPanel( new GridBagLayout() );
+
     	this.tabs.add( "Graph",graphPane );
     	this.tabs.setEnabledAt( this.tabs.indexOfTab("Graph") , false );
 
@@ -888,6 +940,22 @@ public class OTNGui {
     	});  
 
     	graphPane.add ( setStorageDirButton , c);
+
+    	/*c = new GridBagConstraints();
+    	c.anchor = GridBagConstraints.CENTER;
+		c.gridx = 0;
+    	c.gridy = 0;
+    	c.weightx = 1;
+    	c.weighty = 1;
+    	c.gridwidth = 2;
+    	c.gridheight = 2;
+    	c.fill = GridBagConstraints.BOTH;
+
+    	JLabel graphbackground = new JLabel();
+
+		graphbackground.setIcon(backgroundimg);
+
+		graphPane.add(graphbackground, c); */
     }
 
 }
