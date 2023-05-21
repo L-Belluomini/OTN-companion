@@ -149,6 +149,11 @@ public class OTNGui {
 					return;
 				}
 
+				String targetdir = workflowTableData.getLastAreaElement().getName().replaceAll("\\s+","")
+
+				if ( targetdir.exists() ) {
+					workflowTableData.getLastAreaElement().setName( workflowTableData.getLastAreaElement().getName() + "_2" )
+				} 
 				otnc.setOsmArea( workflowTableData.getLastAreaElement() );
 
 				otnc.setProfiles( profilesTableData );
