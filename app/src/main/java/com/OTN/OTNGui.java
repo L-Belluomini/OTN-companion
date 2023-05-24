@@ -243,7 +243,7 @@ public class OTNGui {
   	  	c.gridx = 0;
     	c.gridy = 0;
     	c.ipadx = 5;
-    	c.ipady = 5;
+    	c.ipady = 10;
 
     	JPanel loadButtons = new JPanel (new GridBagLayout());
 
@@ -407,7 +407,7 @@ public class OTNGui {
 	  	c.gridx = 0;
 		c.gridy = 4;
 		c.ipadx = 5;
-    	c.ipady = 5; //areaButtonsPanel costraints
+    	c.ipady = 10; //areaButtonsPanel costraints
 
       	JPanel areaButtonsPanel = new JPanel(new GridBagLayout());
 
@@ -625,7 +625,7 @@ public class OTNGui {
 			c.anchor = GridBagConstraints.FIRST_LINE_START;
 		  	c.gridx = 0;
 			c.gridy = 0;
-			c.insets = new Insets(5,5,5,5);
+			c.insets = new Insets(0,5,0,5);
 
 	   		JButton deleteProfileButton = new JButton("delete profile");
   			
@@ -652,6 +652,9 @@ public class OTNGui {
 
 
       		JButton newProfileButton = new JButton("new profile");
+
+      		///////////////////////////// NEW PROFILE DIALOG //////////////////////////////////
+
       			newProfileButton.addActionListener(new ActionListener(){  
 				public void actionPerformed(ActionEvent e){
 
@@ -815,7 +818,7 @@ public class OTNGui {
 		  	c.gridx = 1;
 			c.gridy = 0;
 			c.weightx = 1;
-			c.insets = new Insets(5,5,5,5);
+			c.insets = new Insets(0,5,0,5);
 
 			profilePaneButtons.add(newProfileButton, c);
 
@@ -824,6 +827,8 @@ public class OTNGui {
   		c.gridx = 0;
   		c.gridy = 1;
   		c.weightx = 1;
+  		c.ipadx = 5;
+  		c.ipady = 10;
 
   		paneProfiles.add(profilePaneButtons, c);
 
@@ -851,6 +856,7 @@ public class OTNGui {
     	this.tabs.setEnabledAt( this.tabs.indexOfTab("Graph") , false );
 
     	ButtonGroup graphCompatGroup = new ButtonGroup();
+
     	this.otnRadioButton = new JRadioButton("OTN", true );
     	this.vnsRadioButton = new JRadioButton("VNS");
     	vnsRadioButton.setEnabled(false);
@@ -859,15 +865,17 @@ public class OTNGui {
     	graphCompatGroup.add( vnsRadioButton );
 
     	GridBagConstraints c = new GridBagConstraints();
-    	c.anchor = GridBagConstraints.CENTER;
+    	c.anchor = GridBagConstraints.LAST_LINE_END;
 		c.gridx = 0;
     	c.gridy = 0;
-    	c.fill = GridBagConstraints.HORIZONTAL;
+    	c.weighty = 1;
+    	c.weightx = 1;
 
     	graphPane.add ( otnRadioButton , c);
-    	
-    	c.gridx = 1;
 
+    	c.anchor = GridBagConstraints.LAST_LINE_START;
+    	c.gridx = 1;
+    	    	
     	graphPane.add ( vnsRadioButton , c);
 
     	c = new GridBagConstraints();
@@ -875,7 +883,6 @@ public class OTNGui {
 		c.gridx = 0;
 		c.gridy = 1;
 		c.gridwidth = 2;
-    	c.fill = GridBagConstraints.HORIZONTAL;
     	c.insets = new Insets(5,5,5,5);
 
     	final JButton vnskmlButton = new JButton("load kml (VNS only)");
@@ -916,11 +923,11 @@ public class OTNGui {
     	});
 
     	c = new GridBagConstraints();
-    	c.anchor = GridBagConstraints.CENTER;
+    	c.anchor = GridBagConstraints.PAGE_START;
 		c.gridx = 0;
     	c.gridy = 2;
     	c.gridwidth = 2;
-    	c.fill = GridBagConstraints.HORIZONTAL;
+    	c.weighty = 1;
     	c.insets = new Insets(5,5,5,5);
 
     	JButton setStorageDirButton = new JButton("select storage Dir");
@@ -941,21 +948,28 @@ public class OTNGui {
 
     	graphPane.add ( setStorageDirButton , c);
 
-    	/*c = new GridBagConstraints();
-    	c.anchor = GridBagConstraints.CENTER;
+    	graphPane.setOpaque(false);
+    	graphPane.setBackground(
+    		new Color(graphPane.getBackground().getRed(),
+    		graphPane.getBackground().getGreen(),
+    		graphPane.getBackground().getBlue(), 125)
+    	);
+
+    	c = new GridBagConstraints();
+
 		c.gridx = 0;
     	c.gridy = 0;
     	c.weightx = 1;
     	c.weighty = 1;
     	c.gridwidth = 2;
-    	c.gridheight = 2;
+    	c.gridheight = 3;
     	c.fill = GridBagConstraints.BOTH;
 
     	JLabel graphbackground = new JLabel();
 
 		graphbackground.setIcon(backgroundimg);
 
-		graphPane.add(graphbackground, c); */
+		graphPane.add(graphbackground, c);
     }
 
 }
