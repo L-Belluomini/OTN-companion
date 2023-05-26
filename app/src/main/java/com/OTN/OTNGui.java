@@ -340,6 +340,7 @@ public class OTNGui {
 		c.gridx = 0;
     	c.gridy = 1;
     	c.fill = GridBagConstraints.BOTH;
+
     	paneArea.add ( new JSeparator (SwingConstants.HORIZONTAL) , c );
 
     	////////////////////////////// WORKFLOW TITLE ///////////////////////////
@@ -387,13 +388,16 @@ public class OTNGui {
     	wfscrollpane.getViewport().setBackground ( 
     		new Color(wfscrollpane.getBackground().getRed(),
     		wfscrollpane.getBackground().getGreen(),
-    		wfscrollpane.getBackground().getBlue(), 125)
+    		wfscrollpane.getBackground().getBlue(), 180)
     	);
+
     	wftable.setOpaque(false);
+
+    	
     	wftable.setBackground(
     		new Color(wftable.getBackground().getRed(),
     		wftable.getBackground().getGreen(),
-    		wftable.getBackground().getBlue(), 125)
+    		wftable.getBackground().getBlue(), 0)
     	);
 
     	wfscrollpane.setPreferredSize(new Dimension(500,250));
@@ -606,13 +610,15 @@ public class OTNGui {
     	profilesScrollpane.getViewport().setBackground ( 
     		new Color(profilesScrollpane.getBackground().getRed(),
     		profilesScrollpane.getBackground().getGreen(),
-    		profilesScrollpane.getBackground().getBlue(), 125)
+    		profilesScrollpane.getBackground().getBlue(), 180)
     	);
+
     	profilesTable.setOpaque(false);
+    	
     	profilesTable.setBackground(
     		new Color(profilesTable.getBackground().getRed(),
     		profilesTable.getBackground().getGreen(),
-    		profilesTable.getBackground().getBlue(), 125)
+    		profilesTable.getBackground().getBlue(), 0)
     	);
 
       	paneProfiles.add(profilesScrollpane, c);
@@ -850,6 +856,7 @@ public class OTNGui {
 	//////////////////////////////////// GRAPH PANE ////////////////////////////////////
 
 	private void fillGraphPane() {
+
 		JPanel graphPane =new JPanel( new GridBagLayout() );
 
     	this.tabs.add( "Graph",graphPane );
@@ -949,11 +956,12 @@ public class OTNGui {
     	graphPane.add ( setStorageDirButton , c);
 
     	graphPane.setOpaque(false);
-    	graphPane.setBackground(
-    		new Color(graphPane.getBackground().getRed(),
+
+    	Color backgroundColor = new Color(graphPane.getBackground().getRed(),
     		graphPane.getBackground().getGreen(),
-    		graphPane.getBackground().getBlue(), 125)
-    	);
+    		graphPane.getBackground().getBlue(), 180);
+
+    	//System.out.println(graphPane.getBackground().toString());
 
     	c = new GridBagConstraints();
 
@@ -965,11 +973,20 @@ public class OTNGui {
     	c.gridheight = 3;
     	c.fill = GridBagConstraints.BOTH;
 
-    	JLabel graphbackground = new JLabel();
+    	JLabel backgroundColorlabel = new JLabel();
 
-		graphbackground.setIcon(backgroundimg);
+    	backgroundColorlabel.setBackground(backgroundColor);
 
-		graphPane.add(graphbackground, c);
+    	backgroundColorlabel.setOpaque(true);
+
+    	graphPane.add(backgroundColorlabel, c);
+
+    	JLabel graphbackgroundimg = new JLabel();
+
+		graphbackgroundimg.setIcon(backgroundimg);
+
+		graphPane.add(graphbackgroundimg, c);
+
     }
 
 }

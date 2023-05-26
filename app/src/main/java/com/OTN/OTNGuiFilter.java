@@ -28,6 +28,7 @@ public class OTNGuiFilter {
 	private File polyFilterFile;
 	JFrame frame;
 	final JFrame filterFrame;
+	StretchIcon backgroundimg;
 
 	OTNGuiFilter(AreaElement einput , AreaElement eoutput ) {
 		this.input = einput;
@@ -36,6 +37,8 @@ public class OTNGuiFilter {
 		editor = new OSMEditor(output);
 		editor.loadFile ( input.getOsmFile() );
 		System.out.println("editor initialized");
+
+		backgroundimg = new StretchIcon(getClass().getResource("/florence_street_map.png"), true);
 
 		
 
@@ -255,7 +258,7 @@ public class OTNGuiFilter {
 		c.gridx = 1;
     	c.gridy = 4;
     	c.fill = GridBagConstraints.BOTH;
-    	c.insets = new Insets(0,0,0,5);
+    	c.insets = new Insets(0,0,5,5);
     	bbFilterPanel.add ( bottomTF , c);
 
     	JLabel rightLabel = new JLabel("Long:");
@@ -272,8 +275,37 @@ public class OTNGuiFilter {
 		c.gridx = 3;
     	c.gridy = 4;
     	c.fill = GridBagConstraints.BOTH;
-    	c.insets = new Insets(0,0,0,5);
+    	c.insets = new Insets(0,0,5,5);
     	bbFilterPanel.add ( rightTF , c);
+
+    	Color backgroundColor = new Color(bbFilterPanel.getBackground().getRed(),
+    		bbFilterPanel.getBackground().getGreen(),
+    		bbFilterPanel.getBackground().getBlue(), 180);
+
+  		c = new GridBagConstraints();
+    	c.gridx = 0;
+    	c.gridy = 0;
+    	c.weightx = 1;
+    	c.weighty = 1;
+    	c.gridheight = 5;
+    	c.gridwidth = 4;
+    	c.fill = GridBagConstraints.BOTH;
+
+    	JLabel backgroundColorlabel = new JLabel();
+
+    	backgroundColorlabel.setBackground(backgroundColor);
+
+    	backgroundColorlabel.setOpaque(true);
+
+    	bbFilterPanel.add(backgroundColorlabel, c);
+
+		JLabel bbBackground = new JLabel();
+
+    	bbBackground.setIcon(backgroundimg);
+
+    	bbFilterPanel.add(bbBackground, c);
+
+
     }
     	   
    	///////////////////////////////////// RADIUS FILTER PANNEL /////////////////////////////////////////
@@ -340,6 +372,34 @@ public class OTNGuiFilter {
     	c.gridy = 3;
     	c.insets = new Insets(5,5,5,5);
     	radiusFilterPanel.add ( radiusTF , c);
+
+    	Color backgroundColor = new Color(radiusFilterPanel.getBackground().getRed(),
+    		radiusFilterPanel.getBackground().getGreen(),
+    		radiusFilterPanel.getBackground().getBlue(), 180);
+
+  		c = new GridBagConstraints();
+    	c.gridx = 0;
+    	c.gridy = 0;
+    	c.weightx = 1;
+    	c.weighty = 1;
+    	c.gridheight = 4;
+    	c.gridwidth = 2;
+    	c.fill = GridBagConstraints.BOTH;
+
+    	JLabel backgroundColorlabel = new JLabel();
+
+    	backgroundColorlabel.setBackground(backgroundColor);
+
+    	backgroundColorlabel.setOpaque(true);
+
+    	radiusFilterPanel.add(backgroundColorlabel, c);
+
+		JLabel bbBackground = new JLabel();
+
+    	bbBackground.setIcon(backgroundimg);
+
+    	radiusFilterPanel.add(bbBackground, c);
+
     }
 
     //////////////////////////////////// POLY PANE ///////////////////////////////////////////////////
@@ -366,6 +426,33 @@ public class OTNGuiFilter {
 		});
 
     	polyFilterPanel.add ( polyFileselctf  , c);
+
+	 	Color backgroundColor = new Color(polyFilterPanel.getBackground().getRed(),
+		polyFilterPanel.getBackground().getGreen(),
+		polyFilterPanel.getBackground().getBlue(), 180);
+
+    	c = new GridBagConstraints();
+    	c.gridx = 0;
+    	c.gridy = 0;
+    	c.weightx = 1;
+    	c.weighty = 1;
+    	c.gridheight = 1;
+    	c.gridwidth = 1;
+    	c.fill = GridBagConstraints.BOTH;
+
+    	JLabel backgroundColorlabel = new JLabel();
+
+    	backgroundColorlabel.setBackground(backgroundColor);
+
+    	backgroundColorlabel.setOpaque(true);
+
+    	polyFilterPanel.add(backgroundColorlabel, c);
+
+		JLabel bbBackground = new JLabel();
+
+    	bbBackground.setIcon(backgroundimg);
+
+    	polyFilterPanel.add(bbBackground, c);
     }
 
     /////////////////////////////////////// FILTER METHODS //////////////////////////////////////////////
