@@ -149,11 +149,33 @@ public class OTNGui {
 					return;
 				}
 
-				String targetdir = workflowTableData.getLastAreaElement().getName().replaceAll("\\s+","");
+				String outputGraphName = workflowTableData.getLastAreaElement().getName().replaceAll("\\s+","");	
 
-				if ( ! targetdir.isEmpty() ) {
-					workflowTableData.getLastAreaElement().setName( workflowTableData.getLastAreaElement().getName() + "_2" );
-				}
+				File dir = new File(otnc.getStorageDir());
+
+				String[] dirList = dir.list();
+
+				boolean flag = false;
+
+			    for (int i = 0; i < dirList.length; i++) {
+			        if(outputGraphName.equals(dirList[i])){
+			        	flag = true;
+			        }
+			    }        
+			    if(flag){
+					int underscoreIndex = outputGraphName.lastIndexOf("_");
+						if ( underscoreIndex == -1 ) {
+							outputGraphName = outputGraphName + "_1";
+							workflowTableData.getLastAreaElement().setName(outputGraphName);
+						}else{
+					int index = Integer.parseInt(outputGraphName.substring(underscoreIndex +1));
+					outputGraphName = outputGraphName.substring(0, underscoreIndex + 1 ) + Integer.toString(index + 1);
+					workflowTableData.getLastAreaElement().setName(outputGraphName);
+					}
+			        System.out.println("Same graph file name found, renamed area element name to avoid overwriting");
+			    }
+
+
 
 				otnc.setOsmArea( workflowTableData.getLastAreaElement() );
 
