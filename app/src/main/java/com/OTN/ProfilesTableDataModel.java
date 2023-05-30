@@ -138,7 +138,10 @@ public class ProfilesTableDataModel extends AbstractTableModel {
     }
 
     public void deletRow ( int row){
-    	profiles.remove( row ); // to do add remove ch profile
+    	String deleteName = profiles.get( row ).getName();
+    	chProfiles.remove ( findInCh ( deleteName ) );
+    	lmProfiles.remove ( findInLm ( deleteName ) );
+    	profiles.remove( row );
     	fireTableDataChanged();
     }
 
