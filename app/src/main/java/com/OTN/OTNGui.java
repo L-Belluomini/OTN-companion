@@ -155,14 +155,14 @@ public class OTNGui {
 
 				String[] dirList = dir.list();
 
-				boolean flag = false;
+				boolean sameNameGraphExists = false;
 
 			    for (int i = 0; i < dirList.length; i++) {
 			        if(outputGraphName.equals(dirList[i])){
-			        	flag = true;
+			        	sameNameGraphExists = true;
 			        }
 			    }        
-			    if(flag){
+			    if(sameNameGraphExists){
 					int underscoreIndex = outputGraphName.lastIndexOf("_");
 						if ( underscoreIndex == -1 ) {
 							outputGraphName = outputGraphName + "_1";
@@ -172,7 +172,7 @@ public class OTNGui {
 					outputGraphName = outputGraphName.substring(0, underscoreIndex + 1 ) + Integer.toString(index + 1);
 					workflowTableData.getLastAreaElement().setName(outputGraphName);
 					}
-			        System.out.println("Same graph file name found, renamed area element name to avoid overwriting");
+			        System.out.println("Same graph file name found, renamed area element to avoid overwriting");
 			    }
 
 
@@ -951,12 +951,13 @@ public class OTNGui {
 	        }
     	});
 
+    	final JLabel storageDirLabel = new JLabel("Storage dir has not been set yet.");
+
     	c = new GridBagConstraints();
     	c.anchor = GridBagConstraints.PAGE_START;
 		c.gridx = 0;
     	c.gridy = 2;
     	c.gridwidth = 2;
-    	c.weighty = 1;
     	c.insets = new Insets(5,5,5,5);
 
     	JButton setStorageDirButton = new JButton("select storage Dir");
@@ -968,7 +969,7 @@ public class OTNGui {
 	            	File file = fc.getSelectedFile();
 	            	if ( file.exists() ){
 	            		otnc.setStorageDir( file.getPath());
-
+	            		storageDirLabel.setText(otnc.getStorageDir());
 	            	}
 
 	            }
@@ -976,6 +977,27 @@ public class OTNGui {
     	});  
 
     	graphPane.add ( setStorageDirButton , c);
+
+    	c = new GridBagConstraints();
+    	c.anchor = GridBagConstraints.CENTER;
+		c.gridx = 0;
+    	c.gridy = 3;
+    	c.gridwidth = 2;
+    	c.insets = new Insets(5,5,5,5);
+
+    	JLabel storageDirLabelTitle = new JLabel("Selected storage dir:");
+
+    	graphPane.add( storageDirLabelTitle, c);
+
+    	c = new GridBagConstraints();
+    	c.anchor = GridBagConstraints.PAGE_START;
+		c.gridx = 0;
+    	c.gridy = 4;
+    	c.gridwidth = 2;
+    	c.weighty = 1;
+    	c.insets = new Insets(5,5,5,5);
+
+    	graphPane.add(storageDirLabel, c);
 
     	graphPane.setOpaque(false);
 
@@ -986,13 +1008,12 @@ public class OTNGui {
     	//System.out.println(graphPane.getBackground().toString());
 
     	c = new GridBagConstraints();
-
 		c.gridx = 0;
     	c.gridy = 0;
     	c.weightx = 1;
     	c.weighty = 1;
     	c.gridwidth = 2;
-    	c.gridheight = 3;
+    	c.gridheight = 5;
     	c.fill = GridBagConstraints.BOTH;
 
     	JLabel backgroundColorlabel = new JLabel();
