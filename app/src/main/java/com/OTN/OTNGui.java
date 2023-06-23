@@ -229,6 +229,18 @@ public class OTNGui {
 
 				// tis continue when worker is finised
 				long finish = System.currentTimeMillis();
+
+				// testing if graph geenration is fished
+				File configFile = new File ( otnc.getStorageDir() +  File.separator + "config.json" )
+				if (  ! configFile.exists() ) {
+					logger.info("graph not generateer error !!!");
+					return;
+					dialogwait.dispose();
+					frame = new JFrame();
+					JOptionPane.showMessageDialog(frame,"Graph Faile " ,"Filter generation",
+					JOptionPane.PLAIN_MESSAGE); // @gabri cheack it
+					frame.dispose();
+				}
 				
 				System.out.println("Graph generated");
   
