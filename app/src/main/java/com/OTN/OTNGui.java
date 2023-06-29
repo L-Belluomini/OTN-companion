@@ -72,7 +72,7 @@ public class OTNGui {
 	
 	OTNGui () {
 		
-		Logger logger = LoggerFactory.getLogger(OTNGui.class);
+		final Logger logger = LoggerFactory.getLogger(OTNGui.class); //@Leo make it work without it being final
     	logger.info("otngui created");
 		logger.info(Constants.VERSION);
 
@@ -155,13 +155,25 @@ public class OTNGui {
 
 				String[] dirList = dir.list();
 
-				boolean sameNameGraphExists = false;
-
 			    for (int i = 0; i < dirList.length; i++) {
-			        if(outputGraphName.equals(dirList[i])){
-			        	sameNameGraphExists = true;
+
+			    	while(outputGraphName.equals(dirList[i])){
+						int underscoreIndex = outputGraphName.lastIndexOf("_");
+
+							if ( underscoreIndex == -1 ) {
+								outputGraphName = outputGraphName + "_1";
+								workflowTableData.getLastAreaElement().setName(outputGraphName);
+							}else{
+							int index = Integer.parseInt(outputGraphName.substring(underscoreIndex +1));
+							outputGraphName = outputGraphName.substring(0, underscoreIndex + 1 ) + Integer.toString(index + 1);
+							workflowTableData.getLastAreaElement().setName(outputGraphName);
+							}
+
+				        System.out.println("Same graph file name found, renamed area element to avoid overwriting");
+			        	}
 			        }
-			    }        
+
+			    /*
 			    if(sameNameGraphExists){
 					int underscoreIndex = outputGraphName.lastIndexOf("_");
 						if ( underscoreIndex == -1 ) {
@@ -173,7 +185,7 @@ public class OTNGui {
 					workflowTableData.getLastAreaElement().setName(outputGraphName);
 					}
 			        System.out.println("Same graph file name found, renamed area element to avoid overwriting");
-			    }
+			    }*/
 
 
 
@@ -204,7 +216,9 @@ public class OTNGui {
 				if ( otnRadioButton.isSelected() ){
 					//otnc.createGraph();
 					otncWorker.execute();// @gabri ecco lo swing worker, per il momneto disabilitiamo tutta la parte relativa a vns
-				}/*
+				}
+
+				/*
 				 else if ( vnsRadioButton.isSelected() && vnsKmlFile.exists() ) {
 					//otnc.createVNSGraph(vnsKmlFile);
 				}
@@ -229,18 +243,6 @@ public class OTNGui {
 
 				// tis continue when worker is finised
 				long finish = System.currentTimeMillis();
-
-				// testing if graph geenration is fished
-				File configFile = new File ( otnc.getStorageDir() +  File.separator + "config.json" )
-				if (  ! configFile.exists() ) {
-					logger.info("graph not generateer error !!!");
-					return;
-					dialogwait.dispose();
-					frame = new JFrame();
-					JOptionPane.showMessageDialog(frame,"Graph Faile " ,"Filter generation",
-					JOptionPane.PLAIN_MESSAGE); // @gabri cheack it
-					frame.dispose();
-				}
 				
 				System.out.println("Graph generated");
   
@@ -250,10 +252,26 @@ public class OTNGui {
 
 				dialogwait.dispose();
 
+				// testing if graph geenration is fished
+				File configFile = new File ( otnc.getStorageDir() +  File.separator + outputGraphName + File.separator + "config.json" );
+				
+				System.out.println(configFile.toString());
+
+
+				if (  ! configFile.exists() ) {
+					logger.info("ERROR: graph not generated!!!");
+					frame = new JFrame();
+					JOptionPane.showMessageDialog(frame,"Graph Failed " ,"Graph generation",
+					JOptionPane.PLAIN_MESSAGE);
+					frame.dispose();
+					return;
+				}
+					
 				frame = new JFrame();
-				JOptionPane.showMessageDialog(frame,"Graph succesfully generated in " + timeSeconds +" s.","Filter generation",
+				JOptionPane.showMessageDialog(frame,"Graph succesfully generated in " + timeSeconds +" s.","Graph generation",
 				JOptionPane.PLAIN_MESSAGE);
 				frame.dispose();
+				
         	}  
     	});
     	
