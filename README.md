@@ -47,6 +47,7 @@ An info dialog will appear once your graph has been successfully created.
 
 * Area editing and trimming with set operations.
 * Area trimming using admin boundaries (with pre-loaded nations' borders).
+* DTED support.
 * Support for custom profiles.
 * Integration with TAKX (dependent on TPC release schedule).
 * Server/microservice version.
