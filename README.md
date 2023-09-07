@@ -16,6 +16,8 @@ It is built based on Java, and easily runs on both Windows and Linux devices.
 
 For technical informations on Graphhopper visit [this link](https://github.com/graphhopper/graphhopper/tree/master/docs).
 
+A new release is on the way. The project is soon to be out of beta.
+
 ## For users
 
 1. Download the latest OTN-C release from the GitHub page, no installation required.
