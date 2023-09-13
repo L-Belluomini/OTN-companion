@@ -371,6 +371,9 @@ public class OTNGui {
     	lbc.insets = new Insets (0,5,0,0);
 
     	JButton eleButton = new JButton("load elevation");
+
+    	eleButton.setEnabled(false);
+
     	eleButton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){ 
 				fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
