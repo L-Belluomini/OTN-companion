@@ -702,6 +702,11 @@ public class OTNGui {
 					int paneRetValue = JOptionPane.showConfirmDialog(null, 
                 	profileName+" will be permanently deleted from profiles.\n"
                 	+"Are you sure you want to proceed?", "Delete " + profileName,JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+			
+					if (profilesTable.isEditing()){
+    					profilesTable.getCellEditor().stopCellEditing();
+					}
+
 					if ( paneRetValue == 0 ){
 						profilesTableData.deletRow( profilesTable.getSelectedRows()[0] );
 					}
