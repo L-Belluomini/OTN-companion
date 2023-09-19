@@ -139,8 +139,15 @@ public class ProfilesTableDataModel extends AbstractTableModel {
 
     public void deletRow ( int row){
     	String deleteName = profiles.get( row ).getName();
-    	chProfiles.remove ( findInCh ( deleteName ) );
-    	lmProfiles.remove ( findInLm ( deleteName ) );
+    	int chIndex = findInCh ( deleteName );
+    	if ( chIndex > 0  ) {
+    		chProfiles.remove (  chIndex );	
+    	}
+    	int lmIndex = findInLm ( deleteName );
+    	if ( lmIndex > 0){
+    		lmProfiles.remove ( lmIndex );	
+    	}
+    	
     	profiles.remove( row );
     	fireTableDataChanged();
     }
