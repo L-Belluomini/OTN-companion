@@ -23,6 +23,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JDialog;
 import javax.swing.JCheckBox;
+import javax.swing.text.MaskFormatter;
 
 import java.net.URL;
 import javax.imageio.ImageReader;
@@ -83,7 +84,7 @@ public class OTNGui {
 		profilesTableData = new ProfilesTableDataModel();
 		profilesTable = new JTable(profilesTableData);
 
-		backgroundimg = new StretchIcon(getClass().getResource("/florence_street_map.png"), true);
+		//backgroundimg = new StretchIcon(getClass().getResource("/florence_street_map.png"), true);
 
 		this.frame = new JFrame("OTN-Companion");
 		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE); 
@@ -447,8 +448,6 @@ public class OTNGui {
     	);
 
     	wftable.setOpaque(false);
-
-    	
     	wftable.setBackground(
     		new Color(wftable.getBackground().getRed(),
     		wftable.getBackground().getGreen(),
@@ -610,7 +609,7 @@ public class OTNGui {
     	c.fill = GridBagConstraints.BOTH;
 
 
-    	areaPaneBackground.setIcon(backgroundimg);
+    	/*areaPaneBackground.setIcon(backgroundimg);*/
 
     	paneArea.add(areaPaneBackground, c);
 	}
@@ -719,163 +718,12 @@ public class OTNGui {
 
       		JButton newProfileButton = new JButton("new profile");
 
-      		///////////////////////////// NEW PROFILE DIALOG //////////////////////////////////
-
-      			newProfileButton.addActionListener(new ActionListener(){  
-				public void actionPerformed(ActionEvent e){
-
-				final JDialog newProfileDialog = new JDialog(frame, "Create new profile", true);
-				newProfileDialog.setLayout(new GridBagLayout());
-				newProfileDialog.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
-				JLabel profileNamelabel = new JLabel("Name:");
-
-				GridBagConstraints c = new GridBagConstraints();
-				c.anchor = GridBagConstraints.FIRST_LINE_END;
-	  			c.gridx = 0;
-				c.gridy = 0;
-				c.weightx = 1;
-				c.insets = new Insets(10,5,5,5);			
-
-				newProfileDialog.add(profileNamelabel, c);
-
-				c = new GridBagConstraints();
-	  			c.gridx = 1;
-				c.gridy = 0;
-				c.weightx = 1;
-				c.insets = new Insets(5,5,5,10);
-
-				final JTextField profileNameTF = new JTextField(15);
-
-				newProfileDialog.add(profileNameTF,c);
-
-				JLabel profileVehiclelabel = new JLabel("Vehicle:");				
-
-				c = new GridBagConstraints();
-				c.anchor = GridBagConstraints.FIRST_LINE_END;
-	  			c.gridx = 0;
-				c.gridy = 1;
-				c.weightx = 1;
-				c.insets = new Insets(5,10,5,5);
-
-				newProfileDialog.add(profileVehiclelabel, c);
-
-				c = new GridBagConstraints();
-	  			c.gridx = 1;
-				c.gridy = 1;
-				c.weightx = 1;
-				c.insets = new Insets(5,5,5,10);
-
-				final JComboBox  vehicleBox = new JComboBox ( new String[] { 
-						"foot", "hike", "wheelchair","bike","racingbike","bike2",
-						"mtb","car","car4wd","motorcycle" });
-				
-    			newProfileDialog.add(vehicleBox,c);
-
-    			JLabel profileWeightinglabel = new JLabel("Weighting:");
-
-    			c.anchor = GridBagConstraints.FIRST_LINE_END;
-	  			c.gridx = 0;
-				c.gridy = 2;
-				c.weightx = 1;
-				c.insets = new Insets(5,10,5,5);		
-
-				newProfileDialog.add(profileWeightinglabel, c);
-
-				c = new GridBagConstraints();
-	  			c.gridx = 1;
-				c.gridy = 2;
-				c.weightx = 1;
-				c.insets = new Insets(5,5,5,10);
-
-				final JComboBox weightingBox = new JComboBox( new String[]{
-	      		"shortest", "fastest", "short_fastest", "curvature" });
-			
-				newProfileDialog.add(weightingBox,c);
-
-				
-				JPanel profileBooleanPanel = new JPanel(new GridBagLayout());
-
-				c = new GridBagConstraints();
-				c.anchor = GridBagConstraints.FIRST_LINE_START;
-	  			c.gridx = 0;
-				c.gridy = 3;
-				c.gridwidth = 2;
-				c.insets = new Insets(5,10,5,10);	
-				c.fill = GridBagConstraints.HORIZONTAL;
-
-					GridBagConstraints pbpc = new GridBagConstraints();
-
-					JLabel turnCostLabel = new JLabel("Turn cost:");
-
-					pbpc.anchor = GridBagConstraints.CENTER;
-		  			pbpc.gridx = 0;
-					pbpc.gridy = 0;
-					pbpc.weightx = 1;			
-					
-					profileBooleanPanel.add(turnCostLabel, pbpc);
-					
-		  			pbpc.gridx = 1;
-
-					final JCheckBox turnCostCheckbox = new JCheckBox();
-
-					profileBooleanPanel.add(turnCostCheckbox,pbpc);
-
-		  			JLabel chLabel = new JLabel("ch:");
-
-		  			pbpc.gridx = 2;
-					
-					profileBooleanPanel.add(chLabel, pbpc);
-
-		  			pbpc.gridx = 3;
-
-					final JCheckBox chCheckbox = new JCheckBox();
-
-					profileBooleanPanel.add(chCheckbox, pbpc);
-
-					JLabel lmLabel = new JLabel("lm:");
-
-					pbpc.gridx = 4;
-			
-					profileBooleanPanel.add(lmLabel, pbpc);
-
-		  			pbpc.gridx = 5;
-
-					final JCheckBox lmCheckbox = new JCheckBox();
-
-					profileBooleanPanel.add(lmCheckbox, pbpc);
-
-				newProfileDialog.add(profileBooleanPanel,c);
-
-				c = new GridBagConstraints();
-				c.gridx = 0;
-    			c.gridy = 4;
-    			c.fill = GridBagConstraints.BOTH;
-    			c.gridwidth = 2;
-    			c.insets = new Insets(5,5,5,5);
-
-    			newProfileDialog.add ( new JSeparator (SwingConstants.HORIZONTAL) , c );
-    			
-				JButton createProfileButton = new JButton("create profile");
-
-				c.anchor = GridBagConstraints.CENTER;
-	  			c.gridx = 0;
-				c.gridy = 5;
-				c.gridwidth = 2;
-				c.insets = new Insets(5,5,5,10);
-
-				newProfileDialog.add(createProfileButton, c);
-
-				createProfileButton.addActionListener(new ActionListener(){
-					public void actionPerformed(ActionEvent e){
-						profilesTableData.addProfile ( profileNameTF.getText() , (String) vehicleBox.getSelectedItem() ,  (String) weightingBox.getSelectedItem() ,  turnCostCheckbox.isSelected() , chCheckbox.isSelected() , lmCheckbox.isSelected() );
-	            		newProfileDialog.dispose();
-	            	}
-				});
-
-				newProfileDialog.pack();
-				newProfileDialog.setVisible(true);
-				
+  			newProfileButton.addActionListener(new ActionListener(){  
+			public void actionPerformed(ActionEvent e){
+				try{createNewProfileDialog();
+					} catch(Exception pe){
+						System.out.println("ParseException in the JFormattedTextField MaskFormatter");
+					}
 				}
 			});
 
@@ -907,7 +755,7 @@ public class OTNGui {
 
 	JLabel profilesbackground = new JLabel();
 
-	profilesbackground.setIcon(backgroundimg);
+	//profilesbackground.setIcon(backgroundimg);
 
 	paneProfiles.add(profilesbackground, c);
 
@@ -1070,4 +918,176 @@ public class OTNGui {
 
     }
 
+    ///////////////////////////// NEW PROFILE DIALOG //////////////////////////////////
+			
+			private void createNewProfileDialog() throws Exception{
+
+
+				final JDialog newProfileDialog = new JDialog(frame, "Create new profile", true);
+				newProfileDialog.setLayout(new GridBagLayout());
+				newProfileDialog.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+				JLabel profileNamelabel = new JLabel("Name:");
+
+				GridBagConstraints c = new GridBagConstraints();
+				c.anchor = GridBagConstraints.FIRST_LINE_END;
+	  			c.gridx = 0;
+				c.gridy = 0;
+				c.weightx = 1;
+				c.insets = new Insets(10,5,5,5);			
+
+				newProfileDialog.add(profileNamelabel, c);
+
+				c = new GridBagConstraints();
+	  			c.gridx = 1;
+				c.gridy = 0;
+				c.weightx = 1;
+				c.insets = new Insets(5,5,5,10);
+
+				
+				MaskFormatter formatter = new MaskFormatter("***************");
+
+				formatter.setValidCharacters("0123456789qwertyuiopasdfghjklzxcvbnm_");
+
+				final JFormattedTextField profileNameFTF = new JFormattedTextField(formatter);
+
+				profileNameFTF.setColumns(15);
+
+				profileNameFTF.setFocusLostBehavior(JFormattedTextField.COMMIT);
+
+
+				newProfileDialog.add(profileNameFTF,c);
+
+				JLabel profileVehiclelabel = new JLabel("Vehicle:");				
+
+				c = new GridBagConstraints();
+				c.anchor = GridBagConstraints.FIRST_LINE_END;
+	  			c.gridx = 0;
+				c.gridy = 1;
+				c.weightx = 1;
+				c.insets = new Insets(5,10,5,5);
+
+				newProfileDialog.add(profileVehiclelabel, c);
+
+				c = new GridBagConstraints();
+	  			c.gridx = 1;
+				c.gridy = 1;
+				c.weightx = 1;
+				c.insets = new Insets(5,5,5,10);
+
+				final JComboBox  vehicleBox = new JComboBox ( new String[] { 
+						"foot", "hike", "wheelchair","bike","racingbike","bike2",
+						"mtb","car","car4wd","motorcycle" });
+				
+    			newProfileDialog.add(vehicleBox,c);
+
+    			JLabel profileWeightinglabel = new JLabel("Weighting:");
+
+    			c.anchor = GridBagConstraints.FIRST_LINE_END;
+	  			c.gridx = 0;
+				c.gridy = 2;
+				c.weightx = 1;
+				c.insets = new Insets(5,10,5,5);		
+
+				newProfileDialog.add(profileWeightinglabel, c);
+
+				c = new GridBagConstraints();
+	  			c.gridx = 1;
+				c.gridy = 2;
+				c.weightx = 1;
+				c.insets = new Insets(5,5,5,10);
+
+				final JComboBox weightingBox = new JComboBox( new String[]{
+	      		"shortest", "fastest", "short_fastest", "curvature" });
+			
+				newProfileDialog.add(weightingBox,c);
+
+				
+				JPanel profileBooleanPanel = new JPanel(new GridBagLayout());
+
+				c = new GridBagConstraints();
+				c.anchor = GridBagConstraints.FIRST_LINE_START;
+	  			c.gridx = 0;
+				c.gridy = 3;
+				c.gridwidth = 2;
+				c.insets = new Insets(5,10,5,10);	
+				c.fill = GridBagConstraints.HORIZONTAL;
+
+					GridBagConstraints pbpc = new GridBagConstraints();
+
+					JLabel turnCostLabel = new JLabel("Turn cost:");
+
+					pbpc.anchor = GridBagConstraints.CENTER;
+		  			pbpc.gridx = 0;
+					pbpc.gridy = 0;
+					pbpc.weightx = 1;			
+					
+					profileBooleanPanel.add(turnCostLabel, pbpc);
+					
+		  			pbpc.gridx = 1;
+
+					final JCheckBox turnCostCheckbox = new JCheckBox();
+
+					profileBooleanPanel.add(turnCostCheckbox,pbpc);
+
+		  			JLabel chLabel = new JLabel("ch:");
+
+		  			pbpc.gridx = 2;
+					
+					profileBooleanPanel.add(chLabel, pbpc);
+
+		  			pbpc.gridx = 3;
+
+					final JCheckBox chCheckbox = new JCheckBox();
+
+					profileBooleanPanel.add(chCheckbox, pbpc);
+
+					JLabel lmLabel = new JLabel("lm:");
+
+					pbpc.gridx = 4;
+			
+					profileBooleanPanel.add(lmLabel, pbpc);
+
+		  			pbpc.gridx = 5;
+
+					final JCheckBox lmCheckbox = new JCheckBox();
+
+					profileBooleanPanel.add(lmCheckbox, pbpc);
+
+				newProfileDialog.add(profileBooleanPanel,c);
+
+				c = new GridBagConstraints();
+				c.gridx = 0;
+    			c.gridy = 4;
+    			c.fill = GridBagConstraints.BOTH;
+    			c.gridwidth = 2;
+    			c.insets = new Insets(5,5,5,5);
+
+    			newProfileDialog.add ( new JSeparator (SwingConstants.HORIZONTAL) , c );
+    			
+				JButton createProfileButton = new JButton("create profile");
+
+				c.anchor = GridBagConstraints.CENTER;
+	  			c.gridx = 0;
+				c.gridy = 5;
+				c.gridwidth = 2;
+				c.insets = new Insets(5,5,5,10);
+
+				newProfileDialog.add(createProfileButton, c);
+
+				createProfileButton.addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent e){
+						profilesTableData.addProfile ( profileNameFTF.getText() , (String) vehicleBox.getSelectedItem() ,  (String) weightingBox.getSelectedItem() ,  turnCostCheckbox.isSelected() , chCheckbox.isSelected() , lmCheckbox.isSelected() );
+	            		newProfileDialog.dispose();
+	            	}
+				});
+
+				newProfileDialog.pack();
+				newProfileDialog.setVisible(true);
+				
+				};
+            
+			/////////////////////////// END OF NEW PROFILE DIALOG /////////////////////////////
+
 }
+
