@@ -84,7 +84,7 @@ public class OTNGui {
 		profilesTableData = new ProfilesTableDataModel();
 		profilesTable = new JTable(profilesTableData);
 
-		//backgroundimg = new StretchIcon(getClass().getResource("/florence_street_map.png"), true);
+		backgroundimg = new StretchIcon(getClass().getResource("/florence_street_map.png"), true);
 
 		this.frame = new JFrame("OTN-Companion");
 		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE); 
@@ -440,19 +440,25 @@ public class OTNGui {
     	c.weighty = 1;
     	c.fill = GridBagConstraints.BOTH;
 
+    	
     	wfscrollpane.setOpaque(false);
+
+    	wfscrollpane.getViewport().setOpaque(false);
+
+    	/*
     	wfscrollpane.getViewport().setBackground ( 
     		new Color(wfscrollpane.getBackground().getRed(),
     		wfscrollpane.getBackground().getGreen(),
-    		wfscrollpane.getBackground().getBlue(), 180)
-    	);
+    		wfscrollpane.getBackground().getBlue(), 0)
+    	);*/
 
     	wftable.setOpaque(false);
+    	/*
     	wftable.setBackground(
     		new Color(wftable.getBackground().getRed(),
     		wftable.getBackground().getGreen(),
     		wftable.getBackground().getBlue(), 0)
-    	);
+    	);*/
 
     	wfscrollpane.setPreferredSize(new Dimension(500,250));
 
@@ -609,9 +615,28 @@ public class OTNGui {
     	c.fill = GridBagConstraints.BOTH;
 
 
-    	/*areaPaneBackground.setIcon(backgroundimg);*/
+    	areaPaneBackground.setIcon(backgroundimg);
+
+    	JLabel areaPaneBackgroundColor = new JLabel()
+    	{
+		    protected void paintComponent(Graphics g)
+		    {
+		        g.setColor( getBackground() );
+		        g.fillRect(0, 0, getWidth(), getHeight());
+		        super.paintComponent(g);
+		    }
+		};
+
+		areaPaneBackgroundColor.setOpaque(false); // background of parent will be painted first
+		
+		areaPaneBackgroundColor.setBackground( new Color(areaPaneBackgroundColor.getBackground().getRed(),
+    		areaPaneBackgroundColor.getBackground().getGreen(),
+    		areaPaneBackgroundColor.getBackground().getBlue(), 180));
+
+		paneArea.add(areaPaneBackgroundColor, c);
 
     	paneArea.add(areaPaneBackground, c);
+
 	}
 
 	///////////////////////////////////// PROFILES PANE ///////////////////////////////////
@@ -661,19 +686,10 @@ public class OTNGui {
     	c.fill = GridBagConstraints.BOTH;
 
     	profilesScrollpane.setOpaque(false);
-    	profilesScrollpane.getViewport().setBackground ( 
-    		new Color(profilesScrollpane.getBackground().getRed(),
-    		profilesScrollpane.getBackground().getGreen(),
-    		profilesScrollpane.getBackground().getBlue(), 180)
-    	);
+
+    	profilesScrollpane.getViewport().setOpaque(false);
 
     	profilesTable.setOpaque(false);
-    	
-    	profilesTable.setBackground(
-    		new Color(profilesTable.getBackground().getRed(),
-    		profilesTable.getBackground().getGreen(),
-    		profilesTable.getBackground().getBlue(), 0)
-    	);
 
       	paneProfiles.add(profilesScrollpane, c);
 
@@ -755,7 +771,25 @@ public class OTNGui {
 
 	JLabel profilesbackground = new JLabel();
 
-	//profilesbackground.setIcon(backgroundimg);
+	profilesbackground.setIcon(backgroundimg);
+
+	JLabel profilesPaneBackgroundColor = new JLabel()
+    	{
+		    protected void paintComponent(Graphics g)
+		    {
+		        g.setColor( getBackground() );
+		        g.fillRect(0, 0, getWidth(), getHeight());
+		        super.paintComponent(g);
+		    }
+		};
+
+	profilesPaneBackgroundColor.setOpaque(false); // background of parent will be painted first
+		
+	profilesPaneBackgroundColor.setBackground( new Color(profilesPaneBackgroundColor.getBackground().getRed(),
+    	profilesPaneBackgroundColor.getBackground().getGreen(),
+    	profilesPaneBackgroundColor.getBackground().getBlue(), 180));
+
+	paneProfiles.add(profilesPaneBackgroundColor, c);
 
 	paneProfiles.add(profilesbackground, c);
 
@@ -887,12 +921,6 @@ public class OTNGui {
 
     	graphPane.setOpaque(false);
 
-    	Color backgroundColor = new Color(graphPane.getBackground().getRed(),
-    		graphPane.getBackground().getGreen(),
-    		graphPane.getBackground().getBlue(), 180);
-
-    	//System.out.println(graphPane.getBackground().toString());
-
     	c = new GridBagConstraints();
 		c.gridx = 0;
     	c.gridy = 0;
@@ -902,17 +930,27 @@ public class OTNGui {
     	c.gridheight = 5;
     	c.fill = GridBagConstraints.BOTH;
 
-    	JLabel backgroundColorlabel = new JLabel();
-
-    	backgroundColorlabel.setBackground(backgroundColor);
-
-    	backgroundColorlabel.setOpaque(true);
-
-    	graphPane.add(backgroundColorlabel, c);
-
     	JLabel graphbackgroundimg = new JLabel();
 
 		graphbackgroundimg.setIcon(backgroundimg);
+
+		JLabel graphPaneBackgroundColor = new JLabel()
+    	{
+		    protected void paintComponent(Graphics g)
+		    {
+		        g.setColor( getBackground() );
+		        g.fillRect(0, 0, getWidth(), getHeight());
+		        super.paintComponent(g);
+		    }
+		};
+
+		graphPaneBackgroundColor.setOpaque(false);
+		
+		graphPaneBackgroundColor.setBackground( new Color(graphPaneBackgroundColor.getBackground().getRed(),
+    		graphPaneBackgroundColor.getBackground().getGreen(),
+    		graphPaneBackgroundColor.getBackground().getBlue(), 180));
+
+		graphPane.add(graphPaneBackgroundColor, c);
 
 		graphPane.add(graphbackgroundimg, c);
 
@@ -1077,7 +1115,7 @@ public class OTNGui {
 
 				createProfileButton.addActionListener(new ActionListener(){
 					public void actionPerformed(ActionEvent e){
-						profilesTableData.addProfile ( profileNameFTF.getText() , (String) vehicleBox.getSelectedItem() ,  (String) weightingBox.getSelectedItem() ,  turnCostCheckbox.isSelected() , chCheckbox.isSelected() , lmCheckbox.isSelected() );
+						profilesTableData.addProfile ( profileNameFTF.getText().trim() , (String) vehicleBox.getSelectedItem() ,  (String) weightingBox.getSelectedItem() ,  turnCostCheckbox.isSelected() , chCheckbox.isSelected() , lmCheckbox.isSelected() );
 	            		newProfileDialog.dispose();
 	            	}
 				});
