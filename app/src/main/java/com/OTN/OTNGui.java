@@ -189,7 +189,8 @@ public class OTNGui {
 			    }*/
 
 
-
+			    File configFile = new File ( otnc.getStorageDir() +  File.separator + outputGraphName + File.separator + "config.json" );
+			    
 				otnc.setOsmArea( workflowTableData.getLastAreaElement() );
 
 				otnc.setProfiles( profilesTableData );
@@ -238,6 +239,7 @@ public class OTNGui {
 				dialogwait.setModal(true);
 				dialogwait.setSize(new Dimension(250,120));
 				dialogwait.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+				dialogwait.setIconImage(new ImageIcon(getClass().getResource("/otn_logo_shield_minimal_32x32.png")).getImage());
 				JLabel text = new JLabel ("This may take a while...");
 				dialogwait.add(text, c);
 				dialogwait.setVisible(true); // tis is blocking, listener will kill it
@@ -254,7 +256,7 @@ public class OTNGui {
 				dialogwait.dispose();
 
 				// testing if graph geenration is fished
-				File configFile = new File ( otnc.getStorageDir() +  File.separator + outputGraphName + File.separator + "config.json" );
+				
 				
 				System.out.println(configFile.toString());
 
