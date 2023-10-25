@@ -479,7 +479,7 @@ public class OTNGuiFilter {
 			filterError.addError("Right coords not found");
 		}
 
-		if(filterError.showDialog()){
+		if(filterError.showErrorDialog()){
 			return true;
 		}
 
@@ -497,7 +497,7 @@ public class OTNGuiFilter {
 			filterError.addError("Left longitude further east than right longitude");
 		}
 
-		if(filterError.showDialog()){
+		if(filterError.showErrorDialog()){
 			return true;
 		}
 
@@ -522,7 +522,7 @@ public class OTNGuiFilter {
 			filterError.addError("Center longitude not found");		
 		}
 
-		if(filterError.showDialog()){
+		if(filterError.showErrorDialog()){
 			return true;
 		}
 
@@ -551,7 +551,7 @@ public class OTNGuiFilter {
 			}
 		}
 
-		if(filterError.showDialog()){
+		if(filterError.showErrorDialog()){
 			return true;
 		}
 

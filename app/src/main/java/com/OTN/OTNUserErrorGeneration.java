@@ -30,7 +30,7 @@ public class OTNUserErrorGeneration {
 		this.errors.add(error);
 	}
 
-	public boolean showDialog() {
+	public boolean showErrorDialog() {
 		
 		if(errors.size()==0){
 			return false;

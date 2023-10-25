@@ -146,7 +146,7 @@ public class OTNGui {
 					userError.addError("Storage Dir not set");
 				}
 
-				if (userError.showDialog()) {
+				if (userError.showErrorDialog()) {
 					return;
 				}
 
@@ -329,7 +329,7 @@ public class OTNGui {
     					}
     				}
 
-    				if ( userError.showDialog() ) {
+    				if ( userError.showErrorDialog() ) {
 					return;
 					}
 	            	
@@ -578,7 +578,7 @@ public class OTNGui {
 							}
 						}
 
-						if (filterAreaError.showDialog()) {
+						if (filterAreaError.showErrorDialog()) {
 							return;
 						}
 
