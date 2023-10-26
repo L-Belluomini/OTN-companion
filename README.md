@@ -42,6 +42,7 @@ An info dialog will appear once your graph has been successfully created.
 * More vehicle types available.
 * Support for different routing options for each profile.
 * Possibility to include the polyline of the graph border.
+* Manual available [here](https://github.com/MightyBakedPotato/OTN-manual/releases/tag/v.1.8).
 
 ## Future Features
 
